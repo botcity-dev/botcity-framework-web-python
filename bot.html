@@ -3150,10 +3150,13 @@ Defaults to False.</p></td>
         <span class="n">haystack</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_screen_image</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">)</span>
         <span class="n">it</span> <span class="o">=</span> <span class="n">cv2find</span><span class="o">.</span><span class="n">locate_all_opencv</span><span class="p">(</span><span class="n">element_path</span><span class="p">,</span> <span class="n">haystack_image</span><span class="o">=</span><span class="n">haystack</span><span class="p">,</span>
                                        <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="n">matching</span><span class="p">,</span> <span class="n">grayscale</span><span class="o">=</span><span class="n">grayscale</span><span class="p">)</span>
-        <span class="n">ele</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">ele</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">ele</span>
-            <span class="k">return</span> <span class="n">ele</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ele</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+            <span class="n">ele</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">ele</span>
+        <span class="k">return</span> <span class="n">ele</span>
 </code></pre></div>
         </details>
     </div>
@@ -3332,9 +3335,16 @@ the first find. Defaults to True.</p></td>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: Ignoring best=False for now. It will be supported in the future.&#39;</span><span class="p">)</span>
 
     <span class="n">it</span> <span class="o">=</span> <span class="n">cv2find</span><span class="o">.</span><span class="n">locate_all_opencv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">map_images</span><span class="p">[</span><span class="n">label</span><span class="p">],</span> <span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="n">matching</span><span class="p">)</span>
-    <span class="n">ele</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">ele</span>
-    <span class="k">return</span> <span class="n">ele</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">ele</span><span class="o">.</span><span class="n">top</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ele</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+        <span class="n">ele</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">ele</span>
+
+    <span class="k">if</span> <span class="n">ele</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ele</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">ele</span><span class="o">.</span><span class="n">top</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 </code></pre></div>
         </details>
     </div>

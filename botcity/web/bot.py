@@ -89,7 +89,10 @@ class WebBot(BaseBot):
             self._chrome_launcher.launch()
         if not self._devtools_service:
             self._devtools_service = PyChromeDevTools.ChromeInterface(host=self._ip,
-                                                                      port=self._chrome_launcher.devtools_port)
+                                                                      port=self._chrome_launcher.devtools_port,
+                                                                      auto_connect=False)
+            self.sleep(100)
+            self._devtools_service.connect()
         self._page = self._devtools_service.Page
         self._page.enable()
         self._network = self._devtools_service.Network

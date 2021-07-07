@@ -37,7 +37,7 @@ class WebBot(BaseBot):
         self.state = State()
         self.maestro = None
 
-        self._ip = "localhost"
+        self._ip = "127.0.0.1"
 
         self._headless = headless
 

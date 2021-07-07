@@ -2,7 +2,7 @@ import os
 import pathlib
 import tempfile
 import subprocess
-import regex
+import re
 import time
 import shutil
 
@@ -93,8 +93,8 @@ class ChromeLauncher:
                 raise RuntimeError('DevTools Server failed to start.')
             data = self._process.stderr.readline()
             data = data.replace(bytes(os.linesep, "utf-8"), b"")
-            match = regex.match(r"DevTools listening on ws\:\/\/.+?\:(\d+)\/devtools/browser/(.+)",
-                                data.decode('utf-8')) if data else None
+            match = re.match(r"DevTools listening on ws\:\/\/.+?\:(\d+)\/devtools/browser/(.+)",
+                             data.decode('utf-8')) if data else None
             if match:
                 self._devtools_port = match.groups()[0]
                 return

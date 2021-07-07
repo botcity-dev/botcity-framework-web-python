@@ -1,0 +1,61 @@
+site_name: BotCity Framework Web - Python
+repo_url: https://github.com/botcity-dev/botcity-framework-web-python
+repo_name: ""
+copyright: BotCity &copy; - All rights reserved
+
+nav:
+    - Home: index.md
+    - Getting Started: intro.md
+    - Framework: bot.md
+
+theme:
+  icon:
+    repo: fontawesome/brands/github
+  name: material
+  favicon: assets/favicon.ico
+  logo: assets/logo.png
+  features:
+    - navigation.top
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/botcity-dev/botcity-framework-web-python
+      name: BotCity Framework Web - Python -> GitHub
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/botcitydev
+      name: BotCity on Twitter
+
+plugins:
+    - search
+    - mkdocstrings:
+        default_handler: python
+        handlers:
+          python:
+            selection:
+              inherited_members: false
+              filters:
+                - "!^_"  # exclude all members starting with _
+                - "^__init__$"  # but always include __init__ modules and methods
+                - "!([a-z])*([A-Z])" # exclude camelCase elements
+            rendering:
+              show_source: true
+              show_root_heading: true

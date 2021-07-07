@@ -1,0 +1,3 @@
+include versioneer.py
+include botcity/web/_version.py
+include requirements.txt

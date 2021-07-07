@@ -1,0 +1,6 @@
+botcity-framework-base>=0.2.0
+opencv-python
+pyperclip
+PyChromeDevTools
+websocket-client
+pillow

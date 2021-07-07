@@ -402,10 +402,13 @@ class WebBot(BaseBot):
             haystack = self.get_screen_image(region=region)
             it = cv2find.locate_all_opencv(element_path, haystack_image=haystack,
                                            region=region, confidence=matching, grayscale=grayscale)
-            ele = next(it)
-            if ele is not None:
-                self.state.element = ele
-                return ele
+            try:
+                ele = next(it)
+            except StopIteration:
+                ele = None
+
+            self.state.element = ele
+            return ele
 
     def find_text(self, label, x=None, y=None, width=None, height=None, *, threshold=None, matching=0.9,
                   waiting_time=10000, best=True):
@@ -542,9 +545,16 @@ class WebBot(BaseBot):
             print('Warning: Ignoring best=False for now. It will be supported in the future.')
 
         it = cv2find.locate_all_opencv(self.state.map_images[label], region=region, confidence=matching)
-        ele = next(it)
-        self.state.element = ele
-        return ele.left, ele.top
+        try:
+            ele = next(it)
+        except StopIteration:
+            ele = None
+            self.state.element = ele
+
+        if ele:
+            return ele.left, ele.top
+        else:
+            return None, None
 
     def get_element_coords_centered(self, label, x=None, y=None, width=None, height=None,
                                     matching=0.9, best=True):

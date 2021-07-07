@@ -22,7 +22,20 @@ CHROME_BINARIES = [
 
 class ChromeLauncher:
     DEFAULT_OPTIONS = {
-        "--remote-debugging-port": "0"
+        "--remote-debugging-port": "0",
+        "--no-first-run": "",
+        "--no-default-browser-check": "",
+        "--disable-background-networking": "",
+        "--disable-background-timer-throttling": "",
+        "--disable-client-side-phishing-detection": "",
+        "--disable-default-apps": "",
+        "--disable-extensions": "",
+        "--disable-hang-monitor": "",
+        "--disable-popup-blocking": "",
+        "--disable-prompt-on-repost": "",
+        "--disable-syncdisable-translate": "",
+        "--metrics-recording-only": "",
+        "--safebrowsing-disable-auto-update": ""
     }
 
     DEFAULT_OPTIONS_HEADLESS = {

@@ -43,14 +43,13 @@ class WebBot(BaseBot):
 
         self._chrome_launcher = None
         self._devtools_service = None
-        self._tab = None
-        self._first_tab = True
 
         self._page = None
         self._network = None
         self._input = None
         self._run = None
-        self._tabs = []
+
+        self._dialog = None
 
         self._last_clipboard = None
 
@@ -135,6 +134,26 @@ class WebBot(BaseBot):
             # Likely the connection as interrupted already or it timed-out
             pass
         self._chrome_launcher.shutdown()
+        self._reset()
+
+    def _reset(self):
+        self._chrome_launcher = None
+        self._devtools_service = None
+
+        self._page = None
+        self._network = None
+        self._input = None
+        self._run = None
+
+    def _parse_all_messages(self, messages):
+        """
+        This method inspect all messages emitted by the browser to lookup for information.
+        """
+        for m in messages:
+            # Checking for dialogs that were opened
+            if m.get('method') == 'Page.javascriptDialogOpening':
+                self._dialog = m.get('params')
+                return self._dialog
 
     def set_download_folder(self, path=None):
         """
@@ -148,12 +167,13 @@ class WebBot(BaseBot):
             self._download_folder_path = path
         if not self._devtools_service:
             return
-        self._devtools_service.Browser.setDownloadBehavior(
+        res, msgs = self._devtools_service.Browser.setDownloadBehavior(
             behavior="allow",
             browserContextId=None,
             downloadPath=self._download_folder_path,
             eventsEnabled=True
         )
+        self._parse_all_messages(msgs)
 
     def set_screen_resolution(self, width=None, height=None):
         """
@@ -170,8 +190,10 @@ class WebBot(BaseBot):
             "left": 0, "top": 0, "width": width, "height": height
         }
         window_id = self.get_window_id()
-        self._devtools_service.Browser.setWindowBounds(windowId=window_id, bounds=bounds)
-        self._devtools_service.Emulation.setVisibleSize(width=width, height=height)
+        res, msgs = self._devtools_service.Browser.setWindowBounds(windowId=window_id, bounds=bounds)
+        self._parse_all_messages(msgs)
+        res, msgs = self._devtools_service.Emulation.setVisibleSize(width=width, height=height)
+        self._parse_all_messages(msgs)
 
     ##########
     # Display
@@ -190,18 +212,11 @@ class WebBot(BaseBot):
         """
         if not region:
             region = (0, 0, 0, 0)
-        layout_metrics = self._page.getLayoutMetrics()[0]
-        if layout_metrics:
-            content_size = layout_metrics['result']['contentSize']
-            x = region[0] or 0
-            y = region[1] or 0
-            width = region[2] or content_size['width']
-            height = region[3] or content_size['height']
-        else:
-            x = 0
-            y = 0
-            width = self._dimensions[0]
-            height = self._dimensions[1]
+
+        x = region[0] or 0
+        y = region[1] or 0
+        width = region[2] or self._dimensions[0]
+        height = region[3] or self._dimensions[1]
         viewport = dict(x=x, y=y, width=width, height=height, scale=1)
         data = self._page.captureScreenshot(format="png", quality=100, clip=viewport,
                                             fromSurface=True, captureBeyondViewport=False)
@@ -279,7 +294,7 @@ class WebBot(BaseBot):
         def _to_dict(lbs, elems):
             return {k: v for k, v in zip(lbs, elems)}
 
-        screen_w, screen_h = self.get_viewport_size()
+        screen_w, screen_h = self._dimensions
         x = x or 0
         y = y or 0
         w = width or screen_w
@@ -307,7 +322,7 @@ class WebBot(BaseBot):
                 return _to_dict(labels, results)
 
             haystack = self.screenshot()
-            helper = functools.partial(self.__find_multiple_helper, haystack, region, matching, grayscale)
+            helper = functools.partial(self._find_multiple_helper, haystack, region, matching, grayscale)
 
             with multiprocessing.Pool(processes=n_cpus) as pool:
                 results = pool.map(helper, paths)
@@ -318,7 +333,7 @@ class WebBot(BaseBot):
             else:
                 return _to_dict(labels, results)
 
-    def __find_multiple_helper(self, haystack, region, confidence, grayscale, needle):
+    def _find_multiple_helper(self, haystack, region, confidence, grayscale, needle):
         ele = cv2find.locate_all_opencv(
             needle, haystack, region=region, confidence=confidence, grayscale=grayscale
         )
@@ -378,7 +393,7 @@ class WebBot(BaseBot):
             element (NamedTuple): The element coordinates. None if not found.
         """
         self.state.element = None
-        screen_w, screen_h = self.get_viewport_size()
+        screen_w, screen_h = self._dimensions
         x = x or 0
         y = y or 0
         w = width or screen_w
@@ -455,8 +470,7 @@ class WebBot(BaseBot):
         Returns:
             size (Tuple): The screen dimension (width and height) in pixels.
         """
-        screen_size = self.get_viewport_size()
-        return screen_size.width, screen_size.height
+        return self._dimensions
 
     def screenshot(self, filepath=None, region=None):
         """
@@ -500,11 +514,11 @@ class WebBot(BaseBot):
         Returns:
             Image: The screenshot Image object
         """
-        screen_size = self.get_viewport_size()
+        screen_size = self._dimensions
         x = x or 0
         y = y or 0
-        width = width or screen_size.width
-        height = height or screen_size.height
+        width = width or screen_size[0]
+        height = height or screen_size[1]
         img = self.screenshot(region=(x, y, width, height))
         return img
 
@@ -537,11 +551,11 @@ class WebBot(BaseBot):
             coords (Tuple): A tuple containing the x and y coordinates for the element.
         """
         self.state.element = None
-        screen_size = self.get_viewport_size()
+        screen_size = self._dimensions
         x = x or 0
         y = y or 0
-        width = width or screen_size.width
-        height = height or screen_size.height
+        width = width or screen_size[0]
+        height = height or screen_size[1]
         region = (x, y, width, height)
 
         if not best:
@@ -639,6 +653,63 @@ class WebBot(BaseBot):
         """
         return self._devtools_service.Browser.getWindowForTarget()[0]['result']['windowId']
 
+    def handle_js_dialog(self, accept=True, prompt_text=None):
+        """
+        Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).
+        This also cleans the dialog information in the local buffer.
+
+        Args:
+            accept (bool): Whether to accept or dismiss the dialog.
+            prompt_text (str): The text to enter into the dialog prompt before accepting.
+                Used only if this is a prompt dialog.
+        """
+        kwargs = {'accept': accept}
+        if prompt_text is not None:
+            kwargs['promptText'] = prompt_text
+        self._devtools_service.Page.handleJavaScriptDialog(**kwargs)
+        self._dialog = None
+
+    def get_js_dialog(self):
+        """
+        Return the last found dialog. Invoke first the `find_js_dialog` method to look up.
+
+        Returns:
+            dialog (dict): The dialog information or None if not available.
+                See https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-javascriptDialogOpening
+        """
+        if not self._dialog:
+            return self._find_js_dialog()
+        return self._dialog
+
+    def _find_js_dialog(self):
+        """
+        Find the JavaScript dialog that is currently open and return its information.
+
+        Returns:
+            dialog (dict): The dialog information.
+                See https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-javascriptDialogOpening
+        """
+        messages = self._devtools_service.pop_messages()
+        print('find_js_dialog -> messages: ', messages)
+        for m in messages:
+            if m.get('method') == 'Page.javascriptDialogOpening':
+                self._dialog = m.get('params')
+                return self._dialog
+
+    def get_tabs(self):
+        ...
+
+    def create_tab(self, url):
+        ...
+
+    def close_tab(self, tab=None):
+        # If tab is None, close current tab
+        ...
+
+    def activate_tab(self, tab):
+        ...
+
+
     #######
     # Mouse
     #######
@@ -684,7 +755,8 @@ class WebBot(BaseBot):
         """
         self._x = x
         self._y = y
-        self._input.dispatchMouseEvent(type="mouseMoved", x=x, y=y)
+        res, msgs = self._input.dispatchMouseEvent(type="mouseMoved", x=x, y=y)
+        self._parse_all_messages(msgs)
 
     def click_at(self, x, y, *, clicks=1, interval_between_clicks=0, button='left'):
         """
@@ -702,12 +774,14 @@ class WebBot(BaseBot):
         self._x = x
         self._y = y
         for i in range(clicks):
-            self._input.dispatchMouseEvent(
+            res, msgs = self._input.dispatchMouseEvent(
                 type="mousePressed", x=x, y=y, button=button, buttons=idx, clickCount=1
             )
-            self._input.dispatchMouseEvent(
+            self._parse_all_messages(msgs)
+            res, msgs = self._input.dispatchMouseEvent(
                 type="mouseReleased", x=x, y=y, button=button, buttons=idx, clickCount=1
             )
+            self._parse_all_messages(msgs)
             self.sleep(interval_between_clicks)
 
     @only_if_element
@@ -805,9 +879,11 @@ class WebBot(BaseBot):
             clicks (int): Number of times to scroll down.
         """
         for i in range(clicks):
-            self._input.dispatchKeyEvent(type="keyDown", commands=["ScrollLineDown"])
+            res, msgs = self._input.dispatchKeyEvent(type="keyDown", commands=["ScrollLineDown"])
+            self._parse_all_messages(msgs)
             self.sleep(200)
-            self._input.dispatchKeyEvent(type="keyUp", commands=["ScrollLineDown"])
+            res, msgs = self._input.dispatchKeyEvent(type="keyUp", commands=["ScrollLineDown"])
+            self._parse_all_messages(msgs)
 
     def scroll_up(self, clicks):
         """
@@ -817,9 +893,11 @@ class WebBot(BaseBot):
             clicks (int): Number of times to scroll up.
         """
         for i in range(clicks):
-            self._input.dispatchKeyEvent(type="keyDown", commands=["ScrollLineUp"])
+            res, msgs = self._input.dispatchKeyEvent(type="keyDown", commands=["ScrollLineUp"])
+            self._parse_all_messages(msgs)
             self.sleep(200)
-            self._input.dispatchKeyEvent(type="keyUp", commands=["ScrollLineUp"])
+            res, msgs = self._input.dispatchKeyEvent(type="keyUp", commands=["ScrollLineUp"])
+            self._parse_all_messages(msgs)
 
     def move_to(self, x, y):
         """
@@ -831,7 +909,8 @@ class WebBot(BaseBot):
         """
         self._x = x
         self._y = y
-        self._input.dispatchMouseEvent(type="mouseMoved", x=x, y=y)
+        res, msgs = self._input.dispatchMouseEvent(type="mouseMoved", x=x, y=y)
+        self._parse_all_messages(msgs)
 
     @only_if_element
     def move(self):
@@ -917,6 +996,8 @@ class WebBot(BaseBot):
         kwargs = {
             "type": event_type
         }
+        if self._shift_hold:
+            kwargs.update({"modifiers": 8})
         if text:
             kwargs.update({"text": text})
         if virtual_kc is not None:
@@ -924,9 +1005,11 @@ class WebBot(BaseBot):
         if key is not None:
             kwargs.update({"key": key})
 
-        self._input.dispatchKeyEvent(**kwargs)
+        res, msgs = self._input.dispatchKeyEvent(**kwargs)
+        self._parse_all_messages(msgs)
         if execute_up:
-            self._input.dispatchKeyEvent(type="keyUp")
+            res, msgs = self._input.dispatchKeyEvent(type="keyUp")
+            self._parse_all_messages(msgs)
 
     def kb_type(self, text, interval=0):
         """
@@ -1095,7 +1178,8 @@ class WebBot(BaseBot):
         """
 
         bounds = dict(left=0, top=0, width=0, height=0, windowState="maximized")
-        self._devtools_service.Browser.setWindowBounds(windowId=self.get_window_id(), bounds=bounds)
+        res, msgs = self._devtools_service.Browser.setWindowBounds(windowId=self.get_window_id(), bounds=bounds)
+        self._parse_all_messages(msgs)
         self.sleep(1000)
 
     def type_keys_with_interval(self, interval, keys):
@@ -1154,8 +1238,10 @@ class WebBot(BaseBot):
             "document.getElementById('clipboardTransferText').value = text;"
         )
         self.execute_javascript(cmd)
-        self._input.dispatchKeyEvent(type="keyDown", commands=["Copy"])
-        self._input.dispatchKeyEvent(type="keyUp", commands=["Copy"])
+        res, msgs = self._input.dispatchKeyEvent(type="keyDown", commands=["Copy"])
+        self._parse_all_messages(msgs)
+        res, msgs = self._input.dispatchKeyEvent(type="keyUp", commands=["Copy"])
+        self._parse_all_messages(msgs)
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1167,8 +1253,10 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._input.dispatchKeyEvent(type="keyDown", commands=["Paste"])
-        self._input.dispatchKeyEvent(type="keyUp", commands=["Paste"])
+        res, msgs = self._input.dispatchKeyEvent(type="keyDown", commands=["Paste"])
+        self._parse_all_messages(msgs)
+        res, msgs = self._input.dispatchKeyEvent(type="keyUp", commands=["Paste"])
+        self._parse_all_messages(msgs)
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1180,8 +1268,10 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._input.dispatchKeyEvent(type="keyDown", commands=["SelectAll"])
-        self._input.dispatchKeyEvent(type="keyUp", commands=["SelectAll"])
+        res, msgs = self._input.dispatchKeyEvent(type="keyDown", commands=["SelectAll"])
+        self._parse_all_messages(msgs)
+        res, msgs = self._input.dispatchKeyEvent(type="keyUp", commands=["SelectAll"])
+        self._parse_all_messages(msgs)
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 

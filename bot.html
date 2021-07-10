@@ -469,6 +469,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.get_js_dialog" class="md-nav__link">
+    get_js_dialog()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.get_last_element" class="md-nav__link">
     get_last_element()
   </a>
@@ -513,6 +520,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.get_window_id" class="md-nav__link">
     get_window_id()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.handle_js_dialog" class="md-nav__link">
+    handle_js_dialog()
   </a>
   
 </li>
@@ -1012,6 +1026,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.get_js_dialog" class="md-nav__link">
+    get_js_dialog()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.get_last_element" class="md-nav__link">
     get_last_element()
   </a>
@@ -1056,6 +1077,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.get_window_id" class="md-nav__link">
     get_window_id()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.handle_js_dialog" class="md-nav__link">
+    handle_js_dialog()
   </a>
   
 </li>
@@ -1434,6 +1462,7 @@ Users must implement the <code>action</code> method in their classes.</p>
 
 
 
+
   <div class="doc doc-object doc-method">
 
 
@@ -1756,12 +1785,14 @@ Users must implement the <code>action</code> method in their classes.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">y</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">clicks</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchMouseEvent</span><span class="p">(</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchMouseEvent</span><span class="p">(</span>
             <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;mousePressed&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">button</span><span class="o">=</span><span class="n">button</span><span class="p">,</span> <span class="n">buttons</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">clickCount</span><span class="o">=</span><span class="mi">1</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchMouseEvent</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchMouseEvent</span><span class="p">(</span>
             <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;mouseReleased&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">button</span><span class="o">=</span><span class="n">button</span><span class="p">,</span> <span class="n">buttons</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">clickCount</span><span class="o">=</span><span class="mi">1</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">interval_between_clicks</span><span class="p">)</span>
 </code></pre></div>
         </details>
@@ -1915,6 +1946,7 @@ Users must implement the <code>action</code> method in their classes.</p>
 
 
 
+
   <div class="doc doc-object doc-method">
 
 
@@ -1958,8 +1990,10 @@ Users must implement the <code>action</code> method in their classes.</p>
 <span class="sd">        wait (int, optional): Wait interval (ms) after task</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyDown&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SelectAll&quot;</span><span class="p">])</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyUp&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SelectAll&quot;</span><span class="p">])</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyDown&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SelectAll&quot;</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyUp&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SelectAll&quot;</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
     <span class="n">delay</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">wait</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_SLEEP_AFTER_ACTION</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
 </code></pre></div>
@@ -2034,8 +2068,10 @@ Users must implement the <code>action</code> method in their classes.</p>
         <span class="s2">&quot;document.getElementById(&#39;clipboardTransferText&#39;).value = text;&quot;</span>
     <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">execute_javascript</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyDown&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Copy&quot;</span><span class="p">])</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyUp&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Copy&quot;</span><span class="p">])</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyDown&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Copy&quot;</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyUp&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Copy&quot;</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
     <span class="n">delay</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">wait</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_SLEEP_AFTER_ACTION</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
 </code></pre></div>
@@ -2089,8 +2125,10 @@ Users must implement the <code>action</code> method in their classes.</p>
 <span class="sd">        wait (int, optional): Wait interval (ms) after task</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyDown&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Paste&quot;</span><span class="p">])</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyUp&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Paste&quot;</span><span class="p">])</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyDown&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Paste&quot;</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyUp&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Paste&quot;</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
     <span class="n">delay</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">wait</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_SLEEP_AFTER_ACTION</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
 </code></pre></div>
@@ -2161,6 +2199,7 @@ Users must implement the <code>action</code> method in their classes.</p>
     </div>
 
   </div>
+
 
 
 
@@ -2256,8 +2295,7 @@ Users must implement the <code>action</code> method in their classes.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        size (Tuple): The screen dimension (width and height) in pixels.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">screen_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_viewport_size</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">screen_size</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">screen_size</span><span class="o">.</span><span class="n">height</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span>
 </code></pre></div>
         </details>
     </div>
@@ -2807,7 +2845,7 @@ Defaults to False.</p></td>
     <span class="k">def</span> <span class="nf">_to_dict</span><span class="p">(</span><span class="n">lbs</span><span class="p">,</span> <span class="n">elems</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">lbs</span><span class="p">,</span> <span class="n">elems</span><span class="p">)}</span>
 
-    <span class="n">screen_w</span><span class="p">,</span> <span class="n">screen_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_viewport_size</span><span class="p">()</span>
+    <span class="n">screen_w</span><span class="p">,</span> <span class="n">screen_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">or</span> <span class="mi">0</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="ow">or</span> <span class="mi">0</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">width</span> <span class="ow">or</span> <span class="n">screen_w</span>
@@ -2835,7 +2873,7 @@ Defaults to False.</p></td>
             <span class="k">return</span> <span class="n">_to_dict</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span>
 
         <span class="n">haystack</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screenshot</span><span class="p">()</span>
-        <span class="n">helper</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__find_multiple_helper</span><span class="p">,</span> <span class="n">haystack</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">matching</span><span class="p">,</span> <span class="n">grayscale</span><span class="p">)</span>
+        <span class="n">helper</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_find_multiple_helper</span><span class="p">,</span> <span class="n">haystack</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">matching</span><span class="p">,</span> <span class="n">grayscale</span><span class="p">)</span>
 
         <span class="k">with</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">n_cpus</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
             <span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">helper</span><span class="p">,</span> <span class="n">paths</span><span class="p">)</span>
@@ -3123,7 +3161,7 @@ Defaults to False.</p></td>
 <span class="sd">        element (NamedTuple): The element coordinates. None if not found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">screen_w</span><span class="p">,</span> <span class="n">screen_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_viewport_size</span><span class="p">()</span>
+    <span class="n">screen_w</span><span class="p">,</span> <span class="n">screen_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">or</span> <span class="mi">0</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="ow">or</span> <span class="mi">0</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">width</span> <span class="ow">or</span> <span class="n">screen_w</span>
@@ -3324,11 +3362,11 @@ the first find. Defaults to True.</p></td>
 <span class="sd">        coords (Tuple): A tuple containing the x and y coordinates for the element.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">screen_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_viewport_size</span><span class="p">()</span>
+    <span class="n">screen_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">or</span> <span class="mi">0</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="ow">or</span> <span class="mi">0</span>
-    <span class="n">width</span> <span class="o">=</span> <span class="n">width</span> <span class="ow">or</span> <span class="n">screen_size</span><span class="o">.</span><span class="n">width</span>
-    <span class="n">height</span> <span class="o">=</span> <span class="n">height</span> <span class="ow">or</span> <span class="n">screen_size</span><span class="o">.</span><span class="n">height</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">width</span> <span class="ow">or</span> <span class="n">screen_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">height</span> <span class="ow">or</span> <span class="n">screen_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">region</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">best</span><span class="p">:</span>
@@ -3547,6 +3585,57 @@ the first find. Defaults to True.</p></td>
 
 
 
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.get_js_dialog">
+<code class="highlight language-python"><span class="n">get_js_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Return the last found dialog. Invoke first the <code>find_js_dialog</code> method to look up.</p>
+
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>dialog (dict)</code></td>
+      <td><p>The dialog information or None if not available.
+    See https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-javascriptDialogOpening</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_js_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the last found dialog. Invoke first the `find_js_dialog` method to look up.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dialog (dict): The dialog information or None if not available.</span>
+<span class="sd">            See https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-javascriptDialogOpening</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dialog</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_js_dialog</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dialog</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="botcity.web.bot.WebBot.get_last_element">
 <code class="highlight language-python"><span class="n">get_last_element</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
 
@@ -3749,18 +3838,11 @@ to crop the screen image.</p></td>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">region</span><span class="p">:</span>
         <span class="n">region</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">layout_metrics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_page</span><span class="o">.</span><span class="n">getLayoutMetrics</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">layout_metrics</span><span class="p">:</span>
-        <span class="n">content_size</span> <span class="o">=</span> <span class="n">layout_metrics</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;contentSize&#39;</span><span class="p">]</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span>
-        <span class="n">width</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="n">content_size</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">or</span> <span class="n">content_size</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">viewport</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_page</span><span class="o">.</span><span class="n">captureScreenshot</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="n">viewport</span><span class="p">,</span>
                                         <span class="n">fromSurface</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">captureBeyondViewport</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -3848,6 +3930,7 @@ to crop the screen image.</p></td>
     </div>
 
   </div>
+
 
 
 
@@ -3943,6 +4026,72 @@ height (int): The current viewport height.</p></td>
 <span class="sd">        id (str): The window Id</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devtools_service</span><span class="o">.</span><span class="n">Browser</span><span class="o">.</span><span class="n">getWindowForTarget</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;windowId&#39;</span><span class="p">]</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.handle_js_dialog">
+<code class="highlight language-python"><span class="n">handle_js_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accept</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">prompt_text</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).
+This also cleans the dialog information in the local buffer.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>accept</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to accept or dismiss the dialog.</p></td>
+        <td><code>True</code></td>
+      </tr>
+      <tr>
+        <td><code>prompt_text</code></td>
+        <td><code>str</code></td>
+        <td><p>The text to enter into the dialog prompt before accepting.
+Used only if this is a prompt dialog.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">handle_js_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">accept</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">prompt_text</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).</span>
+<span class="sd">    This also cleans the dialog information in the local buffer.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        accept (bool): Whether to accept or dismiss the dialog.</span>
+<span class="sd">        prompt_text (str): The text to enter into the dialog prompt before accepting.</span>
+<span class="sd">            Used only if this is a prompt dialog.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;accept&#39;</span><span class="p">:</span> <span class="n">accept</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">prompt_text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;promptText&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prompt_text</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_devtools_service</span><span class="o">.</span><span class="n">Page</span><span class="o">.</span><span class="n">handleJavaScriptDialog</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_dialog</span> <span class="o">=</span> <span class="kc">None</span>
 </code></pre></div>
         </details>
     </div>
@@ -4302,7 +4451,8 @@ height (int): The current viewport height.</p></td>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">bounds</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">windowState</span><span class="o">=</span><span class="s2">&quot;maximized&quot;</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_devtools_service</span><span class="o">.</span><span class="n">Browser</span><span class="o">.</span><span class="n">setWindowBounds</span><span class="p">(</span><span class="n">windowId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_window_id</span><span class="p">(),</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devtools_service</span><span class="o">.</span><span class="n">Browser</span><span class="o">.</span><span class="n">setWindowBounds</span><span class="p">(</span><span class="n">windowId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_window_id</span><span class="p">(),</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
 </code></pre></div>
         </details>
@@ -4364,7 +4514,8 @@ height (int): The current viewport height.</p></td>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">y</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchMouseEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;mouseMoved&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchMouseEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;mouseMoved&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -4577,7 +4728,8 @@ height (int): The current viewport height.</p></td>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="n">y</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchMouseEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;mouseMoved&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchMouseEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;mouseMoved&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -5096,11 +5248,11 @@ This method needs to be invoked after holding Shift or similar.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        Image: The screenshot Image object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">screen_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_viewport_size</span><span class="p">()</span>
+    <span class="n">screen_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="ow">or</span> <span class="mi">0</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="ow">or</span> <span class="mi">0</span>
-    <span class="n">width</span> <span class="o">=</span> <span class="n">width</span> <span class="ow">or</span> <span class="n">screen_size</span><span class="o">.</span><span class="n">width</span>
-    <span class="n">height</span> <span class="o">=</span> <span class="n">height</span> <span class="ow">or</span> <span class="n">screen_size</span><span class="o">.</span><span class="n">height</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">width</span> <span class="ow">or</span> <span class="n">screen_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">height</span> <span class="ow">or</span> <span class="n">screen_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">img</span>
 </code></pre></div>
@@ -5233,9 +5385,11 @@ This method needs to be invoked after holding Shift or similar.</p>
 <span class="sd">        clicks (int): Number of times to scroll down.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">clicks</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyDown&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ScrollLineDown&quot;</span><span class="p">])</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyDown&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ScrollLineDown&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyUp&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ScrollLineDown&quot;</span><span class="p">])</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyUp&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ScrollLineDown&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -5287,9 +5441,11 @@ This method needs to be invoked after holding Shift or similar.</p>
 <span class="sd">        clicks (int): Number of times to scroll up.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">clicks</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyDown&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ScrollLineUp&quot;</span><span class="p">])</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyDown&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ScrollLineUp&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyUp&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ScrollLineUp&quot;</span><span class="p">])</span>
+        <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="o">.</span><span class="n">dispatchKeyEvent</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;keyUp&quot;</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ScrollLineUp&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -5345,12 +5501,13 @@ This method needs to be invoked after holding Shift or similar.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">_download_folder_path</span> <span class="o">=</span> <span class="n">path</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devtools_service</span><span class="p">:</span>
         <span class="k">return</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_devtools_service</span><span class="o">.</span><span class="n">Browser</span><span class="o">.</span><span class="n">setDownloadBehavior</span><span class="p">(</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devtools_service</span><span class="o">.</span><span class="n">Browser</span><span class="o">.</span><span class="n">setDownloadBehavior</span><span class="p">(</span>
         <span class="n">behavior</span><span class="o">=</span><span class="s2">&quot;allow&quot;</span><span class="p">,</span>
         <span class="n">browserContextId</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">downloadPath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_download_folder_path</span><span class="p">,</span>
         <span class="n">eventsEnabled</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -5415,8 +5572,10 @@ This method needs to be invoked after holding Shift or similar.</p>
         <span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="n">width</span><span class="p">,</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">height</span>
     <span class="p">}</span>
     <span class="n">window_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_window_id</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_devtools_service</span><span class="o">.</span><span class="n">Browser</span><span class="o">.</span><span class="n">setWindowBounds</span><span class="p">(</span><span class="n">windowId</span><span class="o">=</span><span class="n">window_id</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_devtools_service</span><span class="o">.</span><span class="n">Emulation</span><span class="o">.</span><span class="n">setVisibleSize</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devtools_service</span><span class="o">.</span><span class="n">Browser</span><span class="o">.</span><span class="n">setWindowBounds</span><span class="p">(</span><span class="n">windowId</span><span class="o">=</span><span class="n">window_id</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">,</span> <span class="n">msgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devtools_service</span><span class="o">.</span><span class="n">Emulation</span><span class="o">.</span><span class="n">setVisibleSize</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_parse_all_messages</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -5625,6 +5784,7 @@ This method needs to be invoked after holding Shift or similar.</p>
         <span class="c1"># Likely the connection as interrupted already or it timed-out</span>
         <span class="k">pass</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_chrome_launcher</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
 </code></pre></div>
         </details>
     </div>

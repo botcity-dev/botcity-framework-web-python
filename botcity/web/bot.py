@@ -4,25 +4,27 @@ import io
 import logging
 import multiprocessing
 import os
-import websocket
+import platform
 import random
+import shutil
 import time
-import pyperclip
 
-import PyChromeDevTools
 from PIL import Image
-
 from botcity.base import BaseBot, State
 from botcity.base.utils import only_if_element
+from bs4 import BeautifulSoup
+from selenium.common.exceptions import InvalidSessionIdException
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 
 from . import config, cv2find
-from .chrome import ChromeLauncher
-
+from .browsers import Browser, BROWSER_CONFIGS
 
 logger = logging.getLogger(__name__)
 
 
 class WebBot(BaseBot):
+    KEYS = Keys
     """
     Base class for Web Bots.
     Users must implement the `action` method in their classes.
@@ -37,21 +39,14 @@ class WebBot(BaseBot):
         self.state = State()
         self.maestro = None
 
-        self._ip = "127.0.0.1"
+        self._browser = Browser.CHROME
+        self._options = None
+        self._driver_path = None
 
+        self._driver = None
         self._headless = headless
 
-        self._chrome_launcher = None
-        self._devtools_service = None
-
-        self._page = None
-        self._network = None
-        self._input = None
-        self._run = None
-
-        self._dialog = None
-
-        self._last_clipboard = None
+        self._clipboard = ""
 
         # Stub mouse coordinates
         self._x = 0
@@ -61,7 +56,56 @@ class WebBot(BaseBot):
         self._shift_hold = False
 
         self._dimensions = (1600, 900)
-        self._download_folder_path = os.path.join(os.path.expanduser("~"), "Desktop")
+        self._download_folder_path = None  # Defaults to ~/Desktop
+
+    @property
+    def driver(self):
+        return self._driver
+
+    @property
+    def driver_path(self):
+        return self._driver_path
+
+    @driver_path.setter
+    def driver_path(self, driver_path):
+        """
+        The webdriver executable path.
+
+        Args:
+            driver_path (str): The full path to the proper webdriver path used for the selected browser.
+                If set to None, the code will look into the PATH for the proper file when starting the browser.
+        """
+        if driver_path and not os.path.isfile(driver_path):
+            raise ValueError("Invalid driver_path. The file does not exist.")
+        self._driver_path = driver_path
+
+    @property
+    def browser(self):
+        return self._browser
+
+    @browser.setter
+    def browser(self, browser):
+        """
+        The web browser to be used.
+
+        Args:
+            browser (Browser): The name of web browser to be used from the Browser enum.
+        """
+        self._browser = browser
+
+    @property
+    def options(self):
+        return self._options
+
+    @options.setter
+    def options(self, options):
+        """
+        The options to be passed down to the WebDriver when starting the browser.
+
+        Args:
+            options (Options): The browser specific options to be used.
+        """
+        self._options = options
 
     @property
     def headless(self):
@@ -75,105 +119,40 @@ class WebBot(BaseBot):
         Args:
             headless (boolean): If set to True will make the bot run headless.
         """
-        if self._chrome_launcher:
-            logger.warning("Browser is running. Invoke stop_browser and start_browser for changes to take effect.")
+        if self._driver:
+            logger.warning("Browser is running. Invoke stop_browser and start browser for changes to take effect.")
         self._headless = headless
 
     def start_browser(self):
         """
-        Start the Chrome Browser and sets up the permissions required.
+        Starts the selected browser.
         """
-        if not self._chrome_launcher:
-            self._chrome_launcher = ChromeLauncher(headless=self.headless)
-            self._chrome_launcher.launch()
-        if not self._devtools_service:
-            self._devtools_service = PyChromeDevTools.ChromeInterface(host=self._ip,
-                                                                      port=self._chrome_launcher.devtools_port,
-                                                                      auto_connect=False)
-            self.sleep(100)
-            self._devtools_service.connect()
-        self._page = self._devtools_service.Page
-        self._page.enable()
-        self._network = self._devtools_service.Network
-        self._input = self._devtools_service.Input
-        self._network.enable()
-        self._run = self._devtools_service.Runtime
-        self._run.enable()
-        self._devtools_service.Accessibility.enable()
-        self._devtools_service.ApplicationCache.enable()
-        self.set_download_folder()
-        permissions = [
-            "accessibilityEvents",
-            "audioCapture",
-            "backgroundSync",
-            "backgroundFetch",
-            "clipboardReadWrite",
-            "clipboardSanitizedWrite",
-            "displayCapture",
-            "durableStorage",
-            "flash",
-            "geolocation",
-            "midi",
-            "midiSysex",
-            "nfc",
-            "notifications",
-            "paymentHandler",
-            "videoCapture",
-            "idleDetection"
-        ]
-        self._devtools_service.Browser.grantPermissions(permissions=permissions)
+        def check_driver():
+            # Look for driver
+            driver_name = BROWSER_CONFIGS.get(self.browser).get("driver")
+            location = shutil.which(driver_name)
+            if not location:
+                raise RuntimeError(
+                    f"{driver_name} was not found. Please make sure to have it on your PATH or set driver_path")
+            return location
+
+        # Specific webdriver class for a given browser
+        driver_class = BROWSER_CONFIGS.get(self.browser).get("class")
+        # Specific default options method for a given browser
+        func_def_options = BROWSER_CONFIGS.get(self.browser).get("options")
+
+        opt = self.options or func_def_options(self.headless, self._download_folder_path, None)
+        driver_path = self.driver_path or check_driver()
+
+        self._driver = driver_class(options=opt, executable_path=driver_path)
+        self.set_screen_resolution()
 
     def stop_browser(self):
         """
         Stops the Chrome browser and clean up the User Data Directory.
         """
-        try:
-            self._devtools_service.Browser.close()
-            time.sleep(1)
-        except (BrokenPipeError, websocket.WebSocketConnectionClosedException):
-            # Likely the connection as interrupted already or it timed-out
-            pass
-        self._chrome_launcher.shutdown()
-        self._reset()
-
-    def _reset(self):
-        self._chrome_launcher = None
-        self._devtools_service = None
-
-        self._page = None
-        self._network = None
-        self._input = None
-        self._run = None
-
-    def _parse_all_messages(self, messages):
-        """
-        This method inspect all messages emitted by the browser to lookup for information.
-        """
-        for m in messages:
-            # Checking for dialogs that were opened
-            if m.get('method') == 'Page.javascriptDialogOpening':
-                self._dialog = m.get('params')
-                return self._dialog
-
-    def set_download_folder(self, path=None):
-        """
-        Set the destination folder for downloads.
-
-        Args:
-            path (str): The desired path.
-
-        """
-        if path:
-            self._download_folder_path = path
-        if not self._devtools_service:
-            return
-        res, msgs = self._devtools_service.Browser.setDownloadBehavior(
-            behavior="allow",
-            browserContextId=None,
-            downloadPath=self._download_folder_path,
-            eventsEnabled=True
-        )
-        self._parse_all_messages(msgs)
+        self._driver.quit()
+        self._driver = None
 
     def set_screen_resolution(self, width=None, height=None):
         """
@@ -186,14 +165,17 @@ class WebBot(BaseBot):
         width = width or self._dimensions[0]
         height = height or self._dimensions[1]
 
-        bounds = {
-            "left": 0, "top": 0, "width": width, "height": height
-        }
-        window_id = self.get_window_id()
-        res, msgs = self._devtools_service.Browser.setWindowBounds(windowId=window_id, bounds=bounds)
-        self._parse_all_messages(msgs)
-        res, msgs = self._devtools_service.Emulation.setVisibleSize(width=width, height=height)
-        self._parse_all_messages(msgs)
+        if self.headless:
+            # When running headless the window size is the viewport size
+            window_size = (width, height)
+        else:
+            # When running non-headless we need to account for the borders and etc
+            # So the size must be bigger to have the same viewport size as before
+            window_size = self._driver.execute_script("""
+                return [window.outerWidth - window.innerWidth + arguments[0],
+                  window.outerHeight - window.innerHeight + arguments[1]];
+                """, width, height)
+        self._driver.set_window_size(*window_size)
 
     ##########
     # Display
@@ -217,12 +199,11 @@ class WebBot(BaseBot):
         y = region[1] or 0
         width = region[2] or self._dimensions[0]
         height = region[3] or self._dimensions[1]
-        viewport = dict(x=x, y=y, width=width, height=height, scale=1)
-        data = self._page.captureScreenshot(format="png", quality=100, clip=viewport,
-                                            fromSurface=True, captureBeyondViewport=False)
-        data = data[0]['result']['data']
-        image = base64.b64decode(data)
-        return Image.open(io.BytesIO(image))
+        data = self._driver.get_screenshot_as_base64()
+        image_data = base64.b64decode(data)
+        img = Image.open(io.BytesIO(image_data))
+        img = img.crop((x, y, x + width, y + height))
+        return img
 
     def get_viewport_size(self):
         """
@@ -232,10 +213,9 @@ class WebBot(BaseBot):
             width (int): The current viewport width.
             height (int): The current viewport height.
         """
-        layout_metrics = self._page.getLayoutMetrics()
-        content_size = layout_metrics[0]['result']['contentSize']
-        width = content_size['width']
-        height = content_size['height']
+        # Access each dimension individually
+        width = self._driver.get_window_size().get("width")
+        height = self._driver.get_window_size().get("height")
         return width, height
 
     def add_image(self, label, path):
@@ -401,7 +381,7 @@ class WebBot(BaseBot):
 
         region = (x, y, w, h)
 
-        element_path = self.state.map_images[label]
+        element_path = self._search_image_file(label)
 
         if threshold:
             # TODO: Figure out how we should do threshold
@@ -598,33 +578,50 @@ class WebBot(BaseBot):
     #########
     # Browser
     #########
+    def page_title(self):
+        """
+        Returns the active page title.
 
-    def navigate_to(self, url, wait=False):
+        Returns:
+            title (str): The page title.
+        """
+        try:
+            return self._driver.title
+        except InvalidSessionIdException:
+            return None
+
+    def page_source(self):
+        """
+        Returns the active page source.
+
+        Returns:
+            soup (BeautifulSoup): BeautifulSoup object for the page source.
+        """
+        try:
+            soup = BeautifulSoup(self._driver.page_source, 'html.parser')
+            return soup
+        except InvalidSessionIdException:
+            return None
+
+    def navigate_to(self, url):
         """
         Opens the browser on the given URL.
 
         Args:
             url (str):  The URL to be visited.
-            wait (bool): Whether or not to wait for the loadEvent fo be fired. Defaults to False.
-
         """
-        self.start_browser()
-        self.set_screen_resolution()
-        self._page.navigate(url=url)
-        if wait:
-            self._devtools_service.wait_event("Page.frameStoppedLoading",
-                                              timeout=config.DEFAULT_NAVIGATE_TIMEOUT / 1000)
+        if not self._driver:
+            self.start_browser()
+        self._driver.get(url)
 
-    def browse(self, url, wait=False):
+    def browse(self, url):
         """
         Opens the browser on the given URL.
 
         Args:
             url (str):  The URL to be visited.
-            wait (bool): Whether or not to wait for the loadEvent fo be fired. Defaults to False.
-
         """
-        self.navigate_to(url, wait=wait)
+        self.navigate_to(url)
 
     def execute_javascript(self, code):
         """
@@ -636,22 +633,7 @@ class WebBot(BaseBot):
         Returns:
             value (object): Returns the code output or None if not available or if an error happens.
         """
-        # TODO: Check for errors and return the error as well
-        output = self._run.evaluate(expression=code)
-        if output:
-            result = output[0]['result'].get('result')
-            if result:
-                return result.get('value')
-        return None
-
-    def get_window_id(self):
-        """
-        Fetch the current window Id
-
-        Returns:
-            id (str): The window Id
-        """
-        return self._devtools_service.Browser.getWindowForTarget()[0]['result']['windowId']
+        return self._driver.execute_script(code)
 
     def handle_js_dialog(self, accept=True, prompt_text=None):
         """
@@ -663,11 +645,16 @@ class WebBot(BaseBot):
             prompt_text (str): The text to enter into the dialog prompt before accepting.
                 Used only if this is a prompt dialog.
         """
-        kwargs = {'accept': accept}
+        dialog = self.get_js_dialog()
+        if not dialog:
+            # TODO: Maybe we should raise an exception here if no alert available
+            return
         if prompt_text is not None:
-            kwargs['promptText'] = prompt_text
-        self._devtools_service.Page.handleJavaScriptDialog(**kwargs)
-        self._dialog = None
+            dialog.send_keys(prompt_text)
+        if accept:
+            dialog.accept()
+        else:
+            dialog.dismiss()
 
     def get_js_dialog(self):
         """
@@ -677,38 +664,48 @@ class WebBot(BaseBot):
             dialog (dict): The dialog information or None if not available.
                 See https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-javascriptDialogOpening
         """
-        if not self._dialog:
-            return self._find_js_dialog()
-        return self._dialog
-
-    def _find_js_dialog(self):
-        """
-        Find the JavaScript dialog that is currently open and return its information.
-
-        Returns:
-            dialog (dict): The dialog information.
-                See https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-javascriptDialogOpening
-        """
-        messages = self._devtools_service.pop_messages()
-        print('find_js_dialog -> messages: ', messages)
-        for m in messages:
-            if m.get('method') == 'Page.javascriptDialogOpening':
-                self._dialog = m.get('params')
-                return self._dialog
+        try:
+            dialog = self._driver.switch_to.alert
+            return dialog
+        except Exception:
+            return None
 
     def get_tabs(self):
-        ...
+        try:
+            return self._driver.window_handles
+        except InvalidSessionIdException:
+            return []
 
     def create_tab(self, url):
-        ...
+        try:
+            # Refactor this when Selenium 4 is released
+            self.execute_javascript(f"window.open('{url}', '_blank');")
+            self._driver.switch_to.window(self.get_tabs()[-1])
+        except InvalidSessionIdException:
+            self.navigate_to(url)
 
-    def close_tab(self, tab=None):
-        # If tab is None, close current tab
-        ...
+    def create_window(self, url):
 
-    def activate_tab(self, tab):
-        ...
+        try:
+            # Refactor this when Selenium 4 is released
+            self.execute_javascript(f"window.open('{url}', '_blank', 'location=0');")
+            self._driver.switch_to.window(self.get_tabs()[-1])
+        except InvalidSessionIdException:
+            self.navigate_to(url)
 
+    def close_page(self):
+        try:
+            self._driver.close()
+
+            # If it was the last tab we can't switch
+            tabs = self.get_tabs()
+            if tabs:
+                self._driver.switch_to.window(tabs[-1])
+        except InvalidSessionIdException:
+            pass
+
+    def activate_tab(self, handle):
+        self._driver.switch_to.window(handle)
 
     #######
     # Mouse
@@ -753,10 +750,10 @@ class WebBot(BaseBot):
             y (int): The Y coordinate
 
         """
+        ActionChains(self._driver).move_by_offset(-self._x, -self._y).perform()
         self._x = x
         self._y = y
-        res, msgs = self._input.dispatchMouseEvent(type="mouseMoved", x=x, y=y)
-        self._parse_all_messages(msgs)
+        ActionChains(self._driver).move_by_offset(x, y).perform()
 
     def click_at(self, x, y, *, clicks=1, interval_between_clicks=0, button='left'):
         """
@@ -767,21 +764,18 @@ class WebBot(BaseBot):
             y (int): The Y coordinate
             clicks (int, optional): Number of times to click. Defaults to 1.
             interval_between_clicks (int, optional): The interval between clicks in ms. Defaults to 0.
-            button (str, optional): One of 'left', 'right', 'middle'. Defaults to 'left'
+            button (str, optional): One of 'left', 'right'. Defaults to 'left'
         """
-        button_idx = ["None", "left", "right", "middle"]
-        idx = button_idx.index(button)
-        self._x = x
-        self._y = y
+        self.mouse_move(x, y)
         for i in range(clicks):
-            res, msgs = self._input.dispatchMouseEvent(
-                type="mousePressed", x=x, y=y, button=button, buttons=idx, clickCount=1
-            )
-            self._parse_all_messages(msgs)
-            res, msgs = self._input.dispatchMouseEvent(
-                type="mouseReleased", x=x, y=y, button=button, buttons=idx, clickCount=1
-            )
-            self._parse_all_messages(msgs)
+            ac = ActionChains(self._driver)
+            if button == 'left':
+                ac.click()
+            elif button == 'right':
+                ac.context_click()
+            else:
+                raise ValueError('Invalid value for button. Accepted values are left or right.')
+            ac.perform()
             self.sleep(interval_between_clicks)
 
     @only_if_element
@@ -827,8 +821,7 @@ class WebBot(BaseBot):
         Args:
             wait_after (int, optional): Interval to wait after clicking on the element.
         """
-        x, y = self.state.center()
-        self.click(x, y, wait_after=wait_after, click=2)
+        self.click(interval_between_clicks=wait_after, click=2)
 
     @only_if_element
     def double_click_relative(self, x, y, interval_between_clicks=0, wait_after=config.DEFAULT_SLEEP_AFTER_ACTION):
@@ -841,8 +834,6 @@ class WebBot(BaseBot):
             interval_between_clicks (int, optional): The interval between clicks in ms. Defaults to 0.
             wait_after (int, optional): Interval to wait after clicking on the element.
         """
-        x = self.state.x() + x
-        y = self.state.y() + y
         self.click_relative(x, y, wait_after=wait_after, click=2, interval_between_clicks=interval_between_clicks)
 
     @only_if_element
@@ -853,8 +844,7 @@ class WebBot(BaseBot):
         Args:
             wait_after (int, optional): Interval to wait after clicking on the element.
         """
-        x, y = self.state.center()
-        self.click(x, y, wait_after=wait_after, click=3)
+        self.click(wait_after=wait_after, click=3)
 
     @only_if_element
     def triple_click_relative(self, x, y, interval_between_clicks=0, wait_after=config.DEFAULT_SLEEP_AFTER_ACTION):
@@ -867,8 +857,6 @@ class WebBot(BaseBot):
             interval_between_clicks (int, optional): The interval between clicks in ms. Defaults to 0.
             wait_after (int, optional): Interval to wait after clicking on the element.
         """
-        x = self.state.x() + x
-        y = self.state.y() + y
         self.click_relative(x, y, wait_after=wait_after, click=3, interval_between_clicks=interval_between_clicks)
 
     def scroll_down(self, clicks):
@@ -879,11 +867,8 @@ class WebBot(BaseBot):
             clicks (int): Number of times to scroll down.
         """
         for i in range(clicks):
-            res, msgs = self._input.dispatchKeyEvent(type="keyDown", commands=["ScrollLineDown"])
-            self._parse_all_messages(msgs)
+            self._driver.execute_script("window.scrollTo(0, window.scrollY + 200)")
             self.sleep(200)
-            res, msgs = self._input.dispatchKeyEvent(type="keyUp", commands=["ScrollLineDown"])
-            self._parse_all_messages(msgs)
 
     def scroll_up(self, clicks):
         """
@@ -893,11 +878,8 @@ class WebBot(BaseBot):
             clicks (int): Number of times to scroll up.
         """
         for i in range(clicks):
-            res, msgs = self._input.dispatchKeyEvent(type="keyDown", commands=["ScrollLineUp"])
-            self._parse_all_messages(msgs)
+            self._driver.execute_script("window.scrollTo(0, window.scrollY - 200)")
             self.sleep(200)
-            res, msgs = self._input.dispatchKeyEvent(type="keyUp", commands=["ScrollLineUp"])
-            self._parse_all_messages(msgs)
 
     def move_to(self, x, y):
         """
@@ -907,10 +889,7 @@ class WebBot(BaseBot):
             x (int): The X coordinate
             y (int): The Y coordinate
         """
-        self._x = x
-        self._y = y
-        res, msgs = self._input.dispatchMouseEvent(type="mouseMoved", x=x, y=y)
-        self._parse_all_messages(msgs)
+        self.mouse_move(x, y)
 
     @only_if_element
     def move(self):
@@ -957,8 +936,7 @@ class WebBot(BaseBot):
             clicks (int, optional): Number of times to click. Defaults to 1.
             interval_between_clicks (int, optional): The interval between clicks in ms. Defaults to 0.
         """
-        x, y = self.state.center()
-        self.click_at(x, y, clicks=clicks, button='right', interval=interval_between_clicks)
+        self.click(clicks=clicks, button='right', interval=interval_between_clicks)
         self.sleep(wait_after)
 
     def right_click_at(self, x, y):
@@ -983,34 +961,12 @@ class WebBot(BaseBot):
             wait_after (int, optional): Interval to wait after clicking on the element.
 
         """
-        x = self.state.x() + x
-        y = self.state.y() + y
         self.click_relative(x, y, wait_after=wait_after, interval_between_clicks=interval_between_clicks,
                             button='right')
 
     ##########
     # Keyboard
     ##########
-
-    def _dispatch_key_event(self, *, event_type="keyDown", text=None, key=None, virtual_kc=None, execute_up=True):
-        kwargs = {
-            "type": event_type
-        }
-        if self._shift_hold:
-            kwargs.update({"modifiers": 8})
-        if text:
-            kwargs.update({"text": text})
-        if virtual_kc is not None:
-            kwargs.update({"windowsVirtualKeyCode": virtual_kc, "nativeVirtualKeyCode": virtual_kc})
-        if key is not None:
-            kwargs.update({"key": key})
-
-        res, msgs = self._input.dispatchKeyEvent(**kwargs)
-        self._parse_all_messages(msgs)
-        if execute_up:
-            res, msgs = self._input.dispatchKeyEvent(type="keyUp")
-            self._parse_all_messages(msgs)
-
     def kb_type(self, text, interval=0):
         """
         Type a text char by char (individual key events).
@@ -1019,9 +975,13 @@ class WebBot(BaseBot):
             text (str): text to be typed.
             interval (int, optional): interval (ms) between each key press. Defaults to 0
         """
+        action = ActionChains(self._driver)
+
         for c in text:
-            self._dispatch_key_event(event_type="char", text=c, execute_up=False)
-            self.sleep(interval)
+            action.send_keys(c)
+            action.pause(interval / 1000.0)
+
+        action.perform()
         self.sleep(config.DEFAULT_SLEEP_AFTER_ACTION)
 
     def paste(self, text=None, wait=0):
@@ -1032,27 +992,10 @@ class WebBot(BaseBot):
             text (str, optional): The text to be pasted. Defaults to None
             wait (int, optional): Wait interval (ms) after task
         """
+        text_to_paste = self._clipboard
         if text:
-            cmd = (
-                "var elementfocused = document.activeElement;"
-                "function copyStringToClipboard(str) {"
-                "  var el = document.createElement('textarea');"
-                "  el.value = str;"
-                "  el.setAttribute('readonly', '');"
-                "  el.style = { position: 'absolute', left: '-9999px' };"
-                "  document.body.appendChild(el);"
-                "  el.select();"
-                "  document.execCommand('copy');"
-                "  document.body.removeChild(el);"
-                "}"
-                f"copyStringToClipboard('{text}');"
-                "elementfocused.focus();"
-            )
-            self.execute_javascript(cmd)
-            self.sleep(500)
-        self.control_v()
-        delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
-        self.sleep(delay)
+            text_to_paste = text
+        self.kb_type(text_to_paste)
 
     def copy_to_clipboard(self, text, wait=0):
         """
@@ -1062,12 +1005,9 @@ class WebBot(BaseBot):
             text (str): The text to be copied.
             wait (int, optional): Wait interval (ms) after task
         """
-        if not self.headless:
-            pyperclip.copy(text)
-            delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
-            self.sleep(delay)
-        else:
-            raise RuntimeError("The clipboard functionality is only available outside of Headless mode.")
+        self._clipboard = text
+        delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
+        self.sleep(delay)
 
     def tab(self, wait=0):
         """
@@ -1077,7 +1017,10 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._dispatch_key_event(event_type="keyDown", key="Tab", virtual_kc=9)
+        action = ActionChains(self._driver)
+        action.key_down(Keys.TAB)
+        action.key_up(Keys.TAB)
+        action.perform()
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1089,7 +1032,10 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._dispatch_key_event(event_type="keyDown", key="Enter", virtual_kc=13, text="\r")
+        action = ActionChains(self._driver)
+        action.key_down(Keys.ENTER)
+        action.key_up(Keys.ENTER)
+        action.perform()
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1101,19 +1047,37 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._dispatch_key_event(event_type="keyDown", key="Right", virtual_kc=0x27)
+        action = ActionChains(self._driver)
+        action.key_down(Keys.ARROW_RIGHT)
+        action.key_up(Keys.ARROW_RIGHT)
+        action.perform()
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
     def key_enter(self, wait=0):
         """
-        Press key Right
+        Press key Enter
 
         Args:
             wait (int, optional): Wait interval (ms) after task
 
         """
         self.enter(wait)
+
+    def key_home(self, wait=0):
+        """
+        Press key Home
+
+        Args:
+            wait (int, optional): Wait interval (ms) after task
+
+        """
+        action = ActionChains(self._driver)
+        action.key_down(Keys.HOME)
+        action.key_up(Keys.HOME)
+        action.perform()
+        delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
+        self.sleep(delay)
 
     def key_end(self, wait=0):
         """
@@ -1123,7 +1087,40 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._dispatch_key_event(event_type="keyDown", key="End", virtual_kc=35)
+        action = ActionChains(self._driver)
+        action.key_down(Keys.END)
+        action.key_up(Keys.END)
+        action.perform()
+        delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
+        self.sleep(delay)
+
+    def page_up(self, wait=0):
+        """
+        Press Page Up key
+
+        Args:
+            wait (int, optional): Wait interval (ms) after task
+
+        """
+        action = ActionChains(self._driver)
+        action.key_down(Keys.PAGE_UP)
+        action.key_up(Keys.PAGE_UP)
+        action.perform()
+        delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
+        self.sleep(delay)
+
+    def page_down(self, wait=0):
+        """
+        Press Page Down key
+
+        Args:
+            wait (int, optional): Wait interval (ms) after task
+
+        """
+        action = ActionChains(self._driver)
+        action.key_down(Keys.PAGE_DOWN)
+        action.key_up(Keys.PAGE_DOWN)
+        action.perform()
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1135,7 +1132,10 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._dispatch_key_event(event_type="keyDown", key="Escape", virtual_kc=27)
+        action = ActionChains(self._driver)
+        action.key_down(Keys.ESCAPE)
+        action.key_up(Keys.ESCAPE)
+        action.perform()
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1148,8 +1148,13 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        code = 111 + idx
-        self._dispatch_key_event(event_type="keyDown", key=f"F{idx}", virtual_kc=code)
+        if idx < 1 or idx > 12:
+            raise ValueError("Only F1 to F12 allowed.")
+        action = ActionChains(self._driver)
+        key = getattr(Keys, f"F{idx}")
+        action.key_down(key)
+        action.key_up(key)
+        action.perform()
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1161,7 +1166,9 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._shift_hold = True
+        action = ActionChains(self._driver)
+        action.key_down(Keys.SHIFT)
+        action.perform()
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1170,17 +1177,16 @@ class WebBot(BaseBot):
         Release key Shift.
         This method needs to be invoked after holding Shift or similar.
         """
-        self._shift_hold = False
+        action = ActionChains(self._driver)
+        action.key_up(Keys.SHIFT)
+        action.perform()
 
     def maximize_window(self):
         """
         Shortcut to maximize window on Windows OS.
         """
-
-        bounds = dict(left=0, top=0, width=0, height=0, windowState="maximized")
-        res, msgs = self._devtools_service.Browser.setWindowBounds(windowId=self.get_window_id(), bounds=bounds)
-        self._parse_all_messages(msgs)
-        self.sleep(1000)
+        # TODO: Understand the complications associated with maximizing the browser and the resolution
+        self._driver.maximize_window()
 
     def type_keys_with_interval(self, interval, keys):
         """
@@ -1188,17 +1194,17 @@ class WebBot(BaseBot):
 
         Args:
             interval (int): Interval (ms) in which to press and release keys
-            keys (list): List of keys to be pressed
+            keys (list): List of Keys to be pressed
         """
-        # TODO: Implement this method
-        raise NotImplementedError()
-        # for k in keys:
-        #     kb.press(k)
-        #     sleep(interval)
-        #
-        # for k in keys.reverse():
-        #     kb.release(k)
-        #     sleep(interval)
+        action = ActionChains(self._driver)
+
+        for k in keys:
+            action.key_down(k)
+            action.pause(interval / 1000.0)
+        for k in reversed(keys):
+            action.key_up(k)
+            action.pause(interval / 1000.0)
+        action.perform()
 
     def type_keys(self, keys):
         """
@@ -1217,31 +1223,7 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        cmd = (
-            "var text = '';"
-            "if (window.getSelection) {"
-            "  text = window.getSelection().toString();"
-            "} else if (document.selection && document.selection.type != 'Control') {"
-            "  text = document.selection.createRange().text;"
-            "}"
-        )
-        self.execute_javascript(cmd)
-        cmd = (
-            "if( null == document.getElementById('clipboardTransferText')) {"
-            "  let el = document.createElement('textarea');"
-            "  el.value = '';"
-            "  el.setAttribute('readonly', '');"
-            "  el.style = {position: 'absolute', left: '-9999px'};"
-            "  el.id = 'clipboardTransferText';"
-            "  document.body.appendChild(el);"
-            "}"
-            "document.getElementById('clipboardTransferText').value = text;"
-        )
-        self.execute_javascript(cmd)
-        res, msgs = self._input.dispatchKeyEvent(type="keyDown", commands=["Copy"])
-        self._parse_all_messages(msgs)
-        res, msgs = self._input.dispatchKeyEvent(type="keyUp", commands=["Copy"])
-        self._parse_all_messages(msgs)
+        self._clipboard = self.execute_javascript("return window.getSelection().toString();")
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1253,12 +1235,7 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        res, msgs = self._input.dispatchKeyEvent(type="keyDown", commands=["Paste"])
-        self._parse_all_messages(msgs)
-        res, msgs = self._input.dispatchKeyEvent(type="keyUp", commands=["Paste"])
-        self._parse_all_messages(msgs)
-        delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
-        self.sleep(delay)
+        self.paste()
 
     def control_a(self, wait=0):
         """
@@ -1268,12 +1245,15 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        res, msgs = self._input.dispatchKeyEvent(type="keyDown", commands=["SelectAll"])
-        self._parse_all_messages(msgs)
-        res, msgs = self._input.dispatchKeyEvent(type="keyUp", commands=["SelectAll"])
-        self._parse_all_messages(msgs)
-        delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
-        self.sleep(delay)
+        action = ActionChains(self._driver)
+        key = Keys.CONTROL
+        if platform.system() == 'Darwin':
+            key = Keys.COMMAND
+
+        action.key_down(key)
+        action.send_keys('a')
+        action.key_up(key)
+        action.perform()
 
     def get_clipboard(self):
         """
@@ -1282,12 +1262,7 @@ class WebBot(BaseBot):
         Returns:
             text (str): Current clipboard content
         """
-        ret = self.execute_javascript("document.getElementById('clipboardTransferText').value")
-        if ret:
-            self._last_clipboard = ret
-            self.execute_javascript("document.getElementById('clipboardTransferText').remove();")
-            return ret
-        return self._last_clipboard
+        return self._clipboard
 
     def type_left(self, wait=0):
         """
@@ -1297,7 +1272,10 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._dispatch_key_event(event_type="keyDown", key="Left", virtual_kc=37)
+        action = ActionChains(self._driver)
+        action.key_down(Keys.ARROW_LEFT)
+        action.key_up(Keys.ARROW_LEFT)
+        action.perform()
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1309,9 +1287,7 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._dispatch_key_event(event_type="keyDown", key="Right", virtual_kc=39)
-        delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
-        self.sleep(delay)
+        self.key_right(wait=wait)
 
     def type_down(self, wait=0):
         """
@@ -1321,7 +1297,10 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._dispatch_key_event(event_type="keyDown", key="Down", virtual_kc=40)
+        action = ActionChains(self._driver)
+        action.key_down(Keys.ARROW_DOWN)
+        action.key_up(Keys.ARROW_DOWN)
+        action.perform()
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1333,7 +1312,10 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._dispatch_key_event(event_type="keyDown", key="Up", virtual_kc=38)
+        action = ActionChains(self._driver)
+        action.key_down(Keys.ARROW_UP)
+        action.key_up(Keys.ARROW_UP)
+        action.perform()
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1345,7 +1327,10 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._dispatch_key_event(event_type="keyDown", key="Up", virtual_kc=32)
+        action = ActionChains(self._driver)
+        action.key_down(Keys.SPACE)
+        action.key_up(Keys.SPACE)
+        action.perform()
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1357,7 +1342,10 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._dispatch_key_event(event_type="keyDown", key="Back Space", virtual_kc=0x8)
+        action = ActionChains(self._driver)
+        action.key_down(Keys.BACK_SPACE)
+        action.key_up(Keys.BACK_SPACE)
+        action.perform()
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1369,7 +1357,10 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._dispatch_key_event(event_type="keyDown", key="Delete", virtual_kc=46)
+        action = ActionChains(self._driver)
+        action.key_down(Keys.DELETE)
+        action.key_up(Keys.DELETE)
+        action.perform()
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 
@@ -1396,3 +1387,26 @@ class WebBot(BaseBot):
 
         """
         self.wait(interval)
+
+    def wait_for_file(self, path, timeout=10000):
+        """
+        Invoke the system handler to open the given file.
+
+        Args:
+            path (str): The path for the file to be executed
+            timeout (int, optional): Maximum wait time (ms) to search for a hit.
+                Defaults to 10000ms (10s).
+
+        Returns:
+            status (bool): Whether or not the file was available before the timeout
+
+        """
+        start_time = time.time()
+
+        while True:
+            elapsed_time = (time.time() - start_time) * 1000
+            if elapsed_time > timeout:
+                return False
+            if os.path.isfile(path) and os.access(path, os.R_OK):
+                return True
+            self.sleep(config.DEFAULT_SLEEP_AFTER_ACTION)

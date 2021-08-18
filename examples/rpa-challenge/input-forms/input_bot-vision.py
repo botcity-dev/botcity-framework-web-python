@@ -2,8 +2,7 @@ import os
 import sys
 import requests
 import pandas
-from botcity.web import WebBot
-from botcity.web import config
+from botcity.web import WebBot, config, Browser
 
 config.DEFAULT_SLEEP_AFTER_ACTION = 20
 
@@ -11,10 +10,7 @@ config.DEFAULT_SLEEP_AFTER_ACTION = 20
 class Bot(WebBot):
     def action(self, execution=None):
         # Execute in non-headless mode
-        self.headless = False
-
-        # Add the resource images
-        self.add_image("start", self.get_resource_abspath("start-web.png"))
+        self.headless = True
 
         # Download Input Spreadsheet
         r = requests.get("http://www.rpachallenge.com/assets/downloadFiles/challenge.xlsx")
@@ -30,12 +26,12 @@ class Bot(WebBot):
 
         print('Started browser')
         # Navigate to the website
-        self.browse("http://www.rpachallenge.com/", wait=True)
+        self.browse("http://www.rpachallenge.com/")
         print('Finished loading...')
 
         # Find and click into the Start button
         print('Find Start')
-        self.find("start")
+        ele = self.find("start")
         print('Click Start')
         self.click()
 
@@ -61,10 +57,10 @@ class Bot(WebBot):
         data = self.get_clipboard()
         self.stop_browser()
 
-        print("#"*80)
+        print("#" * 80)
         print("# RPA Challenge Result:")
         print("#" * 80)
-        print(data[data.rfind("RESET")+6:])
+        print(data[data.rfind("Your success"):])
 
 
 if __name__ == '__main__':

@@ -16,7 +16,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
         user_data_dir = temp_dir.name
         atexit.register(cleanup_temp_dir, temp_dir)
     firefox_profile = webdriver.FirefoxProfile(user_data_dir)
-    firefox_profile = webdriver.FirefoxProfile()
+    firefox_profile.set_preference("security.default_personal_cert", "Select Automatically")
     firefox_profile.set_preference('browser.download.folderList', 2)
     firefox_profile.set_preference('browser.download.manager.showWhenStarting', False)
     if not download_folder_path:

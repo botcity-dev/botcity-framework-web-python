@@ -183,7 +183,9 @@ class WebBot(BaseBot):
         func_def_options = BROWSER_CONFIGS.get(self.browser).get("options")
 
         opt = self.options or func_def_options(self.headless, self._download_folder_path, None)
+        self.options = opt
         driver_path = self.driver_path or check_driver()
+        self.driver_path = driver_path
 
         self._driver = driver_class(options=opt, executable_path=driver_path)
         self.set_screen_resolution()

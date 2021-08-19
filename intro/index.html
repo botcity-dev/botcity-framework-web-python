@@ -524,7 +524,7 @@ available browser by setting the <code>browser</code> property to one of the <co
 
 
 <span class="k">class</span> <span class="nc">Bot</span><span class="p">(</span><span class="n">WebBot</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">execution</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">execution</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Configure whether or not to run on headless mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">headless</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -546,7 +546,7 @@ via the <code>driver_path</code> property.</p>
 
 
 <span class="k">class</span> <span class="nc">Bot</span><span class="p">(</span><span class="n">WebBot</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">execution</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">execution</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Configure whether or not to run on headless mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">headless</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -587,7 +587,7 @@ the <code>default options</code> curated by BotCity and make your changes or sta
 <span class="c1">#from botcity.web.browsers.firefox import default_options</span>
 
 <span class="k">class</span> <span class="nc">Bot</span><span class="p">(</span><span class="n">WebBot</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">execution</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">execution</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Configure whether or not to run on headless mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">headless</span> <span class="o">=</span> <span class="kc">False</span>
 

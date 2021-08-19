@@ -88,6 +88,12 @@ class WebBot(BaseBot):
 
     @property
     def browser(self):
+        """
+        The web browser to be used.
+
+        Returns:
+            browser (Browser): The web browser to be used.
+        """
         return self._browser
 
     @browser.setter
@@ -102,6 +108,12 @@ class WebBot(BaseBot):
 
     @property
     def options(self):
+        """
+        The options to be passed down to the WebDriver when starting the browser.
+
+        Returns:
+            options (Options): The browser specific options to be used.
+        """
         return self._options
 
     @options.setter
@@ -131,6 +143,12 @@ class WebBot(BaseBot):
 
     @property
     def headless(self):
+        """
+        Controls whether or not the bot will run headless.
+
+        Returns:
+            headless (bool): Whether or not to run the browser on headless mode.
+        """
         return self._headless
 
     @headless.setter

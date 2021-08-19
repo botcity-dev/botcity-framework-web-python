@@ -1,7 +1,7 @@
 import sys
 import requests
 import pandas
-from botcity.web import WebBot
+from botcity.web import WebBot, Browser
 
 
 class Bot(WebBot):
@@ -9,8 +9,13 @@ class Bot(WebBot):
         # Execute in non-headless mode
         self.headless = True
 
-        # Add the resource images
-        self.add_image("start", self.get_resource_abspath("start-web.png"))
+        # For Firefox
+        self.browser = Browser.FIREFOX
+        self.driver_path = "/Volumes/SlepickaHD/Users/slepicka/sandbox/git-botcity/toolbox/webdrivers/geckodriver"
+
+        # For Chrome
+        self.browser = Browser.CHROME
+        self.driver_path = "/Volumes/SlepickaHD/Users/slepicka/sandbox/git-botcity/toolbox/webdrivers/chromedriver"
 
         # Download Input Spreadsheet
         r = requests.get("http://www.rpachallenge.com/assets/downloadFiles/challenge.xlsx")
@@ -34,7 +39,7 @@ class Bot(WebBot):
             commands.append("$(\"input[type='submit']\")[0].click();")
 
         # Navigate to the website
-        self.browse("http://www.rpachallenge.com/", wait=True)
+        self.browse("http://www.rpachallenge.com/")
         self.execute_javascript("".join(commands))
         self.control_a()
         self.control_c()
@@ -43,7 +48,7 @@ class Bot(WebBot):
         print("#"*80)
         print("# RPA Challenge Result:")
         print("#" * 80)
-        print(data[data.rfind("RESET")+6:])
+        print(data[data.rfind("Your success"):])
 
 
 if __name__ == '__main__':

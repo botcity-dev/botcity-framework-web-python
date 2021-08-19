@@ -1,6 +1,6 @@
 botcity-framework-base>=0.2.0
+beautifulsoup4
+numpy
 opencv-python
-pyperclip
-PyChromeDevTools
-websocket-client
 pillow
+selenium

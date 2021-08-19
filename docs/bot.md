@@ -14,7 +14,7 @@ from botcity.web import WebBot
 
 
 class Bot(WebBot):
-    def action(self, execution):
+    def action(self, execution=None
         # Configure whether or not to run on headless mode
         self.headless = False
 

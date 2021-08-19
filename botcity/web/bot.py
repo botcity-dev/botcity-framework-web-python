@@ -151,6 +151,8 @@ class WebBot(BaseBot):
         """
         Stops the Chrome browser and clean up the User Data Directory.
         """
+        if not self._driver:
+            return
         self._driver.quit()
         self._driver = None
 
@@ -603,16 +605,24 @@ class WebBot(BaseBot):
         except InvalidSessionIdException:
             return None
 
-    def navigate_to(self, url):
+    def navigate_to(self, url, is_retry=False):
         """
         Opens the browser on the given URL.
 
         Args:
             url (str):  The URL to be visited.
+            is_retry (bool): Whether or not this is a retry attempt.
         """
+        self._x = 0
+        self._y = 0
         if not self._driver:
             self.start_browser()
-        self._driver.get(url)
+        try:
+            self._driver.get(url)
+        except InvalidSessionIdException:
+            if not is_retry:
+                self.stop_browser()
+                self.navigate_to(url, is_retry=True)
 
     def browse(self, url):
         """
@@ -750,10 +760,12 @@ class WebBot(BaseBot):
             y (int): The Y coordinate
 
         """
-        ActionChains(self._driver).move_by_offset(-self._x, -self._y).perform()
+        # ActionChains(self._driver).move_by_offset(-self._x, -self._y).perform()
+        mx = x-self._x
+        my = y-self._y
         self._x = x
         self._y = y
-        ActionChains(self._driver).move_by_offset(x, y).perform()
+        ActionChains(self._driver).move_by_offset(mx, my).perform()
 
     def click_at(self, x, y, *, clicks=1, interval_between_clicks=0, button='left'):
         """
@@ -858,6 +870,28 @@ class WebBot(BaseBot):
             wait_after (int, optional): Interval to wait after clicking on the element.
         """
         self.click_relative(x, y, wait_after=wait_after, click=3, interval_between_clicks=interval_between_clicks)
+
+    def mouse_down(self, wait_after=config.DEFAULT_SLEEP_AFTER_ACTION, *, button='left'):
+        """
+        Holds down the requested mouse button.
+
+        Args:
+            wait_after (int, optional): Interval to wait after clicking on the element.
+            button (str, optional): One of 'left', 'right', 'middle'. Defaults to 'left'
+        """
+        ActionChains(self._driver).click_and_hold().perform()
+        self.sleep(wait_after)
+
+    def mouse_up(self, wait_after=config.DEFAULT_SLEEP_AFTER_ACTION, *, button='left'):
+        """
+        Releases the requested mouse button.
+
+        Args:
+            wait_after (int, optional): Interval to wait after clicking on the element.
+            button (str, optional): One of 'left', 'right', 'middle'. Defaults to 'left'
+        """
+        ActionChains(self._driver).release().perform()
+        self.sleep(wait_after)
 
     def scroll_down(self, clicks):
         """
@@ -1072,6 +1106,7 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
+        # TODO: Investigate why with Firefox the key isn't working properly
         action = ActionChains(self._driver)
         action.key_down(Keys.HOME)
         action.key_up(Keys.HOME)
@@ -1102,6 +1137,7 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
+        # TODO: Investigate why with Firefox the key isn't working properly
         action = ActionChains(self._driver)
         action.key_down(Keys.PAGE_UP)
         action.key_up(Keys.PAGE_UP)
@@ -1117,6 +1153,7 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
+        # TODO: Investigate why with Firefox the key isn't working properly
         action = ActionChains(self._driver)
         action.key_down(Keys.PAGE_DOWN)
         action.key_up(Keys.PAGE_DOWN)
@@ -1223,7 +1260,18 @@ class WebBot(BaseBot):
             wait (int, optional): Wait interval (ms) after task
 
         """
-        self._clipboard = self.execute_javascript("return window.getSelection().toString();")
+        # Firefox can't do window.getSelection() and return a proper value when the selected text
+        # is in an input of similar. While Firefox doesn't get its shit together we apply this
+        # ugly alternative so control+c works for "all" browsers tested so far.
+        cmd = """
+        try {
+            return document.activeElement.value.substring(document.activeElement.selectionStart,document.activeElement.selectionEnd);
+        } catch(error) {
+            return window.getSelection().toString();
+        }
+        """
+
+        self._clipboard = self.execute_javascript(cmd)
         delay = max(0, wait or config.DEFAULT_SLEEP_AFTER_ACTION)
         self.sleep(delay)
 

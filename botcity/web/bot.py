@@ -108,6 +108,21 @@ class WebBot(BaseBot):
         self._options = options
 
     @property
+    def download_folder_path(self):
+        return self._download_folder_path
+
+    @download_folder_path.setter
+    def download_folder_path(self, folder_path):
+        """
+        The download folder path to be used. Set it up before starting the Browser or browsing a URL or restart the
+        browser after changing it.
+
+        Args:
+            folder_path (str): The desired download folder path.
+        """
+        self._download_folder_path = folder_path
+
+    @property
     def headless(self):
         return self._headless
 
@@ -1264,11 +1279,14 @@ class WebBot(BaseBot):
         # is in an input of similar. While Firefox doesn't get its shit together we apply this
         # ugly alternative so control+c works for "all" browsers tested so far.
         cmd = """
-        try {
-            return document.activeElement.value.substring(document.activeElement.selectionStart,document.activeElement.selectionEnd);
-        } catch(error) {
-            return window.getSelection().toString();
-        }
+            try {
+                return document.activeElement.value.substring(
+                    document.activeElement.selectionStart,
+                    document.activeElement.selectionEnd
+                );
+            } catch(error) {
+                return window.getSelection().toString();
+            }
         """
 
         self._clipboard = self.execute_javascript(cmd)

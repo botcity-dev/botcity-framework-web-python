@@ -60,6 +60,13 @@ class WebBot(BaseBot):
 
     @property
     def driver(self):
+        """
+        The WebDriver driver instance.
+
+        Returns:
+            driver (WebDriver): The WebDriver driver instance.
+
+        """
         return self._driver
 
     @property

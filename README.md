@@ -20,10 +20,11 @@
 # Prerequisites
 * Python 3.7+
 * botcity-framework-base
-* PyChromeDevTools 
-* websocket
-* pyperclip
-* opencv
+* beautifulsoup4
+* numpy
+* opencv-python
+* pillow
+* selenium
 
 Python package requirements are listed in the requirements.txt file, which can
 be used to install all requirements from pip: 'pip install -r requirements.txt'

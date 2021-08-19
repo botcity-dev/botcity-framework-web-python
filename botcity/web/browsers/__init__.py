@@ -1,8 +1,9 @@
 import enum
-from . import chrome
-from . import firefox
 
 from selenium import webdriver
+
+from . import chrome
+from . import firefox
 
 
 class Browser(str, enum.Enum):

@@ -142,6 +142,7 @@ class WebBot(BaseBot):
         """
         Starts the selected browser.
         """
+
         def check_driver():
             # Look for driver
             driver_name = BROWSER_CONFIGS.get(self.browser).get("driver")
@@ -776,8 +777,8 @@ class WebBot(BaseBot):
 
         """
         # ActionChains(self._driver).move_by_offset(-self._x, -self._y).perform()
-        mx = x-self._x
-        my = y-self._y
+        mx = x - self._x
+        my = y - self._y
         self._x = x
         self._y = y
         ActionChains(self._driver).move_by_offset(mx, my).perform()

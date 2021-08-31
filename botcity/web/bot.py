@@ -20,6 +20,14 @@ from selenium.webdriver.common.keys import Keys
 from . import config, cv2find
 from .browsers import Browser, BROWSER_CONFIGS
 
+
+try:
+    from botcity.maestro import BotMaestroSDK
+    MAESTRO_AVAILABLE = True
+except ImportError:
+    MAESTRO_AVAILABLE = False
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -37,7 +45,7 @@ class WebBot(BaseBot):
 
     def __init__(self, headless=False):
         self.state = State()
-        self.maestro = None
+        self.maestro = BotMaestroSDK() if MAESTRO_AVAILABLE else None
 
         self._browser = Browser.CHROME
         self._options = None

@@ -830,16 +830,17 @@ class WebBot(BaseBot):
             button (str, optional): One of 'left', 'right'. Defaults to 'left'
         """
         self.mouse_move(x, y)
+        ac = ActionChains(self._driver)
         for i in range(clicks):
-            ac = ActionChains(self._driver)
             if button == 'left':
                 ac.click()
             elif button == 'right':
                 ac.context_click()
             else:
                 raise ValueError('Invalid value for button. Accepted values are left or right.')
-            ac.perform()
-            self.sleep(interval_between_clicks)
+            ac.pause(interval_between_clicks/1000.0)
+        ac.perform()
+
 
     @only_if_element
     def click(self, wait_after=config.DEFAULT_SLEEP_AFTER_ACTION, *,

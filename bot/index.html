@@ -2053,16 +2053,16 @@ the ChromeDriver WebDriver to remote control the browser.</p>
 <span class="sd">        button (str, optional): One of &#39;left&#39;, &#39;right&#39;. Defaults to &#39;left&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">mouse_move</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">ActionChains</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">clicks</span><span class="p">):</span>
-        <span class="n">ac</span> <span class="o">=</span> <span class="n">ActionChains</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">button</span> <span class="o">==</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span>
             <span class="n">ac</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
         <span class="k">elif</span> <span class="n">button</span> <span class="o">==</span> <span class="s1">&#39;right&#39;</span><span class="p">:</span>
             <span class="n">ac</span><span class="o">.</span><span class="n">context_click</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid value for button. Accepted values are left or right.&#39;</span><span class="p">)</span>
-        <span class="n">ac</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">interval_between_clicks</span><span class="p">)</span>
+        <span class="n">ac</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="n">interval_between_clicks</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">)</span>
+    <span class="n">ac</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
 </code></pre></div>
         </details>
     </div>

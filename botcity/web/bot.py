@@ -884,7 +884,7 @@ class WebBot(BaseBot):
         Args:
             wait_after (int, optional): Interval to wait after clicking on the element.
         """
-        self.click(interval_between_clicks=wait_after, click=2)
+        self.click(interval_between_clicks=wait_after, clicks=2)
 
     @only_if_element
     def double_click_relative(self, x, y, interval_between_clicks=0, wait_after=config.DEFAULT_SLEEP_AFTER_ACTION):
@@ -897,7 +897,7 @@ class WebBot(BaseBot):
             interval_between_clicks (int, optional): The interval between clicks in ms. Defaults to 0.
             wait_after (int, optional): Interval to wait after clicking on the element.
         """
-        self.click_relative(x, y, wait_after=wait_after, click=2, interval_between_clicks=interval_between_clicks)
+        self.click_relative(x, y, wait_after=wait_after, clicks=2, interval_between_clicks=interval_between_clicks)
 
     @only_if_element
     def triple_click(self, wait_after=config.DEFAULT_SLEEP_AFTER_ACTION):
@@ -907,7 +907,7 @@ class WebBot(BaseBot):
         Args:
             wait_after (int, optional): Interval to wait after clicking on the element.
         """
-        self.click(wait_after=wait_after, click=3)
+        self.click(wait_after=wait_after, clicks=3)
 
     @only_if_element
     def triple_click_relative(self, x, y, interval_between_clicks=0, wait_after=config.DEFAULT_SLEEP_AFTER_ACTION):
@@ -920,7 +920,7 @@ class WebBot(BaseBot):
             interval_between_clicks (int, optional): The interval between clicks in ms. Defaults to 0.
             wait_after (int, optional): Interval to wait after clicking on the element.
         """
-        self.click_relative(x, y, wait_after=wait_after, click=3, interval_between_clicks=interval_between_clicks)
+        self.click_relative(x, y, wait_after=wait_after, clicks=3, interval_between_clicks=interval_between_clicks)
 
     def mouse_down(self, wait_after=config.DEFAULT_SLEEP_AFTER_ACTION, *, button='left'):
         """

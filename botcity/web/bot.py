@@ -841,7 +841,6 @@ class WebBot(BaseBot):
             ac.pause(interval_between_clicks/1000.0)
         ac.perform()
 
-
     @only_if_element
     def click(self, wait_after=config.DEFAULT_SLEEP_AFTER_ACTION, *,
               clicks=1, interval_between_clicks=0, button='left'):

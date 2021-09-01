@@ -10,7 +10,7 @@
       
       
       <link rel="icon" href="../assets/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.5">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.6">
     
     
       
@@ -18,7 +18,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.be71726b.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.802231af.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -2605,7 +2605,7 @@ the ChromeDriver WebDriver to remote control the browser.</p>
 <span class="sd">    Args:</span>
 <span class="sd">        wait_after (int, optional): Interval to wait after clicking on the element.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">interval_between_clicks</span><span class="o">=</span><span class="n">wait_after</span><span class="p">,</span> <span class="n">click</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">interval_between_clicks</span><span class="o">=</span><span class="n">wait_after</span><span class="p">,</span> <span class="n">clicks</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -2678,7 +2678,7 @@ the ChromeDriver WebDriver to remote control the browser.</p>
 <span class="sd">        interval_between_clicks (int, optional): The interval between clicks in ms. Defaults to 0.</span>
 <span class="sd">        wait_after (int, optional): Interval to wait after clicking on the element.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">click_relative</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">wait_after</span><span class="o">=</span><span class="n">wait_after</span><span class="p">,</span> <span class="n">click</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">interval_between_clicks</span><span class="o">=</span><span class="n">interval_between_clicks</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">click_relative</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">wait_after</span><span class="o">=</span><span class="n">wait_after</span><span class="p">,</span> <span class="n">clicks</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">interval_between_clicks</span><span class="o">=</span><span class="n">interval_between_clicks</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -6404,7 +6404,7 @@ This method needs to be invoked after holding Shift or similar.</p>
 <span class="sd">    Args:</span>
 <span class="sd">        wait_after (int, optional): Interval to wait after clicking on the element.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">wait_after</span><span class="o">=</span><span class="n">wait_after</span><span class="p">,</span> <span class="n">click</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">wait_after</span><span class="o">=</span><span class="n">wait_after</span><span class="p">,</span> <span class="n">clicks</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -6477,7 +6477,7 @@ This method needs to be invoked after holding Shift or similar.</p>
 <span class="sd">        interval_between_clicks (int, optional): The interval between clicks in ms. Defaults to 0.</span>
 <span class="sd">        wait_after (int, optional): Interval to wait after clicking on the element.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">click_relative</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">wait_after</span><span class="o">=</span><span class="n">wait_after</span><span class="p">,</span> <span class="n">click</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">interval_between_clicks</span><span class="o">=</span><span class="n">interval_between_clicks</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">click_relative</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">wait_after</span><span class="o">=</span><span class="n">wait_after</span><span class="p">,</span> <span class="n">clicks</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">interval_between_clicks</span><span class="o">=</span><span class="n">interval_between_clicks</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -7055,7 +7055,7 @@ Defaults to 10000ms (10s).</p></td>
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.409db549.min.js", "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.56a63758.min.js"></script>
+      <script src="../assets/javascripts/bundle.756773cc.min.js"></script>
       
     
   </body>

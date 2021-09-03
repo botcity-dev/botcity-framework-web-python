@@ -458,8 +458,9 @@ class WebBot(BaseBot):
             except StopIteration:
                 ele = None
 
-            self.state.element = ele
-            return ele
+            if ele is not None:
+                self.state.element = ele
+                return ele
 
     def find_text(self, label, x=None, y=None, width=None, height=None, *, threshold=None, matching=0.9,
                   waiting_time=10000, best=True):

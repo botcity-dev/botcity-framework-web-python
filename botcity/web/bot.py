@@ -600,7 +600,7 @@ class WebBot(BaseBot):
             ele = next(it)
         except StopIteration:
             ele = None
-            self.state.element = ele
+        self.state.element = ele
 
         if ele:
             return ele.left, ele.top

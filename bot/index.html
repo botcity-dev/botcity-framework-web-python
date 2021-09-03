@@ -3445,8 +3445,9 @@ Defaults to False.</p></td>
         <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
             <span class="n">ele</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">ele</span>
-        <span class="k">return</span> <span class="n">ele</span>
+        <span class="k">if</span> <span class="n">ele</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">ele</span>
+            <span class="k">return</span> <span class="n">ele</span>
 </code></pre></div>
         </details>
     </div>
@@ -3624,7 +3625,7 @@ the first find. Defaults to True.</p></td>
         <span class="n">ele</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
         <span class="n">ele</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">ele</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">ele</span>
 
     <span class="k">if</span> <span class="n">ele</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">ele</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">ele</span><span class="o">.</span><span class="n">top</span>

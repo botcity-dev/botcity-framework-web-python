@@ -5,6 +5,8 @@ import tempfile
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
+from .. import config
+
 from ..util import cleanup_temp_dir
 
 
@@ -23,6 +25,10 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
         download_folder_path = os.path.join(os.path.expanduser("~"), "Desktop")
     firefox_profile.set_preference('browser.download.dir', download_folder_path)
     firefox_profile.set_preference('general.warnOnAboutConfig', False)
+
+    mimetypes_to_download = ",".join(config.FIREFOX_MIMETYPES_TO_DOWNLOAD)
+    firefox_profile.set_preference('browser.helperApps.neverAsk.saveToDisk', mimetypes_to_download)
+
     firefox_profile.update_preferences()
     firefox_options.profile = firefox_profile
 

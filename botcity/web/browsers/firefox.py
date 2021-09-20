@@ -3,6 +3,7 @@ import os
 import tempfile
 
 from selenium import webdriver
+from selenium.webdriver import Firefox  # noqa: F401, F403
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 from ..util import cleanup_temp_dir

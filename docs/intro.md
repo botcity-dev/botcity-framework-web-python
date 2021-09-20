@@ -11,10 +11,11 @@ via code in your bot.
 
 Here is a list of supported browsers along with links for you to download the proper WebDriver:
 
-| Browser | WebDriver Download                                                             |
-|---------|--------------------------------------------------------------------------------|
-| Chrome  | [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) |
-| Firefox | [GeckoDriver](https://github.com/mozilla/geckodriver/releases)                 |
+| Browser | WebDriver Download                                                                   |
+|---------|--------------------------------------------------------------------------------------|
+| Chrome  | [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads)       |
+| Firefox | [GeckoDriver](https://github.com/mozilla/geckodriver/releases)                       |
+| Edge    | [MSDriverEdge](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/)|
 
 Please follow the instructions on the WebDriver website for installation and setup.
 

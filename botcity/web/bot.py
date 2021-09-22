@@ -450,7 +450,7 @@ class WebBot(BaseBot):
             elapsed_time = (time.time() - start_time) * 1000
             if elapsed_time > waiting_time:
                 return None
-            haystack = self.get_screen_image(region=region)
+            haystack = self.get_screen_image()
             it = cv2find.locate_all_opencv(element_path, haystack_image=haystack,
                                            region=region, confidence=matching, grayscale=grayscale)
             try:

@@ -2,6 +2,7 @@ import atexit
 import os
 import tempfile
 
+from selenium.webdriver import Chrome  # noqa: F401, F403
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 
 from ..util import cleanup_temp_dir

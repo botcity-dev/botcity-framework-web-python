@@ -21,6 +21,7 @@
 * Python 3.7+
 * botcity-framework-base
 * beautifulsoup4
+* msedge-selenium-tools 
 * numpy
 * opencv-python
 * pillow

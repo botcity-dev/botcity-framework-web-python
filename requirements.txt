@@ -1,6 +1,7 @@
 botcity-framework-base>=0.2.0
 beautifulsoup4
+msedge-selenium-tools
 numpy
 opencv-python
 pillow
-selenium
+selenium==3.141

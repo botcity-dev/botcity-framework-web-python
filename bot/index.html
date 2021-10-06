@@ -10,7 +10,7 @@
       
       
       <link rel="icon" href="../assets/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.8">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.3.1">
     
     
       
@@ -18,7 +18,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.92558b1b.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.1c75ef36.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -87,7 +87,9 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="BotCity Framework Web - Python" class="md-header__button md-logo" aria-label="BotCity Framework Web - Python" data-md-component="logo">
       
@@ -187,11 +189,14 @@
       </div>
     
   </nav>
+  
 </header>
     
     <div class="md-container" data-md-component="container">
       
       
+        
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -710,6 +715,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.paste" class="md-nav__link">
     paste()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.print_pdf" class="md-nav__link">
+    print_pdf()
   </a>
   
 </li>
@@ -1337,6 +1349,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.paste" class="md-nav__link">
     paste()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.print_pdf" class="md-nav__link">
+    print_pdf()
   </a>
   
 </li>
@@ -5493,6 +5512,107 @@ Used only if this is a prompt dialog.</p></td>
 
 
 
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.print_pdf">
+<code class="highlight language-python"><span class="n">print_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">print_options</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Print the current page as a PDF file.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>path</code></td>
+        <td><code>str</code></td>
+        <td><p>The path for the file to be saved. Defaults to None.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>print_options</code></td>
+        <td><code>dict</code></td>
+        <td><p>Print options as defined at. Defaults to None.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>str</code></td>
+      <td><p>the saved file path</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">print_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">print_options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Print the current page as a PDF file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str, optional): The path for the file to be saved. Defaults to None.</span>
+<span class="sd">        print_options (dict, optional): Print options as defined at. Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: the saved file path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_title</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;document&quot;</span>
+    <span class="n">default_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="s2">&quot;Desktop&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Browser</span><span class="o">.</span><span class="n">CHROME</span><span class="p">,</span> <span class="n">Browser</span><span class="o">.</span><span class="n">EDGE</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">headless</span><span class="p">:</span>
+        <span class="c1"># Chrome still does not support headless webdriver print</span>
+        <span class="c1"># but Firefox does.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute_javascript</span><span class="p">(</span><span class="s2">&quot;window.print();&quot;</span><span class="p">)</span>
+        <span class="c1"># We need to wait for the file to be available in this case.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_file</span><span class="p">(</span><span class="n">default_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">default_path</span>
+
+    <span class="k">if</span> <span class="n">print_options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">print_options</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;landscape&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s1">&#39;displayHeaderFooter&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s1">&#39;printBackground&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;preferCSSPageSize&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;marginTop&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;marginBottom&#39;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">}</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_webdriver_command</span><span class="p">(</span><span class="s2">&quot;print&quot;</span><span class="p">,</span> <span class="n">print_options</span><span class="p">)</span>
+    <span class="n">bytes_file</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">default_path</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">bytes_file</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">path</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="botcity.web.bot.WebBot.release_shift">
 <code class="highlight language-python"><span class="n">release_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
 
@@ -6897,14 +7017,14 @@ This method needs to be invoked after holding Shift or similar.</p>
 
 
 <h3 class="doc doc-heading" id="botcity.web.bot.WebBot.wait_for_file">
-<code class="highlight language-python"><span class="n">wait_for_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">wait_for_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60000</span><span class="p">)</span></code>
 
 
 </h3>
 
     <div class="doc doc-contents ">
 
-      <p>Invoke the system handler to open the given file.</p>
+      <p>Wait for a file to be available on disk.</p>
 
 <p><strong>Parameters:</strong></p>
 <table>
@@ -6927,8 +7047,8 @@ This method needs to be invoked after holding Shift or similar.</p>
         <td><code>timeout</code></td>
         <td><code>int</code></td>
         <td><p>Maximum wait time (ms) to search for a hit.
-Defaults to 10000ms (10s).</p></td>
-        <td><code>10000</code></td>
+Defaults to 60000ms (60s).</p></td>
+        <td><code>60000</code></td>
       </tr>
   </tbody>
 </table>
@@ -6949,14 +7069,14 @@ Defaults to 10000ms (10s).</p></td>
 </table>
         <details class="quote">
           <summary>Source code in <code>web/bot.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">wait_for_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">wait_for_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60000</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Invoke the system handler to open the given file.</span>
+<span class="sd">    Wait for a file to be available on disk.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        path (str): The path for the file to be executed</span>
 <span class="sd">        timeout (int, optional): Maximum wait time (ms) to search for a hit.</span>
-<span class="sd">            Defaults to 10000ms (10s).</span>
+<span class="sd">            Defaults to 60000ms (60s).</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        status (bool): Whether or not the file was available before the timeout</span>
@@ -7035,10 +7155,7 @@ Defaults to 10000ms (10s).</p></td>
             BotCity &copy; - All rights reserved
           </div>
         
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-          Material for MkDocs
-        </a>
+        
         
       </div>
       
@@ -7066,10 +7183,10 @@ Defaults to 10000ms (10s).</p></td>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.94ec81fe.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.e99e714c.min.js", "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.48dfec6c.min.js"></script>
+      <script src="../assets/javascripts/bundle.c7d1b464.min.js"></script>
       
     
   </body>

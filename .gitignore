@@ -1,5 +1,8 @@
 .DS_Store
 
+# VSCode IDE files
+.vscode
+
 # PyCharm IDE files
 .idea
 

@@ -1,4 +1,5 @@
 import atexit
+import json
 import os
 import tempfile
 
@@ -9,8 +10,7 @@ from ..util import cleanup_temp_dir
 
 def default_options(headless=False, download_folder_path=None, user_data_dir=None):
     edge_options = EdgeOptions()
-    edge_options.use_chrome = True
-    edge_options.add_argument("--disable-extensions")
+    edge_options.use_chromium = True
     edge_options.add_argument("--remote-debugging-port=0")
     edge_options.add_argument("--no-first-run")
     edge_options.add_argument("--no-default-browser-check")
@@ -48,8 +48,38 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     if not download_folder_path:
         download_folder_path = os.path.join(os.path.expanduser("~"), "Desktop")
 
+    app_state = {
+        "recentDestinations": [{
+            "id": "Save as PDF",
+            "origin": "local",
+            "account": ""
+        }],
+        "selectedDestinationId": "Save as PDF",
+        "version": 2,
+        "isHeaderFooterEnabled": False,
+        "marginsType": 2,
+        "isCssBackgroundEnabled": True
+    }
+
     # Set the Downloads default folder
-    prefs = {"download.default_directory": download_folder_path}
+    prefs = {
+        "printing.print_preview_sticky_settings.appState": json.dumps(app_state),
+        "download.default_directory": download_folder_path,
+        "savefile.default_directory": download_folder_path,
+        "printing.default_destination_selection_rules": {
+            "kind": "local",
+            "namePattern": "Save as PDF",
+        },
+        "safebrowsing.enabled": True
+    }
+
     edge_options.add_experimental_option("prefs", prefs)
+
+    edge_options.add_argument(
+        "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
+    )
+
+    edge_options.add_argument("--kiosk-printing")
 
     return edge_options

@@ -1,6 +1,7 @@
 import base64
 import functools
 import io
+import json
 import logging
 import multiprocessing
 import os
@@ -229,6 +230,31 @@ class WebBot(BaseBot):
                   window.outerHeight - window.innerHeight + arguments[1]];
                 """, width, height)
         self._driver.set_window_size(*window_size)
+
+    def _webdriver_command(self, command, params=None, req_type="POST"):
+        """
+        Execute a webdriver command.
+
+        Args:
+            command (str): The command URL after the session part
+            params (dict): The payload to be serialized and sent to the webdriver. Defaults to None.
+            req_type (str, optional): The type of request to be made. Defaults to "POST".
+
+        Returns:
+            str: The value of the response
+        """
+        if not params:
+            params = {}
+
+        resource = f"/session/{self.driver.session_id}/{command}"
+        url = self.driver.command_executor._url + resource
+        body = json.dumps(params)
+        response = self.driver.command_executor._request(req_type, url, body)
+
+        if not response:
+            raise Exception(response.get('value'))
+
+        return response.get('value')
 
     ##########
     # Display
@@ -747,7 +773,6 @@ class WebBot(BaseBot):
             self.navigate_to(url)
 
     def create_window(self, url):
-
         try:
             # Refactor this when Selenium 4 is released
             self.execute_javascript(f"window.open('{url}', '_blank', 'location=0');")
@@ -769,10 +794,47 @@ class WebBot(BaseBot):
     def activate_tab(self, handle):
         self._driver.switch_to.window(handle)
 
+    def print_pdf(self, path=None, print_options=None):
+        """Print the current page as a PDF file.
+
+        Args:
+            path (str, optional): The path for the file to be saved. Defaults to None.
+            print_options (dict, optional): Print options as defined at. Defaults to None.
+
+        Returns:
+            str: the saved file path
+        """
+        title = self.page_title() or "document"
+        default_path = os.path.expanduser(os.path.join("~", "Desktop", f"{title}.pdf"))
+
+        if self.browser in [Browser.CHROME, Browser.EDGE] and not self.headless:
+            # Chrome still does not support headless webdriver print
+            # but Firefox does.
+            self.execute_javascript("window.print();")
+            # We need to wait for the file to be available in this case.
+            self.wait_for_file(default_path)
+            return default_path
+
+        if print_options is None:
+            print_options = {
+                'landscape': False,
+                'displayHeaderFooter': False,
+                'printBackground': True,
+                'preferCSSPageSize': True,
+                'marginTop': 0,
+                'marginBottom': 0
+            }
+        data = self._webdriver_command("print", print_options)
+        bytes_file = base64.b64decode(data)
+        if not path:
+            path = default_path
+        with open(path, "wb") as f:
+            f.write(bytes_file)
+        return path
+
     #######
     # Mouse
     #######
-
     @only_if_element
     def click_on(self, label):
         """
@@ -1491,14 +1553,14 @@ class WebBot(BaseBot):
         """
         self.wait(interval)
 
-    def wait_for_file(self, path, timeout=10000):
+    def wait_for_file(self, path, timeout=60000):
         """
-        Invoke the system handler to open the given file.
+        Wait for a file to be available on disk.
 
         Args:
             path (str): The path for the file to be executed
             timeout (int, optional): Maximum wait time (ms) to search for a hit.
-                Defaults to 10000ms (10s).
+                Defaults to 60000ms (60s).
 
         Returns:
             status (bool): Whether or not the file was available before the timeout

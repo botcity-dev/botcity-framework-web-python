@@ -759,12 +759,22 @@ class WebBot(BaseBot):
             return None
 
     def get_tabs(self):
+        """Get a list of tab handlers
+
+        Returns:
+            list: List of tab handlers
+        """
         try:
             return self._driver.window_handles
         except InvalidSessionIdException:
             return []
 
     def create_tab(self, url):
+        """Create a new tab and navigate to the given URL.
+
+        Args:
+            url (str): The desired URL.
+        """
         try:
             # Refactor this when Selenium 4 is released
             self.execute_javascript(f"window.open('{url}', '_blank');")
@@ -773,6 +783,11 @@ class WebBot(BaseBot):
             self.navigate_to(url)
 
     def create_window(self, url):
+        """Creates a new window with the given URL.
+
+        Args:
+            url (str): The desired URL.
+        """
         try:
             # Refactor this when Selenium 4 is released
             self.execute_javascript(f"window.open('{url}', '_blank', 'location=0');")
@@ -781,6 +796,8 @@ class WebBot(BaseBot):
             self.navigate_to(url)
 
     def close_page(self):
+        """Close the current active page (tab or window).
+        """
         try:
             self._driver.close()
 
@@ -792,6 +809,11 @@ class WebBot(BaseBot):
             pass
 
     def activate_tab(self, handle):
+        """Activate a tab given by the handle.
+
+        Args:
+            handle (str): The tab or window handle.
+        """
         self._driver.switch_to.window(handle)
 
     def print_pdf(self, path=None, print_options=None):

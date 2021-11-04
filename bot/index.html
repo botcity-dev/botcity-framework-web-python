@@ -344,6 +344,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.activate_tab" class="md-nav__link">
+    activate_tab()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.add_image" class="md-nav__link">
     add_image()
   </a>
@@ -393,6 +400,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.close_page" class="md-nav__link">
+    close_page()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.control_a" class="md-nav__link">
     control_a()
   </a>
@@ -416,6 +430,20 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.copy_to_clipboard" class="md-nav__link">
     copy_to_clipboard()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.create_tab" class="md-nav__link">
+    create_tab()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.create_window" class="md-nav__link">
+    create_window()
   </a>
   
 </li>
@@ -556,6 +584,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.get_screenshot" class="md-nav__link">
     get_screenshot()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.get_tabs" class="md-nav__link">
+    get_tabs()
   </a>
   
 </li>
@@ -980,6 +1015,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.activate_tab" class="md-nav__link">
+    activate_tab()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.add_image" class="md-nav__link">
     add_image()
   </a>
@@ -1029,6 +1071,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.close_page" class="md-nav__link">
+    close_page()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.control_a" class="md-nav__link">
     control_a()
   </a>
@@ -1052,6 +1101,20 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.copy_to_clipboard" class="md-nav__link">
     copy_to_clipboard()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.create_tab" class="md-nav__link">
+    create_tab()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.create_window" class="md-nav__link">
+    create_window()
   </a>
   
 </li>
@@ -1192,6 +1255,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.get_screenshot" class="md-nav__link">
     get_screenshot()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.get_tabs" class="md-nav__link">
+    get_tabs()
   </a>
   
 </li>
@@ -1775,6 +1845,55 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 
 
 
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.activate_tab">
+<code class="highlight language-python"><span class="n">activate_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Activate a tab given by the handle.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>handle</code></td>
+        <td><code>str</code></td>
+        <td><p>The tab or window handle.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">activate_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Activate a tab given by the handle.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        handle (str): The tab or window handle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">window</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
 
   <div class="doc doc-object doc-method">
 
@@ -2251,6 +2370,41 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 
 
 
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.close_page">
+<code class="highlight language-python"><span class="n">close_page</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Close the current active page (tab or window).</p>
+
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">close_page</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Close the current active page (tab or window).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># If it was the last tab we can&#39;t switch</span>
+        <span class="n">tabs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tabs</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tabs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">window</span><span class="p">(</span><span class="n">tabs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">except</span> <span class="n">InvalidSessionIdException</span><span class="p">:</span>
+        <span class="k">pass</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
 
   <div class="doc doc-object doc-method">
 
@@ -2491,6 +2645,114 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
   </div>
 
 
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.create_tab">
+<code class="highlight language-python"><span class="n">create_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Create a new tab and navigate to the given URL.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>url</code></td>
+        <td><code>str</code></td>
+        <td><p>The desired URL.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a new tab and navigate to the given URL.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url (str): The desired URL.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Refactor this when Selenium 4 is released</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute_javascript</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;window.open(&#39;</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&#39;, &#39;_blank&#39;);&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">window</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_tabs</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">except</span> <span class="n">InvalidSessionIdException</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">navigate_to</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.create_window">
+<code class="highlight language-python"><span class="n">create_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Creates a new window with the given URL.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>url</code></td>
+        <td><code>str</code></td>
+        <td><p>The desired URL.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a new window with the given URL.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url (str): The desired URL.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Refactor this when Selenium 4 is released</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute_javascript</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;window.open(&#39;</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&#39;, &#39;_blank&#39;, &#39;location=0&#39;);&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">window</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_tabs</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">except</span> <span class="n">InvalidSessionIdException</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">navigate_to</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
 
 
 
@@ -4216,6 +4478,54 @@ to crop the screen image.</p></td>
 
   </div>
 
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.get_tabs">
+<code class="highlight language-python"><span class="n">get_tabs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Get a list of tab handlers</p>
+
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>list</code></td>
+      <td><p>List of tab handlers</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_tabs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get a list of tab handlers</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: List of tab handlers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">window_handles</span>
+    <span class="k">except</span> <span class="n">InvalidSessionIdException</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
 
 
 

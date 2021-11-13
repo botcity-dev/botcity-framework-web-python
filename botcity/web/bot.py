@@ -9,19 +9,21 @@ import platform
 import random
 import shutil
 import time
+from typing import List
 
-from PIL import Image
 from botcity.base import BaseBot, State
 from botcity.base.utils import only_if_element
 from bs4 import BeautifulSoup
+from PIL import Image
 from selenium.common.exceptions import InvalidSessionIdException
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import WebDriverWait
 
 from . import config, cv2find
-from .browsers import Browser, BROWSER_CONFIGS
-
+from .browsers import BROWSER_CONFIGS, Browser
 
 try:
     from botcity.maestro import BotMaestroSDK
@@ -866,6 +868,76 @@ class WebBot(BaseBot):
         wait_method = BROWSER_CONFIGS.get(self.browser).get("wait_for_downloads")
         # waits for all the files to be completed
         WebDriverWait(self._driver, timeout/1000, 1).until(wait_method)
+
+    def find_elements(self, selector: str, by: By = By.CSS_SELECTOR) -> List[WebElement]:
+        """Find elements using the specified selector with selector type specified by `by`.
+
+        Args:
+            selector (str): The selector string to be used.
+            by (str, optional): Selector type. Defaults to By.CSS_SELECTOR.
+                [See more](https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By)
+
+        Returns:
+            List[WebElement]: List of elements found.
+
+        **Example:**
+        ```python
+        from botcity.web import By
+        ...
+        # Find element by ID
+        all_cells = self.find_elements("//td", By.XPATH)
+        ...
+        ```
+        """
+        return self._driver.find_elements(by, selector)
+
+    def find_element(self, selector: str, by: str = By.CSS_SELECTOR) -> WebElement:
+        """Find an element using the specified selector with selector type specified by `by`.
+        If more than one element is found, the first instance is returned.
+
+        Args:
+            selector (str): The selector string to be used.
+            by (str, optional): Selector type. Defaults to By.CSS_SELECTOR.
+                [See more](https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By)
+
+        Returns:
+            WebElement: The element found.
+
+        **Example:**
+        ```python
+        from botcity.web import By
+        ...
+        # Find element by ID
+        elem = self.find_element("my_elem", By.ID)
+        # Find element by XPath
+        elem = self.find_element("//input[@type='submit']", By.XPATH)
+        ...
+        ```
+        """
+        out = self.find_elements(selector=selector, by=by)
+        if out:
+            return out[0]
+
+    def set_file_input_element(self, element: WebElement, filepath: str):
+        """Configure the filepath for upload in a file element.
+        Note: This method does not submit the form.
+
+        Args:
+            element (WebElement): The file upload element.
+            filepath (str): The path to the file to be uploaded.
+
+        **Example:**
+        ```python
+        ...
+        # Find element
+        elem = self.find_element("body > form > input[type=file]")
+        # Set the filepath
+        self.set_file_input_element(elem, "./test.txt")
+        ...
+        ```
+        """
+        fpath = os.path.abspath(os.path.expanduser(os.path.expandvars(filepath)))
+        element.send_keys(fpath)
 
     #######
     # Mouse

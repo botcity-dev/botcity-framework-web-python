@@ -882,7 +882,7 @@ class WebBot(BaseBot):
 
         **Example:**
         ```python
-        from botcity.web import By
+        from botcity.web.bot import By
         ...
         # Find element by ID
         all_cells = self.find_elements("//td", By.XPATH)
@@ -905,7 +905,7 @@ class WebBot(BaseBot):
 
         **Example:**
         ```python
-        from botcity.web import By
+        from botcity.web.bot import By
         ...
         # Find element by ID
         elem = self.find_element("my_elem", By.ID)

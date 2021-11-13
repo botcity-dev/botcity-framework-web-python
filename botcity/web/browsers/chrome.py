@@ -78,3 +78,14 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     chrome_options.add_argument("--kiosk-printing")
 
     return chrome_options
+
+
+def wait_for_downloads(driver):
+    if not driver.current_url.startswith("chrome://downloads"):
+        driver.get("chrome://downloads/")
+    return driver.execute_script("""
+        var items = document.querySelector('downloads-manager')
+            .shadowRoot.getElementById('downloadsList').items;
+        if (items.every(e => e.state === "COMPLETE"))
+            return items.map(e => e.fileUrl || e.file_url);
+        """)

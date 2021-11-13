@@ -17,6 +17,7 @@ from bs4 import BeautifulSoup
 from selenium.common.exceptions import InvalidSessionIdException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
 
 from . import config, cv2find
 from .browsers import Browser, BROWSER_CONFIGS
@@ -65,7 +66,7 @@ class WebBot(BaseBot):
         self._shift_hold = False
 
         self._dimensions = (1600, 900)
-        self._download_folder_path = None  # Defaults to ~/Desktop
+        self._download_folder_path = os.path.join(os.path.expanduser("~"), "Desktop")
 
     @property
     def driver(self):
@@ -205,6 +206,7 @@ class WebBot(BaseBot):
         """
         if not self._driver:
             return
+        self._driver.close()
         self._driver.quit()
         self._driver = None
 
@@ -853,6 +855,17 @@ class WebBot(BaseBot):
         with open(path, "wb") as f:
             f.write(bytes_file)
         return path
+
+    def wait_for_downloads(self, timeout: int = 120000):
+        """
+        Wait for all downloads to be finished.
+
+        Args:
+            timeout (int, optional): Timeout in millis. Defaults to 120000.
+        """
+        wait_method = BROWSER_CONFIGS.get(self.browser).get("wait_for_downloads")
+        # waits for all the files to be completed
+        WebDriverWait(self._driver, timeout/1000, 1).until(wait_method)
 
     #######
     # Mouse

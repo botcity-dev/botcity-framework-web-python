@@ -932,6 +932,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.wait_for_downloads" class="md-nav__link">
+    wait_for_downloads()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.wait_for_file" class="md-nav__link">
     wait_for_file()
   </a>
@@ -1598,6 +1605,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.wait" class="md-nav__link">
     wait()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.wait_for_downloads" class="md-nav__link">
+    wait_for_downloads()
   </a>
   
 </li>
@@ -6742,6 +6756,7 @@ This method needs to be invoked after holding Shift or similar.</p>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">:</span>
         <span class="k">return</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="o">=</span> <span class="kc">None</span>
 </code></pre></div>
@@ -7318,6 +7333,59 @@ This method needs to be invoked after holding Shift or similar.</p>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">interval</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.wait_for_downloads">
+<code class="highlight language-python"><span class="n">wait_for_downloads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">120000</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Wait for all downloads to be finished.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>timeout</code></td>
+        <td><code>int</code></td>
+        <td><p>Timeout in millis. Defaults to 120000.</p></td>
+        <td><code>120000</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">wait_for_downloads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">120000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wait for all downloads to be finished.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        timeout (int, optional): Timeout in millis. Defaults to 120000.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wait_method</span> <span class="o">=</span> <span class="n">BROWSER_CONFIGS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;wait_for_downloads&quot;</span><span class="p">)</span>
+    <span class="c1"># waits for all the files to be completed</span>
+    <span class="n">WebDriverWait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">wait_method</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>

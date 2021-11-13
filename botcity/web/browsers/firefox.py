@@ -351,9 +351,24 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     firefox_profile.set_preference('general.warnOnAboutConfig', False)
 
     mimetypes_to_download = ",".join(FIREFOX_MIMETYPES_TO_DOWNLOAD)
+    firefox_profile.set_preference("pdfjs.disabled", True)
+    firefox_profile.set_preference("plugin.disable_full_page_plugin_for_types", mimetypes_to_download)
     firefox_profile.set_preference('browser.helperApps.neverAsk.saveToDisk', mimetypes_to_download)
 
     firefox_profile.update_preferences()
     firefox_options.profile = firefox_profile
 
     return firefox_options
+
+
+def wait_for_downloads(driver):
+    print('Start Wait for Downloads')
+    if not driver.current_url.startswith("about:downloads"):
+        print('Open the downloads tab')
+        driver.get("about:downloads")
+
+    return driver.execute_script("""
+        var items = document.querySelector('richlistbox').itemChildren;
+        if (items.every(e => e.attributes["state"].value != 0))
+            return true;
+        """)

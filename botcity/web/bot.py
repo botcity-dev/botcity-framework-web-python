@@ -939,6 +939,19 @@ class WebBot(BaseBot):
         fpath = os.path.abspath(os.path.expanduser(os.path.expandvars(filepath)))
         element.send_keys(fpath)
 
+    def enter_iframe(self, iframe: WebElement):
+        """Switch the WebBot driver to the specified iframe.
+
+        Args:
+            iframe (WebElement): The desired iFrame.
+        """
+        self._driver.switch_to.frame(iframe)
+
+    def leave_iframe(self):
+        """Leave the iframe and switch the WebBot driver to the default content.
+        """
+        self._driver.switch_to.default_content()
+
     #######
     # Mouse
     #######

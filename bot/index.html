@@ -484,6 +484,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.enter_iframe" class="md-nav__link">
+    enter_iframe()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.execute_javascript" class="md-nav__link">
     execute_javascript()
   </a>
@@ -668,6 +675,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.key_right" class="md-nav__link">
     key_right()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.leave_iframe" class="md-nav__link">
+    leave_iframe()
   </a>
   
 </li>
@@ -1183,6 +1197,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.enter_iframe" class="md-nav__link">
+    enter_iframe()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.execute_javascript" class="md-nav__link">
     execute_javascript()
   </a>
@@ -1367,6 +1388,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.key_right" class="md-nav__link">
     key_right()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.leave_iframe" class="md-nav__link">
+    leave_iframe()
   </a>
   
 </li>
@@ -3090,6 +3118,56 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
     <span class="n">action</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
     <span class="n">delay</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">wait</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_SLEEP_AFTER_ACTION</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.enter_iframe">
+<code class="highlight language-python"><span class="n">enter_iframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iframe</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Switch the WebBot driver to the specified iframe.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>iframe</code></td>
+        <td><code>WebElement</code></td>
+        <td><p>The desired iFrame.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">enter_iframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iframe</span><span class="p">:</span> <span class="n">WebElement</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Switch the WebBot driver to the specified iframe.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        iframe (WebElement): The desired iFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">frame</span><span class="p">(</span><span class="n">iframe</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -5296,6 +5374,34 @@ Used only if this is a prompt dialog.</p></td>
     <span class="n">action</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
     <span class="n">delay</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">wait</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_SLEEP_AFTER_ACTION</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.leave_iframe">
+<code class="highlight language-python"><span class="n">leave_iframe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Leave the iframe and switch the WebBot driver to the default content.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">leave_iframe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Leave the iframe and switch the WebBot driver to the default content.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">default_content</span><span class="p">()</span>
 </code></pre></div>
         </details>
     </div>

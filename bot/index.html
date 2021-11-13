@@ -498,6 +498,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.find_element" class="md-nav__link">
+    find_element()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.find_elements" class="md-nav__link">
+    find_elements()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.find_multiple" class="md-nav__link">
     find_multiple()
   </a>
@@ -822,6 +836,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.scroll_up" class="md-nav__link">
     scroll_up()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.set_file_input_element" class="md-nav__link">
+    set_file_input_element()
   </a>
   
 </li>
@@ -1176,6 +1197,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.find_element" class="md-nav__link">
+    find_element()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.find_elements" class="md-nav__link">
+    find_elements()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.find_multiple" class="md-nav__link">
     find_multiple()
   </a>
@@ -1500,6 +1535,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.scroll_up" class="md-nav__link">
     scroll_up()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.set_file_input_element" class="md-nav__link">
+    set_file_input_element()
   </a>
   
 </li>
@@ -3261,6 +3303,200 @@ Defaults to False.</p></td>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_until</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">,</span>
                            <span class="n">matching</span><span class="o">=</span><span class="n">matching</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="n">waiting_time</span><span class="p">,</span> <span class="n">best</span><span class="o">=</span><span class="n">best</span><span class="p">,</span> <span class="n">grayscale</span><span class="o">=</span><span class="n">grayscale</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.find_element">
+<code class="highlight language-python"><span class="n">find_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;css selector&#39;</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Find an element using the specified selector with selector type specified by <code>by</code>.
+If more than one element is found, the first instance is returned.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>selector</code></td>
+        <td><code>str</code></td>
+        <td><p>The selector string to be used.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>by</code></td>
+        <td><code>str</code></td>
+        <td><p>Selector type. Defaults to By.CSS_SELECTOR.
+<a href="https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By">See more</a></p></td>
+        <td><code>&#39;css selector&#39;</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>WebElement</code></td>
+      <td><p>The element found.</p></td>
+    </tr>
+  </tbody>
+</table>      <p><strong>Example:</strong>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">botcity.web</span> <span class="kn">import</span> <span class="n">By</span>
+<span class="o">...</span>
+<span class="c1"># Find element by ID</span>
+<span class="n">elem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="s2">&quot;my_elem&quot;</span><span class="p">,</span> <span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span>
+<span class="c1"># Find element by XPath</span>
+<span class="n">elem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="s2">&quot;//input[@type=&#39;submit&#39;]&quot;</span><span class="p">,</span> <span class="n">By</span><span class="o">.</span><span class="n">XPATH</span><span class="p">)</span>
+<span class="o">...</span>
+</code></pre></div></p>
+
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">find_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WebElement</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Find an element using the specified selector with selector type specified by `by`.</span>
+<span class="sd">    If more than one element is found, the first instance is returned.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        selector (str): The selector string to be used.</span>
+<span class="sd">        by (str, optional): Selector type. Defaults to By.CSS_SELECTOR.</span>
+<span class="sd">            [See more](https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        WebElement: The element found.</span>
+
+<span class="sd">    **Example:**</span>
+<span class="sd">    ```python</span>
+<span class="sd">    from botcity.web import By</span>
+<span class="sd">    ...</span>
+<span class="sd">    # Find element by ID</span>
+<span class="sd">    elem = self.find_element(&quot;my_elem&quot;, By.ID)</span>
+<span class="sd">    # Find element by XPath</span>
+<span class="sd">    elem = self.find_element(&quot;//input[@type=&#39;submit&#39;]&quot;, By.XPATH)</span>
+<span class="sd">    ...</span>
+<span class="sd">    ```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span><span class="n">selector</span><span class="o">=</span><span class="n">selector</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="n">by</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.find_elements">
+<code class="highlight language-python"><span class="n">find_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;css selector&#39;</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Find elements using the specified selector with selector type specified by <code>by</code>.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>selector</code></td>
+        <td><code>str</code></td>
+        <td><p>The selector string to be used.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>by</code></td>
+        <td><code>str</code></td>
+        <td><p>Selector type. Defaults to By.CSS_SELECTOR.
+<a href="https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By">See more</a></p></td>
+        <td><code>&#39;css selector&#39;</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>List[WebElement]</code></td>
+      <td><p>List of elements found.</p></td>
+    </tr>
+  </tbody>
+</table>      <p><strong>Example:</strong>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">botcity.web</span> <span class="kn">import</span> <span class="n">By</span>
+<span class="o">...</span>
+<span class="c1"># Find element by ID</span>
+<span class="n">all_cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span><span class="s2">&quot;//td&quot;</span><span class="p">,</span> <span class="n">By</span><span class="o">.</span><span class="n">XPATH</span><span class="p">)</span>
+<span class="o">...</span>
+</code></pre></div></p>
+
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">find_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="n">By</span> <span class="o">=</span> <span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">WebElement</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Find elements using the specified selector with selector type specified by `by`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        selector (str): The selector string to be used.</span>
+<span class="sd">        by (str, optional): Selector type. Defaults to By.CSS_SELECTOR.</span>
+<span class="sd">            [See more](https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[WebElement]: List of elements found.</span>
+
+<span class="sd">    **Example:**</span>
+<span class="sd">    ```python</span>
+<span class="sd">    from botcity.web import By</span>
+<span class="sd">    ...</span>
+<span class="sd">    # Find element by ID</span>
+<span class="sd">    all_cells = self.find_elements(&quot;//td&quot;, By.XPATH)</span>
+<span class="sd">    ...</span>
+<span class="sd">    ```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span><span class="n">by</span><span class="p">,</span> <span class="n">selector</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -6496,6 +6732,84 @@ This method needs to be invoked after holding Shift or similar.</p>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">clicks</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;window.scrollTo(0, window.scrollY - 200)&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.set_file_input_element">
+<code class="highlight language-python"><span class="n">set_file_input_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Configure the filepath for upload in a file element.
+Note: This method does not submit the form.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>element</code></td>
+        <td><code>WebElement</code></td>
+        <td><p>The file upload element.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>filepath</code></td>
+        <td><code>str</code></td>
+        <td><p>The path to the file to be uploaded.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>      <p><strong>Example:</strong>
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="c1"># Find element</span>
+<span class="n">elem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="s2">&quot;body &gt; form &gt; input[type=file]&quot;</span><span class="p">)</span>
+<span class="c1"># Set the filepath</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">set_file_input_element</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="s2">&quot;./test.txt&quot;</span><span class="p">)</span>
+<span class="o">...</span>
+</code></pre></div></p>
+
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_file_input_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">WebElement</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Configure the filepath for upload in a file element.</span>
+<span class="sd">    Note: This method does not submit the form.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        element (WebElement): The file upload element.</span>
+<span class="sd">        filepath (str): The path to the file to be uploaded.</span>
+
+<span class="sd">    **Example:**</span>
+<span class="sd">    ```python</span>
+<span class="sd">    ...</span>
+<span class="sd">    # Find element</span>
+<span class="sd">    elem = self.find_element(&quot;body &gt; form &gt; input[type=file]&quot;)</span>
+<span class="sd">    # Set the filepath</span>
+<span class="sd">    self.set_file_input_element(elem, &quot;./test.txt&quot;)</span>
+<span class="sd">    ...</span>
+<span class="sd">    ```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="n">filepath</span><span class="p">)))</span>
+    <span class="n">element</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>

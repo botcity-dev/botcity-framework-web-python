@@ -366,7 +366,7 @@ class WebBot(BaseBot):
         region = (x, y, w, h)
 
         results = [None] * len(labels)
-        paths = [self.state.map_images[la] for la in labels]
+        paths = [self._search_image_file(la) for la in labels]
 
         if threshold:
             # TODO: Figure out how we should do threshold
@@ -400,6 +400,10 @@ class WebBot(BaseBot):
         ele = cv2find.locate_all_opencv(
             needle, haystack, region=region, confidence=confidence, grayscale=grayscale
         )
+        try:
+            ele = next(ele)
+        except StopIteration:
+            ele = None
         return ele
 
     def find(self, label, x=None, y=None, width=None, height=None, *,
@@ -491,6 +495,93 @@ class WebBot(BaseBot):
             if ele is not None:
                 self.state.element = ele
                 return ele
+
+    def find_all(self, label, x=None, y=None, width=None, height=None, *,
+                 threshold=None, matching=0.9, waiting_time=10000, grayscale=False):
+        """
+        Find all elements defined by label on screen until a timeout happens.
+
+        Args:
+            label (str): The image identifier
+            x (int, optional): Search region start position x. Defaults to 0.
+            y (int, optional): Search region start position y. Defaults to 0.
+            width (int, optional): Search region width. Defaults to screen width.
+            height (int, optional): Search region height. Defaults to screen height.
+            threshold (int, optional): The threshold to be applied when doing grayscale search.
+                Defaults to None.
+            matching (float, optional): The matching index ranging from 0 to 1.
+                Defaults to 0.9.
+            waiting_time (int, optional): Maximum wait time (ms) to search for a hit.
+                Defaults to 10000ms (10s).
+            grayscale (bool, optional): Whether or not to convert to grayscale before searching.
+                Defaults to False.
+
+        Returns:
+            elements (collections.Iterable[NamedTuple]): A generator with all element coordinates fount.
+                None if not found.
+        """
+        def deduplicate(elems):
+            def find_same(item, items):
+                x_start = item.left
+                x_end = item.left + item.width
+                y_start = item.top
+                y_end = item.top + item.height
+                similars = []
+                for itm in items:
+                    if itm == item:
+                        continue
+                    if (itm.left >= x_start and itm.left <= x_end)\
+                            and (itm.top >= y_start and itm.top <= y_end):
+                        similars.append(itm)
+                        continue
+                return similars
+
+            index = 0
+            while True:
+                try:
+                    dups = find_same(elems[index], elems[index:])
+                    for d in dups:
+                        elems.remove(d)
+                    index += 1
+                except IndexError:
+                    break
+            return elems
+
+        self.state.element = None
+        screen_w, screen_h = self._dimensions
+        x = x or 0
+        y = y or 0
+        w = width or screen_w
+        h = height or screen_h
+
+        region = (x, y, w, h)
+
+        element_path = self._search_image_file(label)
+
+        if threshold:
+            # TODO: Figure out how we should do threshold
+            print('Threshold not yet supported')
+
+        start_time = time.time()
+
+        while True:
+            elapsed_time = (time.time() - start_time) * 1000
+            if elapsed_time > waiting_time:
+                return None
+
+            haystack = self.get_screen_image()
+            it = cv2find.locate_all_opencv(element_path, haystack_image=haystack,
+                                           region=region, confidence=matching, grayscale=grayscale)
+
+            eles = [ele for ele in it]
+            if not eles:
+                continue
+            eles = deduplicate(list(eles))
+            for ele in eles:
+                if ele is not None:
+                    self.state.element = ele
+                    yield ele
+            break
 
     def find_text(self, label, x=None, y=None, width=None, height=None, *, threshold=None, matching=0.9,
                   waiting_time=10000, best=True):

@@ -1295,7 +1295,7 @@ class WebBot(BaseBot):
             clicks (int, optional): Number of times to click. Defaults to 1.
             interval_between_clicks (int, optional): The interval between clicks in ms. Defaults to 0.
         """
-        self.click(clicks=clicks, button='right', interval=interval_between_clicks)
+        self.click(clicks=clicks, button='right', interval_between_clicks=interval_between_clicks)
         self.sleep(wait_after)
 
     def right_click_at(self, x, y):

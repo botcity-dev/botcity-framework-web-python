@@ -508,7 +508,7 @@ class WebBot(BaseBot):
         self.state.element = element
 
     def find_all(self, label, x=None, y=None, width=None, height=None, *,
-                 threshold=None, matching=0.9, waiting_time=10000, grayscale=False, as_list: bool=False):
+                 threshold=None, matching=0.9, waiting_time=10000, grayscale=False, as_list: bool = False):
         """
         Find all elements defined by label on screen until a timeout happens.
 

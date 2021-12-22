@@ -13,6 +13,7 @@ from typing import List
 
 from botcity.base import BaseBot, State
 from botcity.base.utils import only_if_element
+from botcity.web.cv2find import Box
 from bs4 import BeautifulSoup
 from PIL import Image
 from selenium.common.exceptions import InvalidSessionIdException

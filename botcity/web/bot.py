@@ -496,7 +496,7 @@ class WebBot(BaseBot):
                 self.state.element = ele
                 return ele
 
-        def set_current_element(self, element: Box):
+    def set_current_element(self, element: Box):
         """
         Changes the current screen element the bot will interact when using click(), move(), and similar methods.
 

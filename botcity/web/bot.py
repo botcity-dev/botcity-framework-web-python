@@ -496,8 +496,19 @@ class WebBot(BaseBot):
                 self.state.element = ele
                 return ele
 
+    def set_current_element(self, element: cv2find.Box):
+        """
+        Changes the current screen element the bot will interact when using click(), move(), and similar methods.
+
+        This method is equivalent to self.state.element = element.
+
+        Args:
+            element (Box): A screen element from self.state.element or the find_all(as_list=True) method.
+        """
+        self.state.element = element
+
     def find_all(self, label, x=None, y=None, width=None, height=None, *,
-                 threshold=None, matching=0.9, waiting_time=10000, grayscale=False):
+                 threshold=None, matching=0.9, waiting_time=10000, grayscale=False, as_list: bool = False):
         """
         Find all elements defined by label on screen until a timeout happens.
 
@@ -515,9 +526,13 @@ class WebBot(BaseBot):
                 Defaults to 10000ms (10s).
             grayscale (bool, optional): Whether or not to convert to grayscale before searching.
                 Defaults to False.
+            as_list (bool, Optional): If True, returns a list of element coordinates instead of a generator.
+                Use set_active_element() to be able to interact with the found elements.
+                This parameter must be True if you intend to run multiple find_all() concurrently.
+                Defaults to False.
 
         Returns:
-            elements (collections.Iterable[NamedTuple]): A generator with all element coordinates fount.
+            elements (collections.Iterable[NamedTuple]): A generator with all element coordinates found.
                 None if not found.
         """
         def deduplicate(elems):
@@ -577,6 +592,12 @@ class WebBot(BaseBot):
             if not eles:
                 continue
             eles = deduplicate(list(eles))
+
+            # As List
+            if as_list:
+                return eles
+
+            # As Generator
             for ele in eles:
                 if ele is not None:
                     self.state.element = ele

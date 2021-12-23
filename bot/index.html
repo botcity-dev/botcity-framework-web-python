@@ -855,6 +855,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.set_current_element" class="md-nav__link">
+    set_current_element()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.set_file_input_element" class="md-nav__link">
     set_file_input_element()
   </a>
@@ -1569,6 +1576,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.scroll_up" class="md-nav__link">
     scroll_up()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.set_current_element" class="md-nav__link">
+    set_current_element()
   </a>
   
 </li>
@@ -3400,7 +3414,7 @@ Defaults to False.</p></td>
 
 
 <h3 class="doc doc-heading" id="botcity.web.bot.WebBot.find_all">
-<code class="highlight language-python"><span class="n">find_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">matching</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">grayscale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">find_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">matching</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">grayscale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_list</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 
 </h3>
@@ -3478,6 +3492,15 @@ Defaults to 10000ms (10s).</p></td>
 Defaults to False.</p></td>
         <td><code>False</code></td>
       </tr>
+      <tr>
+        <td><code>as_list</code></td>
+        <td><code>bool, Optional</code></td>
+        <td><p>If True, returns a list of element coordinates instead of a generator.
+Use set_active_element() to be able to interact with the found elements.
+This parameter must be True if you intend to run multiple find_all() concurrently.
+Defaults to False.</p></td>
+        <td><code>False</code></td>
+      </tr>
   </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -3491,7 +3514,7 @@ Defaults to False.</p></td>
   <tbody>
     <tr>
       <td><code>elements (collections.Iterable[NamedTuple])</code></td>
-      <td><p>A generator with all element coordinates fount.
+      <td><p>A generator with all element coordinates found.
     None if not found.</p></td>
     </tr>
   </tbody>
@@ -3499,7 +3522,7 @@ Defaults to False.</p></td>
         <details class="quote">
           <summary>Source code in <code>web/bot.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">find_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
-             <span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">matching</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">grayscale</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+             <span class="n">threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">matching</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">grayscale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_list</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find all elements defined by label on screen until a timeout happens.</span>
 
@@ -3517,9 +3540,13 @@ Defaults to False.</p></td>
 <span class="sd">            Defaults to 10000ms (10s).</span>
 <span class="sd">        grayscale (bool, optional): Whether or not to convert to grayscale before searching.</span>
 <span class="sd">            Defaults to False.</span>
+<span class="sd">        as_list (bool, Optional): If True, returns a list of element coordinates instead of a generator.</span>
+<span class="sd">            Use set_active_element() to be able to interact with the found elements.</span>
+<span class="sd">            This parameter must be True if you intend to run multiple find_all() concurrently.</span>
+<span class="sd">            Defaults to False.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        elements (collections.Iterable[NamedTuple]): A generator with all element coordinates fount.</span>
+<span class="sd">        elements (collections.Iterable[NamedTuple]): A generator with all element coordinates found.</span>
 <span class="sd">            None if not found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">deduplicate</span><span class="p">(</span><span class="n">elems</span><span class="p">):</span>
@@ -3579,6 +3606,12 @@ Defaults to False.</p></td>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">eles</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="n">eles</span> <span class="o">=</span> <span class="n">deduplicate</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">eles</span><span class="p">))</span>
+
+        <span class="c1"># As List</span>
+        <span class="k">if</span> <span class="n">as_list</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">eles</span>
+
+        <span class="c1"># As Generator</span>
         <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">eles</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">ele</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">ele</span>
@@ -7041,6 +7074,60 @@ This method needs to be invoked after holding Shift or similar.</p>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">clicks</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;window.scrollTo(0, window.scrollY - 200)&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.set_current_element">
+<code class="highlight language-python"><span class="n">set_current_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Changes the current screen element the bot will interact when using click(), move(), and similar methods.</p>
+<p>This method is equivalent to self.state.element = element.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>element</code></td>
+        <td><code>Box</code></td>
+        <td><p>A screen element from self.state.element or the find_all(as_list=True) method.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">set_current_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">cv2find</span><span class="o">.</span><span class="n">Box</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Changes the current screen element the bot will interact when using click(), move(), and similar methods.</span>
+
+<span class="sd">    This method is equivalent to self.state.element = element.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        element (Box): A screen element from self.state.element or the find_all(as_list=True) method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">element</span>
 </code></pre></div>
         </details>
     </div>

@@ -51,7 +51,8 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     app_state = {
         'recentDestinations': [{
             'id': 'Save as PDF',
-            'origin': 'local'
+            'origin': 'local',
+            'account': ''
         }],
         'selectedDestinationId': 'Save as PDF',
         'version': 2

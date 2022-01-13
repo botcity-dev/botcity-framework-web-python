@@ -1809,6 +1809,7 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
         <span class="bp">self</span><span class="o">.</span><span class="n">_clipboard</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
         <span class="c1"># Stub mouse coordinates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_html_elem</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -1816,7 +1817,7 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
         <span class="bp">self</span><span class="o">.</span><span class="n">_shift_hold</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1600</span><span class="p">,</span> <span class="mi">900</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_download_folder_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">),</span> <span class="s2">&quot;Desktop&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_download_folder_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">driver</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1842,6 +1843,7 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 <span class="sd">            driver_path (str): The full path to the proper webdriver path used for the selected browser.</span>
 <span class="sd">                If set to None, the code will look into the PATH for the proper file when starting the browser.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">driver_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="n">driver_path</span><span class="p">)))</span>
         <span class="k">if</span> <span class="n">driver_path</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">driver_path</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid driver_path. The file does not exist.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_driver_path</span> <span class="o">=</span> <span class="n">driver_path</span>
@@ -2691,14 +2693,17 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 <span class="sd">            str: the saved file path</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_title</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;document&quot;</span>
-        <span class="n">default_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="s2">&quot;Desktop&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">))</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="mi">60000</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_title</span><span class="p">():</span>
+            <span class="n">timeout</span> <span class="o">=</span> <span class="mi">1000</span>
+        <span class="n">default_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Browser</span><span class="o">.</span><span class="n">CHROME</span><span class="p">,</span> <span class="n">Browser</span><span class="o">.</span><span class="n">EDGE</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">headless</span><span class="p">:</span>
             <span class="c1"># Chrome still does not support headless webdriver print</span>
             <span class="c1"># but Firefox does.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">execute_javascript</span><span class="p">(</span><span class="s2">&quot;window.print();&quot;</span><span class="p">)</span>
             <span class="c1"># We need to wait for the file to be available in this case.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_file</span><span class="p">(</span><span class="n">default_path</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_file</span><span class="p">(</span><span class="n">default_path</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">default_path</span>
 
         <span class="k">if</span> <span class="n">print_options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2721,6 +2726,7 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
     <span class="k">def</span> <span class="nf">wait_for_downloads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">120000</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wait for all downloads to be finished.</span>
+<span class="sd">        Beware that this method replaces the current page with the downloads window.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            timeout (int, optional): Timeout in millis. Defaults to 120000.</span>
@@ -2742,7 +2748,7 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 
 <span class="sd">        **Example:**</span>
 <span class="sd">        ```python</span>
-<span class="sd">        from botcity.web.bot import By</span>
+<span class="sd">        from botcity.web import By</span>
 <span class="sd">        ...</span>
 <span class="sd">        # Find element by ID</span>
 <span class="sd">        all_cells = self.find_elements(&quot;//td&quot;, By.XPATH)</span>
@@ -2765,7 +2771,7 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 
 <span class="sd">        **Example:**</span>
 <span class="sd">        ```python</span>
-<span class="sd">        from botcity.web.bot import By</span>
+<span class="sd">        from botcity.web import By</span>
 <span class="sd">        ...</span>
 <span class="sd">        # Find element by ID</span>
 <span class="sd">        elem = self.find_element(&quot;my_elem&quot;, By.ID)</span>
@@ -2854,7 +2860,20 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 <span class="sd">            y (int): The Y coordinate</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># ActionChains(self._driver).move_by_offset(-self._x, -self._y).perform()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="o">==</span> <span class="n">Browser</span><span class="o">.</span><span class="n">FIREFOX</span><span class="p">:</span>
+            <span class="c1"># Reset coordinates if the page has gone stale. Only required for Firefox</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_html_elem</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_html_elem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">find_element_by_tag_name</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_html_elem</span><span class="o">.</span><span class="n">is_enabled</span><span class="p">()</span>
+                <span class="k">except</span> <span class="n">StaleElementReferenceException</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_html_elem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">find_element_by_tag_name</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="mi">0</span>
+
         <span class="n">mx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x</span>
         <span class="n">my</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span>
@@ -3546,6 +3565,7 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 <span class="sd">            status (bool): Whether or not the file was available before the timeout</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="n">path</span><span class="p">)))</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
@@ -5457,7 +5477,7 @@ If more than one element is found, the first instance is returned.</p>
     </tr>
   </tbody>
 </table>      <p><strong>Example:</strong>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">botcity.web.bot</span> <span class="kn">import</span> <span class="n">By</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">botcity.web</span> <span class="kn">import</span> <span class="n">By</span>
 <span class="o">...</span>
 <span class="c1"># Find element by ID</span>
 <span class="n">elem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="s2">&quot;my_elem&quot;</span><span class="p">,</span> <span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span>
@@ -5482,7 +5502,7 @@ If more than one element is found, the first instance is returned.</p>
 
 <span class="sd">    **Example:**</span>
 <span class="sd">    ```python</span>
-<span class="sd">    from botcity.web.bot import By</span>
+<span class="sd">    from botcity.web import By</span>
 <span class="sd">    ...</span>
 <span class="sd">    # Find element by ID</span>
 <span class="sd">    elem = self.find_element(&quot;my_elem&quot;, By.ID)</span>
@@ -5557,7 +5577,7 @@ If more than one element is found, the first instance is returned.</p>
     </tr>
   </tbody>
 </table>      <p><strong>Example:</strong>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">botcity.web.bot</span> <span class="kn">import</span> <span class="n">By</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">botcity.web</span> <span class="kn">import</span> <span class="n">By</span>
 <span class="o">...</span>
 <span class="c1"># Find element by ID</span>
 <span class="n">all_cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span><span class="s2">&quot;//td&quot;</span><span class="p">,</span> <span class="n">By</span><span class="o">.</span><span class="n">XPATH</span><span class="p">)</span>
@@ -5579,7 +5599,7 @@ If more than one element is found, the first instance is returned.</p>
 
 <span class="sd">    **Example:**</span>
 <span class="sd">    ```python</span>
-<span class="sd">    from botcity.web.bot import By</span>
+<span class="sd">    from botcity.web import By</span>
 <span class="sd">    ...</span>
 <span class="sd">    # Find element by ID</span>
 <span class="sd">    all_cells = self.find_elements(&quot;//td&quot;, By.XPATH)</span>
@@ -7561,7 +7581,20 @@ Used only if this is a prompt dialog.</p></td>
 <span class="sd">        y (int): The Y coordinate</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># ActionChains(self._driver).move_by_offset(-self._x, -self._y).perform()</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="o">==</span> <span class="n">Browser</span><span class="o">.</span><span class="n">FIREFOX</span><span class="p">:</span>
+        <span class="c1"># Reset coordinates if the page has gone stale. Only required for Firefox</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_html_elem</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_html_elem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">find_element_by_tag_name</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_html_elem</span><span class="o">.</span><span class="n">is_enabled</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">StaleElementReferenceException</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_html_elem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">find_element_by_tag_name</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_y</span> <span class="o">=</span> <span class="mi">0</span>
+
     <span class="n">mx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x</span>
     <span class="n">my</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_x</span> <span class="o">=</span> <span class="n">x</span>
@@ -8257,14 +8290,17 @@ Used only if this is a prompt dialog.</p></td>
 <span class="sd">        str: the saved file path</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_title</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;document&quot;</span>
-    <span class="n">default_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="s2">&quot;Desktop&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">))</span>
+    <span class="n">timeout</span> <span class="o">=</span> <span class="mi">60000</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_title</span><span class="p">():</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="n">default_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Browser</span><span class="o">.</span><span class="n">CHROME</span><span class="p">,</span> <span class="n">Browser</span><span class="o">.</span><span class="n">EDGE</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">headless</span><span class="p">:</span>
         <span class="c1"># Chrome still does not support headless webdriver print</span>
         <span class="c1"># but Firefox does.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">execute_javascript</span><span class="p">(</span><span class="s2">&quot;window.print();&quot;</span><span class="p">)</span>
         <span class="c1"># We need to wait for the file to be available in this case.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_file</span><span class="p">(</span><span class="n">default_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_file</span><span class="p">(</span><span class="n">default_path</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">default_path</span>
 
     <span class="k">if</span> <span class="n">print_options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -9839,7 +9875,8 @@ Note: This method does not submit the form.</p>
 
     <div class="doc doc-contents ">
 
-      <p>Wait for all downloads to be finished.</p>
+      <p>Wait for all downloads to be finished.
+Beware that this method replaces the current page with the downloads window.</p>
 
 <p><strong>Parameters:</strong></p>
 <table>
@@ -9865,6 +9902,7 @@ Note: This method does not submit the form.</p>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">wait_for_downloads</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">120000</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wait for all downloads to be finished.</span>
+<span class="sd">    Beware that this method replaces the current page with the downloads window.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        timeout (int, optional): Timeout in millis. Defaults to 120000.</span>
@@ -9950,6 +9988,7 @@ Defaults to 60000ms (60s).</p></td>
 <span class="sd">        status (bool): Whether or not the file was available before the timeout</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="n">path</span><span class="p">)))</span>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>

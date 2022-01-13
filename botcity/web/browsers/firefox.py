@@ -346,7 +346,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     firefox_profile.set_preference('browser.download.folderList', 2)
     firefox_profile.set_preference('browser.download.manager.showWhenStarting', False)
     if not download_folder_path:
-        download_folder_path = os.path.join(os.path.expanduser("~"), "Desktop")
+        download_folder_path = os.getcwd()
     firefox_profile.set_preference('browser.download.dir', download_folder_path)
     firefox_profile.set_preference('general.warnOnAboutConfig', False)
 
@@ -362,9 +362,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
 
 
 def wait_for_downloads(driver):
-    print('Start Wait for Downloads')
     if not driver.current_url.startswith("about:downloads"):
-        print('Open the downloads tab')
         driver.get("about:downloads")
 
     return driver.execute_script("""

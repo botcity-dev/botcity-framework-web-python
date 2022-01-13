@@ -46,7 +46,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
 
     if not download_folder_path:
-        download_folder_path = os.path.join(os.path.expanduser("~"), "Desktop")
+        download_folder_path = os.getcwd()
 
     app_state = {
         'recentDestinations': [{
@@ -67,7 +67,9 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
             "kind": "local",
             "namePattern": "Save as PDF",
         },
-        "safebrowsing.enabled": True
+        "safebrowsing.enabled": True,
+        "credentials_enable_service": False,
+        "profile.password_manager_enabled": False
     }
 
     chrome_options.add_experimental_option("prefs", prefs)

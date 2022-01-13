@@ -17,6 +17,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from selenium.common.exceptions import InvalidSessionIdException
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
@@ -61,6 +62,7 @@ class WebBot(BaseBot):
         self._clipboard = ""
 
         # Stub mouse coordinates
+        self._html_elem = None
         self._x = 0
         self._y = 0
 
@@ -68,7 +70,7 @@ class WebBot(BaseBot):
         self._shift_hold = False
 
         self._dimensions = (1600, 900)
-        self._download_folder_path = os.path.join(os.path.expanduser("~"), "Desktop")
+        self._download_folder_path = os.getcwd()
 
     @property
     def driver(self):
@@ -94,6 +96,7 @@ class WebBot(BaseBot):
             driver_path (str): The full path to the proper webdriver path used for the selected browser.
                 If set to None, the code will look into the PATH for the proper file when starting the browser.
         """
+        driver_path = os.path.abspath(os.path.expanduser(os.path.expandvars(driver_path)))
         if driver_path and not os.path.isfile(driver_path):
             raise ValueError("Invalid driver_path. The file does not exist.")
         self._driver_path = driver_path
@@ -943,14 +946,17 @@ class WebBot(BaseBot):
             str: the saved file path
         """
         title = self.page_title() or "document"
-        default_path = os.path.expanduser(os.path.join("~", "Desktop", f"{title}.pdf"))
+        timeout = 60000
+        if not self.page_title():
+            timeout = 1000
+        default_path = os.path.expanduser(os.path.join(self.download_folder_path, f"{title}.pdf"))
 
         if self.browser in [Browser.CHROME, Browser.EDGE] and not self.headless:
             # Chrome still does not support headless webdriver print
             # but Firefox does.
             self.execute_javascript("window.print();")
             # We need to wait for the file to be available in this case.
-            self.wait_for_file(default_path)
+            self.wait_for_file(default_path, timeout=timeout)
             return default_path
 
         if print_options is None:
@@ -973,6 +979,7 @@ class WebBot(BaseBot):
     def wait_for_downloads(self, timeout: int = 120000):
         """
         Wait for all downloads to be finished.
+        Beware that this method replaces the current page with the downloads window.
 
         Args:
             timeout (int, optional): Timeout in millis. Defaults to 120000.
@@ -994,7 +1001,7 @@ class WebBot(BaseBot):
 
         **Example:**
         ```python
-        from botcity.web.bot import By
+        from botcity.web import By
         ...
         # Find element by ID
         all_cells = self.find_elements("//td", By.XPATH)
@@ -1017,7 +1024,7 @@ class WebBot(BaseBot):
 
         **Example:**
         ```python
-        from botcity.web.bot import By
+        from botcity.web import By
         ...
         # Find element by ID
         elem = self.find_element("my_elem", By.ID)
@@ -1106,7 +1113,20 @@ class WebBot(BaseBot):
             y (int): The Y coordinate
 
         """
-        # ActionChains(self._driver).move_by_offset(-self._x, -self._y).perform()
+        if self.browser == Browser.FIREFOX:
+            # Reset coordinates if the page has gone stale. Only required for Firefox
+            if self._html_elem is None:
+                self._html_elem = self._driver.find_element_by_tag_name('body')
+                self._x = 0
+                self._y = 0
+            else:
+                try:
+                    self._html_elem.is_enabled()
+                except StaleElementReferenceException:
+                    self._html_elem = self._driver.find_element_by_tag_name('body')
+                    self._x = 0
+                    self._y = 0
+
         mx = x - self._x
         my = y - self._y
         self._x = x
@@ -1798,6 +1818,7 @@ class WebBot(BaseBot):
             status (bool): Whether or not the file was available before the timeout
 
         """
+        path = os.path.abspath(os.path.expanduser(os.path.expandvars(path)))
         start_time = time.time()
 
         while True:

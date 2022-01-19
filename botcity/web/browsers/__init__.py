@@ -24,18 +24,21 @@ BROWSER_CONFIGS = {
         "driver": "chromedriver",
         "class": chrome.Chrome,
         "options": chrome.default_options,
+        "capabilities": chrome.default_capabilities,
         "wait_for_downloads": chrome.wait_for_downloads
     },
     Browser.FIREFOX: {
         "driver": "geckodriver",
         "class": firefox.Firefox,
         "options": firefox.default_options,
+        "capabilities": firefox.default_capabilities,
         "wait_for_downloads": firefox.wait_for_downloads
     },
     Browser.EDGE: {
         "driver": "msedgedriver",
         "class": edge.Edge,
         "options": edge.default_options,
+        "capabilities": edge.default_capabilities,
         "wait_for_downloads": edge.wait_for_downloads
     },
 }

@@ -1,9 +1,11 @@
 import atexit
 import os
 import tempfile
+from typing import Dict
 
 from selenium import webdriver
 from selenium.webdriver import Firefox  # noqa: F401, F403
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 from ..util import cleanup_temp_dir
@@ -334,7 +336,19 @@ FIREFOX_MIMETYPES_TO_DOWNLOAD = ['application/vnd.hzn-3d-crossword', 'video/3gpp
                                  'application/vnd.zzazz.deck+xml']
 
 
-def default_options(headless=False, download_folder_path=None, user_data_dir=None):
+def default_options(headless=False, download_folder_path=None, user_data_dir=None) -> FirefoxOptions:
+    """Retrieve the default options for this browser curated by BotCity.
+
+    Args:
+        headless (bool, optional): Whether or not to use the headless mode. Defaults to False.
+        download_folder_path (str, optional): The default path in which to save files.
+            If None, the current directory is used. Defaults to None.
+        user_data_dir ([type], optional): The directory to use as user profile.
+            If None, a new temporary directory is used. Defaults to None.
+
+    Returns:
+        FirefoxOptions: The Firefox options.
+    """
     firefox_options = FirefoxOptions()
     firefox_options.headless = headless
     if not user_data_dir:
@@ -361,7 +375,19 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     return firefox_options
 
 
+def default_capabilities() -> Dict:
+    """Fetch the default capabilities for this browser.
+
+    Returns:
+        Dict: Dictionary with the default capabilities defined.
+    """
+    return DesiredCapabilities.FIREFOX.copy()
+
+
 def wait_for_downloads(driver):
+    """Wait for all downloads to finish.
+    *Important*: This method overwrites the current page with the downloads page.
+    """
     if not driver.current_url.startswith("about:downloads"):
         driver.get("about:downloads")
 

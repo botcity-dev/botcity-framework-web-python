@@ -54,6 +54,7 @@ class WebBot(BaseBot):
 
         self._browser = Browser.CHROME
         self._options = None
+        self._capabilities = None
         self._driver_path = None
 
         self._driver = None
@@ -142,6 +143,26 @@ class WebBot(BaseBot):
         self._options = options
 
     @property
+    def capabilities(self):
+        """
+        The capabilities to be passed down to the WebDriver when starting the browser.
+
+        Returns:
+            capabilities (Dict): The browser specific capabilities to be used.
+        """
+        return self._capabilities
+
+    @capabilities.setter
+    def capabilities(self, capabilities):
+        """
+        The capabilities to be passed down to the WebDriver when starting the browser.
+
+        Args:
+            capabilities (Dict): The browser specific capabilities to be used.
+        """
+        self._capabilities = capabilities
+
+    @property
     def download_folder_path(self):
         return self._download_folder_path
 
@@ -196,13 +217,17 @@ class WebBot(BaseBot):
         driver_class = BROWSER_CONFIGS.get(self.browser).get("class")
         # Specific default options method for a given browser
         func_def_options = BROWSER_CONFIGS.get(self.browser).get("options")
+        # Specific capabilities method for a given browser
+        func_def_capabilities = BROWSER_CONFIGS.get(self.browser).get("capabilities")
 
         opt = self.options or func_def_options(self.headless, self._download_folder_path, None)
+        cap = self.capabilities or func_def_capabilities()
         self.options = opt
+        self.capabilities = cap
         driver_path = self.driver_path or check_driver()
         self.driver_path = driver_path
 
-        self._driver = driver_class(options=opt, executable_path=driver_path)
+        self._driver = driver_class(options=opt, desired_capabilities=cap, executable_path=driver_path)
         self.set_screen_resolution()
 
     def stop_browser(self):

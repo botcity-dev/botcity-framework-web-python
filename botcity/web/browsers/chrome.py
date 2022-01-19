@@ -1,15 +1,29 @@
-import json
 import atexit
+import json
 import os
 import tempfile
+from typing import Dict
 
 from selenium.webdriver import Chrome  # noqa: F401, F403
 from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from ..util import cleanup_temp_dir
 
 
-def default_options(headless=False, download_folder_path=None, user_data_dir=None):
+def default_options(headless=False, download_folder_path=None, user_data_dir=None) -> ChromeOptions:
+    """Retrieve the default options for this browser curated by BotCity.
+
+    Args:
+        headless (bool, optional): Whether or not to use the headless mode. Defaults to False.
+        download_folder_path (str, optional): The default path in which to save files.
+            If None, the current directory is used. Defaults to None.
+        user_data_dir ([type], optional): The directory to use as user profile.
+            If None, a new temporary directory is used. Defaults to None.
+
+    Returns:
+        ChromeOptions: The Chrome options.
+    """
     chrome_options = ChromeOptions()
     chrome_options.add_argument("--remote-debugging-port=0")
     chrome_options.add_argument("--no-first-run")
@@ -83,7 +97,19 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     return chrome_options
 
 
+def default_capabilities() -> Dict:
+    """Fetch the default capabilities for this browser.
+
+    Returns:
+        Dict: Dictionary with the default capabilities defined.
+    """
+    return DesiredCapabilities.CHROME.copy()
+
+
 def wait_for_downloads(driver):
+    """Wait for all downloads to finish.
+    *Important*: This method overwrites the current page with the downloads page.
+    """
     if not driver.current_url.startswith("chrome://downloads"):
         driver.get("chrome://downloads/")
     return driver.execute_script("""

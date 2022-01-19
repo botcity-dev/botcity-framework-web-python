@@ -853,9 +853,6 @@ class WebBot(BaseBot):
                 Used only if this is a prompt dialog.
         """
         dialog = self.get_js_dialog()
-        if not dialog:
-            # TODO: Maybe we should raise an exception here if no alert available
-            return
         if prompt_text is not None:
             dialog.send_keys(prompt_text)
         if accept:
@@ -875,7 +872,8 @@ class WebBot(BaseBot):
             dialog = self._driver.switch_to.alert
             return dialog
         except Exception:
-            return None
+            raise Exception(
+                f"Dialog was not found. Make sure the dialog exists.")
 
     def get_tabs(self):
         """Get a list of tab handlers

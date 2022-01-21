@@ -980,7 +980,7 @@ class WebBot(BaseBot):
             # Chrome still does not support headless webdriver print
             # but Firefox does.
             self.execute_javascript("window.print();")
-            
+
             # We need to wait for the file to be available in this case.
             if self.page_title():
                 self.wait_for_file(default_path, timeout=timeout)
@@ -995,7 +995,7 @@ class WebBot(BaseBot):
                 return path
             self.wait(2000)
             return default_path
-        
+
         if print_options is None:
             print_options = {
                 'landscape': False,
@@ -1877,8 +1877,8 @@ class WebBot(BaseBot):
             str: the path of the last created file
         """
         if not path:
-            path = self.download_folder_path 
-        
+            path = self.download_folder_path
+
         files_path = glob.glob(os.path.expanduser(os.path.join(path, f"*{file_extension}")))
         last_created_file = max(files_path, key=os.path.getctime)
         return last_created_file
@@ -1894,8 +1894,8 @@ class WebBot(BaseBot):
             int: the number of files of the given type
         """
         if not path:
-            path = self.download_folder_path 
-        
+            path = self.download_folder_path
+
         files_path = glob.glob(os.path.expanduser(os.path.join(path, f"*{file_extension}")))
         return len(files_path)
 
@@ -1913,7 +1913,7 @@ class WebBot(BaseBot):
         while pdf_count != current_count + 1:
             self.wait(2000)
             pdf_count = self.check_file_count(file_extension=".pdf")
-            
+
             wait_time = wait_time + 2000
             if wait_time >= timeout:
                 break

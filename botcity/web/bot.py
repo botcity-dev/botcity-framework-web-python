@@ -1,5 +1,6 @@
 import base64
 import functools
+import glob
 import io
 import json
 import logging
@@ -972,18 +973,29 @@ class WebBot(BaseBot):
         """
         title = self.page_title() or "document"
         timeout = 60000
-        if not self.page_title():
-            timeout = 1000
         default_path = os.path.expanduser(os.path.join(self.download_folder_path, f"{title}.pdf"))
 
         if self.browser in [Browser.CHROME, Browser.EDGE] and not self.headless:
+            pdf_current_count = self.check_file_count(file_extension=".pdf")
             # Chrome still does not support headless webdriver print
             # but Firefox does.
             self.execute_javascript("window.print();")
+            
             # We need to wait for the file to be available in this case.
-            self.wait_for_file(default_path, timeout=timeout)
-            return default_path
+            if self.page_title():
+                self.wait_for_file(default_path, timeout=timeout)
+            else:
+                # Waiting when the file don't have the page title in path
+                self.wait_for_new_pdf(pdf_current_count, timeout=timeout)
 
+            # Move the downloaded pdf file if the path is not None
+            if path:
+                last_downloaded_pdf = self.return_last_created_file(self.download_folder_path, ".pdf")
+                os.rename(last_downloaded_pdf, path)
+                return path
+            self.wait(2000)
+            return default_path
+        
         if print_options is None:
             print_options = {
                 'landscape': False,
@@ -1853,3 +1865,55 @@ class WebBot(BaseBot):
             if os.path.isfile(path) and os.access(path, os.R_OK):
                 return True
             self.sleep(config.DEFAULT_SLEEP_AFTER_ACTION)
+
+    def return_last_created_file(self, path=None, file_extension=""):
+        """Returns the last created file in a specific folder path.
+
+        Args:
+            path (str, optional): The path of the folder where the file is expected. Defaults to None.
+            file_extension (str, optional): The extension of the file to be searched for (e.g., .pdf, .txt).
+
+        Returns:
+            str: the path of the last created file
+        """
+        if not path:
+            path = self.download_folder_path 
+        
+        files_path = glob.glob(os.path.expanduser(os.path.join(path, f"*{file_extension}")))
+        last_created_file = max(files_path, key=os.path.getctime)
+        return last_created_file
+
+    def check_file_count(self, path=None, file_extension=""):
+        """Get the total number of files of the same type.
+
+        Args:
+            path (str, optional): The path of the folder where the files are saved.
+            file_extension (str, optional): The extension of the files to be searched for (e.g., .pdf, .txt).
+
+        Returns:
+            int: the number of files of the given type
+        """
+        if not path:
+            path = self.download_folder_path 
+        
+        files_path = glob.glob(os.path.expanduser(os.path.join(path, f"*{file_extension}")))
+        return len(files_path)
+
+    def wait_for_new_pdf(self, current_count=0, timeout=60000):
+        """
+        Wait for a new pdf file to be available on download folder path.
+
+        Args:
+            current_count (int): The current number of pdf files in the folder. Defaults to 0 files
+            timeout (int, optional): Maximum wait time (ms) to search for a hit.
+                Defaults to 60000ms (60s).
+        """
+        pdf_count = 0
+        wait_time = 0
+        while pdf_count != current_count + 1:
+            self.wait(2000)
+            pdf_count = self.check_file_count(file_extension=".pdf")
+            
+            wait_time = wait_time + 2000
+            if wait_time >= timeout:
+                break

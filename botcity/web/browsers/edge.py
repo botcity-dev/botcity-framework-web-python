@@ -114,11 +114,11 @@ def wait_for_downloads(driver):
     """Wait for all downloads to finish.
     *Important*: This method overwrites the current page with the downloads page.
     """
-    if not driver.current_url.startswith("chrome://downloads"):
-        driver.get("chrome://downloads/")
+    if not driver.current_url.startswith("edge://downloads"):
+            driver.get("edge://downloads/")
     return driver.execute_script("""
-        var items = document.querySelector('downloads-manager')
-            .shadowRoot.getElementById('downloadsList').items;
-        if (items.every(e => e.state === "COMPLETE"))
-            return items.map(e => e.fileUrl || e.file_url);
+        var items = Array.from(document.querySelector(".downloads-list")
+            .querySelectorAll('[role="listitem"]'));
+        if(items.every(e => e.querySelector('[role="progressbar"]') == null))
+            return true;
         """)

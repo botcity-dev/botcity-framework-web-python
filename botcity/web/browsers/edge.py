@@ -115,7 +115,7 @@ def wait_for_downloads(driver):
     *Important*: This method overwrites the current page with the downloads page.
     """
     if not driver.current_url.startswith("edge://downloads"):
-            driver.get("edge://downloads/")
+        driver.get("edge://downloads/")
     return driver.execute_script("""
         var items = Array.from(document.querySelector(".downloads-list")
             .querySelectorAll('[role="listitem"]'));

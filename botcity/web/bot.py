@@ -976,7 +976,7 @@ class WebBot(BaseBot):
         default_path = os.path.expanduser(os.path.join(self.download_folder_path, f"{title}.pdf"))
 
         if self.browser in [Browser.CHROME, Browser.EDGE] and not self.headless:
-            pdf_current_count = self.check_file_count(file_extension=".pdf")
+            pdf_current_count = self.get_file_count(file_extension=".pdf")
             # Chrome still does not support headless webdriver print
             # but Firefox does.
             self.execute_javascript("window.print();")
@@ -986,11 +986,11 @@ class WebBot(BaseBot):
                 self.wait_for_file(default_path, timeout=timeout)
             else:
                 # Waiting when the file don't have the page title in path
-                self.wait_for_new_pdf(pdf_current_count, timeout=timeout)
+                self.wait_for_new_file(file_extension=".pdf", current_count=pdf_current_count)
 
             # Move the downloaded pdf file if the path is not None
             if path:
-                last_downloaded_pdf = self.return_last_created_file(self.download_folder_path, ".pdf")
+                last_downloaded_pdf = self.get_last_created_file(self.download_folder_path, ".pdf")
                 os.rename(last_downloaded_pdf, path)
                 return path
             self.wait(2000)
@@ -1866,7 +1866,7 @@ class WebBot(BaseBot):
                 return True
             self.sleep(config.DEFAULT_SLEEP_AFTER_ACTION)
 
-    def return_last_created_file(self, path=None, file_extension=""):
+    def get_last_created_file(self, path=None, file_extension=""):
         """Returns the last created file in a specific folder path.
 
         Args:
@@ -1883,7 +1883,7 @@ class WebBot(BaseBot):
         last_created_file = max(files_path, key=os.path.getctime)
         return last_created_file
 
-    def check_file_count(self, path=None, file_extension=""):
+    def get_file_count(self, path=None, file_extension=""):
         """Get the total number of files of the same type.
 
         Args:
@@ -1899,21 +1899,29 @@ class WebBot(BaseBot):
         files_path = glob.glob(os.path.expanduser(os.path.join(path, f"*{file_extension}")))
         return len(files_path)
 
-    def wait_for_new_pdf(self, current_count=0, timeout=60000):
+    def wait_for_new_file(self, path=None, file_extension="", current_count=0, timeout=60000):
         """
-        Wait for a new pdf file to be available on download folder path.
+        Wait for a new file to be available on disk without the file path.
 
         Args:
-            current_count (int): The current number of pdf files in the folder. Defaults to 0 files
+            path (str, optional): The path of the folder where the file is expected. Defaults to None.
+            file_extension (str, optional): The extension of the file to be searched for (e.g., .pdf, .txt).
+            current_count (int): The current number of files in the folder of the given type. Defaults to 0 files
             timeout (int, optional): Maximum wait time (ms) to search for a hit.
                 Defaults to 60000ms (60s).
-        """
-        pdf_count = 0
-        wait_time = 0
-        while pdf_count != current_count + 1:
-            self.wait(2000)
-            pdf_count = self.check_file_count(file_extension=".pdf")
 
-            wait_time = wait_time + 2000
-            if wait_time >= timeout:
-                break
+        Returns:
+            str: the path of the last created file of the given type
+        """
+        if not path:
+            path = self.download_folder_path
+
+        start_time = time.time()
+        while True:
+            elapsed_time = (time.time() - start_time) * 1000
+            if elapsed_time > timeout:
+                return None
+            pdf_count = self.get_file_count(path, f"*{file_extension}")
+            if pdf_count == current_count + 1:
+                return self.get_last_created_file(path, f"*{file_extension}")
+            self.sleep(config.DEFAULT_SLEEP_AFTER_ACTION)

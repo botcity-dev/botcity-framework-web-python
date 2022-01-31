@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../assets/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.8">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.9">
     
     
       
@@ -17,7 +17,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.6e60f8b8.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.2b4465f4.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
@@ -2024,19 +2024,18 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 <span class="sd">            width (int): The desired width.</span>
 <span class="sd">            height (int): The desired height.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">width</span> <span class="o">=</span> <span class="n">width</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="n">height</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span> <span class="o">=</span> <span class="p">(</span><span class="n">width</span> <span class="ow">or</span> <span class="mi">1600</span><span class="p">,</span> <span class="n">height</span> <span class="ow">or</span> <span class="mi">900</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">headless</span><span class="p">:</span>
             <span class="c1"># When running headless the window size is the viewport size</span>
-            <span class="n">window_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+            <span class="n">window_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># When running non-headless we need to account for the borders and etc</span>
             <span class="c1"># So the size must be bigger to have the same viewport size as before</span>
             <span class="n">window_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">                return [window.outerWidth - window.innerWidth + arguments[0],</span>
 <span class="s2">                  window.outerHeight - window.innerHeight + arguments[1]];</span>
-<span class="s2">                &quot;&quot;&quot;</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+<span class="s2">                &quot;&quot;&quot;</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">set_window_size</span><span class="p">(</span><span class="o">*</span><span class="n">window_size</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_webdriver_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">req_type</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">):</span>
@@ -9167,19 +9166,18 @@ Note: This method does not submit the form.</p>
 <span class="sd">        width (int): The desired width.</span>
 <span class="sd">        height (int): The desired height.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">width</span> <span class="o">=</span> <span class="n">width</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">height</span> <span class="o">=</span> <span class="n">height</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span> <span class="o">=</span> <span class="p">(</span><span class="n">width</span> <span class="ow">or</span> <span class="mi">1600</span><span class="p">,</span> <span class="n">height</span> <span class="ow">or</span> <span class="mi">900</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">headless</span><span class="p">:</span>
         <span class="c1"># When running headless the window size is the viewport size</span>
-        <span class="n">window_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">window_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># When running non-headless we need to account for the borders and etc</span>
         <span class="c1"># So the size must be bigger to have the same viewport size as before</span>
         <span class="n">window_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">            return [window.outerWidth - window.innerWidth + arguments[0],</span>
 <span class="s2">              window.outerHeight - window.innerHeight + arguments[1]];</span>
-<span class="s2">            &quot;&quot;&quot;</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">set_window_size</span><span class="p">(</span><span class="o">*</span><span class="n">window_size</span><span class="p">)</span>
 </code></pre></div>
         </details>

@@ -248,19 +248,18 @@ class WebBot(BaseBot):
             width (int): The desired width.
             height (int): The desired height.
         """
-        width = width or self._dimensions[0]
-        height = height or self._dimensions[1]
+        self._dimensions = (width or 1600, height or 900)
 
         if self.headless:
             # When running headless the window size is the viewport size
-            window_size = (width, height)
+            window_size = self._dimensions
         else:
             # When running non-headless we need to account for the borders and etc
             # So the size must be bigger to have the same viewport size as before
             window_size = self._driver.execute_script("""
                 return [window.outerWidth - window.innerWidth + arguments[0],
                   window.outerHeight - window.innerHeight + arguments[1]];
-                """, width, height)
+                """, *self._dimensions)
         self._driver.set_window_size(*window_size)
 
     def _webdriver_command(self, command, params=None, req_type="POST"):

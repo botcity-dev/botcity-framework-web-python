@@ -764,7 +764,9 @@ class WebBot(BaseBot):
         if not best:
             print('Warning: Ignoring best=False for now. It will be supported in the future.')
 
-        it = cv2find.locate_all_opencv(self.state.map_images[label], region=region, confidence=matching)
+        haystack = self.get_screen_image()
+        it = cv2find.locate_all_opencv(self.state.map_images[label], haystack_image=haystack,
+                                       region=region, confidence=matching)
         try:
             ele = next(it)
         except StopIteration:

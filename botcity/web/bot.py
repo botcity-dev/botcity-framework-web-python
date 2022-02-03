@@ -1108,6 +1108,8 @@ class WebBot(BaseBot):
             label (str): The image identifier
         """
         x, y = self.get_element_coords_centered(label)
+        if None in (x, y):
+            raise ValueError(f'Element not available. Cannot find {label}.')
         self.click_at(x, y)
 
     @only_if_element

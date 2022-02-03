@@ -1192,7 +1192,7 @@ class WebBot(BaseBot):
             wait_after (int, optional): Interval to wait after clicking on the element.
             clicks (int, optional): Number of times to click. Defaults to 1.
             interval_between_clicks (int, optional): The interval between clicks in ms. Defaults to 0.
-            button (str, optional): One of 'left', 'right', 'middle'. Defaults to 'left'
+            button (str, optional): One of 'left', 'right'. Defaults to 'left'
         """
         x, y = self.state.center()
         self.click_at(x, y, clicks=clicks, button=button, interval_between_clicks=interval_between_clicks)

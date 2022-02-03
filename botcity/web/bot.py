@@ -1100,7 +1100,6 @@ class WebBot(BaseBot):
     #######
     # Mouse
     #######
-    @only_if_element
     def click_on(self, label):
         """
         Click on the element.
@@ -1109,7 +1108,9 @@ class WebBot(BaseBot):
             label (str): The image identifier
         """
         x, y = self.get_element_coords_centered(label)
-        self.click(x, y)
+        if None in (x, y):
+            raise ValueError(f'Element not available. Cannot find {label}.')
+        self.click_at(x, y)
 
     @only_if_element
     def get_last_x(self):

@@ -568,6 +568,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.get_file_count" class="md-nav__link">
+    get_file_count()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.get_image_from_map" class="md-nav__link">
     get_image_from_map()
   </a>
@@ -577,6 +584,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.get_js_dialog" class="md-nav__link">
     get_js_dialog()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.get_last_created_file" class="md-nav__link">
+    get_last_created_file()
   </a>
   
 </li>
@@ -990,6 +1004,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.wait_for_file" class="md-nav__link">
     wait_for_file()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.wait_for_new_file" class="md-nav__link">
+    wait_for_new_file()
   </a>
   
 </li>
@@ -1316,6 +1337,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.get_file_count" class="md-nav__link">
+    get_file_count()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.get_image_from_map" class="md-nav__link">
     get_image_from_map()
   </a>
@@ -1325,6 +1353,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.get_js_dialog" class="md-nav__link">
     get_js_dialog()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.get_last_created_file" class="md-nav__link">
+    get_last_created_file()
   </a>
   
 </li>
@@ -1738,6 +1773,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.wait_for_file" class="md-nav__link">
     wait_for_file()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.wait_for_new_file" class="md-nav__link">
+    wait_for_new_file()
   </a>
   
 </li>
@@ -2749,16 +2791,27 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_title</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;document&quot;</span>
         <span class="n">timeout</span> <span class="o">=</span> <span class="mi">60000</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_title</span><span class="p">():</span>
-            <span class="n">timeout</span> <span class="o">=</span> <span class="mi">1000</span>
         <span class="n">default_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Browser</span><span class="o">.</span><span class="n">CHROME</span><span class="p">,</span> <span class="n">Browser</span><span class="o">.</span><span class="n">EDGE</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">headless</span><span class="p">:</span>
+            <span class="n">pdf_current_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_count</span><span class="p">(</span><span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.pdf&quot;</span><span class="p">)</span>
             <span class="c1"># Chrome still does not support headless webdriver print</span>
             <span class="c1"># but Firefox does.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">execute_javascript</span><span class="p">(</span><span class="s2">&quot;window.print();&quot;</span><span class="p">)</span>
+
             <span class="c1"># We need to wait for the file to be available in this case.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_file</span><span class="p">(</span><span class="n">default_path</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_title</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_file</span><span class="p">(</span><span class="n">default_path</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Waiting when the file don&#39;t have the page title in path</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_new_file</span><span class="p">(</span><span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.pdf&quot;</span><span class="p">,</span> <span class="n">current_count</span><span class="o">=</span><span class="n">pdf_current_count</span><span class="p">)</span>
+
+            <span class="c1"># Move the downloaded pdf file if the path is not None</span>
+            <span class="k">if</span> <span class="n">path</span><span class="p">:</span>
+                <span class="n">last_downloaded_pdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_last_created_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">)</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">last_downloaded_pdf</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">path</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">default_path</span>
 
         <span class="k">if</span> <span class="n">print_options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -3633,6 +3686,66 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
                     <span class="c1"># if *.part exists, the download is not completed.</span>
                     <span class="k">continue</span>
                 <span class="k">return</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_SLEEP_AFTER_ACTION</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_last_created_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the last created file in a specific folder path.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path (str, optional): The path of the folder where the file is expected. Defaults to None.</span>
+<span class="sd">            file_extension (str, optional): The extension of the file to be searched for (e.g., .pdf, .txt).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: the path of the last created file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span>
+
+        <span class="n">files_path</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">file_extension</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)))</span>
+        <span class="n">last_created_file</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">files_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getctime</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">last_created_file</span>
+
+    <span class="k">def</span> <span class="nf">get_file_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the total number of files of the same type.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path (str, optional): The path of the folder where the files are saved.</span>
+<span class="sd">            file_extension (str, optional): The extension of the files to be searched for (e.g., .pdf, .txt).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: the number of files of the given type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span>
+
+        <span class="n">files_path</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">file_extension</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">files_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">wait_for_new_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">current_count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60000</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wait for a new file to be available on disk without the file path.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path (str, optional): The path of the folder where the file is expected. Defaults to None.</span>
+<span class="sd">            file_extension (str, optional): The extension of the file to be searched for (e.g., .pdf, .txt).</span>
+<span class="sd">            current_count (int): The current number of files in the folder of the given type. Defaults to 0 files</span>
+<span class="sd">            timeout (int, optional): Maximum wait time (ms) to search for a hit.</span>
+<span class="sd">                Defaults to 60000ms (60s).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: the path of the last created file of the given type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span>
+
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">elapsed_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+            <span class="k">if</span> <span class="n">elapsed_time</span> <span class="o">&gt;</span> <span class="n">timeout</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">pdf_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_count</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">file_extension</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pdf_count</span> <span class="o">==</span> <span class="n">current_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_last_created_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">file_extension</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_SLEEP_AFTER_ACTION</span><span class="p">)</span>
 </code></pre></div>
         </details>
@@ -6518,6 +6631,85 @@ the first find. Defaults to True.</p></td>
 
 
 
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.get_file_count">
+<code class="highlight language-python"><span class="n">get_file_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_extension</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Get the total number of files of the same type.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>path</code></td>
+        <td><code>str</code></td>
+        <td><p>The path of the folder where the files are saved.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>file_extension</code></td>
+        <td><code>str</code></td>
+        <td><p>The extension of the files to be searched for (e.g., .pdf, .txt).</p></td>
+        <td><code>&#39;&#39;</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>int</code></td>
+      <td><p>the number of files of the given type</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_file_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the total number of files of the same type.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str, optional): The path of the folder where the files are saved.</span>
+<span class="sd">        file_extension (str, optional): The extension of the files to be searched for (e.g., .pdf, .txt).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: the number of files of the given type</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span>
+
+    <span class="n">files_path</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">file_extension</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">files_path</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="botcity.web.bot.WebBot.get_image_from_map">
 <code class="highlight language-python"><span class="n">get_image_from_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></code>
 
@@ -6632,6 +6824,86 @@ the first find. Defaults to True.</p></td>
         <span class="k">return</span> <span class="n">dialog</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.get_last_created_file">
+<code class="highlight language-python"><span class="n">get_last_created_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_extension</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns the last created file in a specific folder path.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>path</code></td>
+        <td><code>str</code></td>
+        <td><p>The path of the folder where the file is expected. Defaults to None.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>file_extension</code></td>
+        <td><code>str</code></td>
+        <td><p>The extension of the file to be searched for (e.g., .pdf, .txt).</p></td>
+        <td><code>&#39;&#39;</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>str</code></td>
+      <td><p>the path of the last created file</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_last_created_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns the last created file in a specific folder path.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str, optional): The path of the folder where the file is expected. Defaults to None.</span>
+<span class="sd">        file_extension (str, optional): The extension of the file to be searched for (e.g., .pdf, .txt).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: the path of the last created file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span>
+
+    <span class="n">files_path</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">file_extension</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)))</span>
+    <span class="n">last_created_file</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">files_path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getctime</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">last_created_file</span>
 </code></pre></div>
         </details>
     </div>
@@ -8391,16 +8663,27 @@ Used only if this is a prompt dialog.</p></td>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_title</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;document&quot;</span>
     <span class="n">timeout</span> <span class="o">=</span> <span class="mi">60000</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_title</span><span class="p">():</span>
-        <span class="n">timeout</span> <span class="o">=</span> <span class="mi">1000</span>
     <span class="n">default_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Browser</span><span class="o">.</span><span class="n">CHROME</span><span class="p">,</span> <span class="n">Browser</span><span class="o">.</span><span class="n">EDGE</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">headless</span><span class="p">:</span>
+        <span class="n">pdf_current_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_count</span><span class="p">(</span><span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.pdf&quot;</span><span class="p">)</span>
         <span class="c1"># Chrome still does not support headless webdriver print</span>
         <span class="c1"># but Firefox does.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">execute_javascript</span><span class="p">(</span><span class="s2">&quot;window.print();&quot;</span><span class="p">)</span>
+
         <span class="c1"># We need to wait for the file to be available in this case.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_file</span><span class="p">(</span><span class="n">default_path</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_title</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_file</span><span class="p">(</span><span class="n">default_path</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Waiting when the file don&#39;t have the page title in path</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_new_file</span><span class="p">(</span><span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.pdf&quot;</span><span class="p">,</span> <span class="n">current_count</span><span class="o">=</span><span class="n">pdf_current_count</span><span class="p">)</span>
+
+        <span class="c1"># Move the downloaded pdf file if the path is not None</span>
+        <span class="k">if</span> <span class="n">path</span><span class="p">:</span>
+            <span class="n">last_downloaded_pdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_last_created_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">last_downloaded_pdf</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">default_path</span>
 
     <span class="k">if</span> <span class="n">print_options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -10103,6 +10386,109 @@ Defaults to 60000ms (60s).</p></td>
                 <span class="c1"># if *.part exists, the download is not completed.</span>
                 <span class="k">continue</span>
             <span class="k">return</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_SLEEP_AFTER_ACTION</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.wait_for_new_file">
+<code class="highlight language-python"><span class="n">wait_for_new_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_extension</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">current_count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60000</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Wait for a new file to be available on disk without the file path.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>path</code></td>
+        <td><code>str</code></td>
+        <td><p>The path of the folder where the file is expected. Defaults to None.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>file_extension</code></td>
+        <td><code>str</code></td>
+        <td><p>The extension of the file to be searched for (e.g., .pdf, .txt).</p></td>
+        <td><code>&#39;&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>current_count</code></td>
+        <td><code>int</code></td>
+        <td><p>The current number of files in the folder of the given type. Defaults to 0 files</p></td>
+        <td><code>0</code></td>
+      </tr>
+      <tr>
+        <td><code>timeout</code></td>
+        <td><code>int</code></td>
+        <td><p>Maximum wait time (ms) to search for a hit.
+Defaults to 60000ms (60s).</p></td>
+        <td><code>60000</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>str</code></td>
+      <td><p>the path of the last created file of the given type</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">wait_for_new_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">current_count</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wait for a new file to be available on disk without the file path.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str, optional): The path of the folder where the file is expected. Defaults to None.</span>
+<span class="sd">        file_extension (str, optional): The extension of the file to be searched for (e.g., .pdf, .txt).</span>
+<span class="sd">        current_count (int): The current number of files in the folder of the given type. Defaults to 0 files</span>
+<span class="sd">        timeout (int, optional): Maximum wait time (ms) to search for a hit.</span>
+<span class="sd">            Defaults to 60000ms (60s).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: the path of the last created file of the given type</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span>
+
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">elapsed_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+        <span class="k">if</span> <span class="n">elapsed_time</span> <span class="o">&gt;</span> <span class="n">timeout</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">pdf_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_count</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">file_extension</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pdf_count</span> <span class="o">==</span> <span class="n">current_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_last_created_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">file_extension</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_SLEEP_AFTER_ACTION</span><span class="p">)</span>
 </code></pre></div>
         </details>

@@ -1120,6 +1120,20 @@ class WebBot(BaseBot):
         """
         self._driver.switch_to.default_content()
 
+    def install_firefox_extension(self, extension):
+        """
+        Install an extension in the Firefox browser.
+        This will start the browser if it was not started yet.
+
+        Args:
+            extension (str): The path of the .xpi extension to be loaded.
+        """
+        if self.browser != Browser.FIREFOX:
+            raise ValueError("install_firefox_extension only works with Firefox.")
+        if not self._driver:
+            self.start_browser()
+        self._driver.install_addon(os.path.abspath(extension))
+
     #######
     # Mouse
     #######

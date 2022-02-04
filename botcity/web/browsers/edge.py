@@ -32,7 +32,6 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     edge_options.add_argument("--disable-background-timer-throttling")
     edge_options.add_argument("--disable-client-side-phishing-detection")
     edge_options.add_argument("--disable-default-apps")
-    edge_options.add_argument("--disable-extensions")
     edge_options.add_argument("--disable-hang-monitor")
     edge_options.add_argument("--disable-popup-blocking")
     edge_options.add_argument("--disable-prompt-on-repost")

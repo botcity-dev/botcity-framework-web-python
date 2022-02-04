@@ -32,7 +32,6 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     chrome_options.add_argument("--disable-background-timer-throttling")
     chrome_options.add_argument("--disable-client-side-phishing-detection")
     chrome_options.add_argument("--disable-default-apps")
-    chrome_options.add_argument("--disable-extensions")
     chrome_options.add_argument("--disable-hang-monitor")
     chrome_options.add_argument("--disable-popup-blocking")
     chrome_options.add_argument("--disable-prompt-on-repost")

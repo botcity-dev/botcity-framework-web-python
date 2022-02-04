@@ -659,6 +659,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.install_firefox_extension" class="md-nav__link">
+    install_firefox_extension()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.kb_type" class="md-nav__link">
     kb_type()
   </a>
@@ -1423,6 +1430,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.hold_shift" class="md-nav__link">
     hold_shift()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.install_firefox_extension" class="md-nav__link">
+    install_firefox_extension()
   </a>
   
 </li>
@@ -2936,6 +2950,20 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
         <span class="sd">&quot;&quot;&quot;Leave the iframe and switch the WebBot driver to the default content.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">default_content</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">install_firefox_extension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Install an extension in the Firefox browser.</span>
+<span class="sd">        This will start the browser if it was not started yet.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            extension (str): The path of the .xpi extension to be loaded.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="o">!=</span> <span class="n">Browser</span><span class="o">.</span><span class="n">FIREFOX</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;install_firefox_extension only works with Firefox.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_browser</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">install_addon</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">extension</span><span class="p">))</span>
 
     <span class="c1">#######</span>
     <span class="c1"># Mouse</span>
@@ -7443,6 +7471,63 @@ Used only if this is a prompt dialog.</p></td>
     <span class="n">action</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
     <span class="n">delay</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">wait</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_SLEEP_AFTER_ACTION</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.install_firefox_extension">
+<code class="highlight language-python"><span class="n">install_firefox_extension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Install an extension in the Firefox browser.
+This will start the browser if it was not started yet.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>extension</code></td>
+        <td><code>str</code></td>
+        <td><p>The path of the .xpi extension to be loaded.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">install_firefox_extension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Install an extension in the Firefox browser.</span>
+<span class="sd">    This will start the browser if it was not started yet.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        extension (str): The path of the .xpi extension to be loaded.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="o">!=</span> <span class="n">Browser</span><span class="o">.</span><span class="n">FIREFOX</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;install_firefox_extension only works with Firefox.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_browser</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">install_addon</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">extension</span><span class="p">))</span>
 </code></pre></div>
         </details>
     </div>

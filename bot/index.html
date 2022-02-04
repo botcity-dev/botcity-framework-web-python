@@ -2839,6 +2839,17 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 <span class="sd">        Args:</span>
 <span class="sd">            timeout (int, optional): Timeout in millis. Defaults to 120000.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Browser</span><span class="o">.</span><span class="n">CHROME</span><span class="p">,</span> <span class="n">Browser</span><span class="o">.</span><span class="n">EDGE</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">headless</span><span class="p">:</span>
+            <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">elapsed_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+                <span class="k">if</span> <span class="n">elapsed_time</span> <span class="o">&gt;</span> <span class="n">timeout</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+                <span class="n">downloads_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_count</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span><span class="p">,</span> <span class="s2">&quot;.crdownload&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">downloads_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_SLEEP_AFTER_ACTION</span><span class="p">)</span>
+
         <span class="n">wait_method</span> <span class="o">=</span> <span class="n">BROWSER_CONFIGS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;wait_for_downloads&quot;</span><span class="p">)</span>
         <span class="c1"># waits for all the files to be completed</span>
         <span class="n">WebDriverWait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">wait_method</span><span class="p">)</span>
@@ -10293,6 +10304,17 @@ Beware that this method replaces the current page with the downloads window.</p>
 <span class="sd">    Args:</span>
 <span class="sd">        timeout (int, optional): Timeout in millis. Defaults to 120000.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Browser</span><span class="o">.</span><span class="n">CHROME</span><span class="p">,</span> <span class="n">Browser</span><span class="o">.</span><span class="n">EDGE</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">headless</span><span class="p">:</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">elapsed_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+            <span class="k">if</span> <span class="n">elapsed_time</span> <span class="o">&gt;</span> <span class="n">timeout</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="n">downloads_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_file_count</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span><span class="p">,</span> <span class="s2">&quot;.crdownload&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">downloads_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_SLEEP_AFTER_ACTION</span><span class="p">)</span>
+
     <span class="n">wait_method</span> <span class="o">=</span> <span class="n">BROWSER_CONFIGS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;wait_for_downloads&quot;</span><span class="p">)</span>
     <span class="c1"># waits for all the files to be completed</span>
     <span class="n">WebDriverWait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">wait_method</span><span class="p">)</span>

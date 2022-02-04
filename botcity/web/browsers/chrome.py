@@ -39,6 +39,9 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     chrome_options.add_argument("--metrics-recording-only")
     chrome_options.add_argument("--safebrowsing-disable-auto-update")
 
+    # Disable What's New banner for new chrome installs
+    chrome_options.add_argument("--disable-features=ChromeWhatsNewUI")
+
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
     # Disable banner for Browser being remote-controlled

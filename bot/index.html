@@ -2236,7 +2236,6 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: Ignoring best=False for now. It will be supported in the future.&#39;</span><span class="p">)</span>
 
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="n">n_cpus</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
 
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">elapsed_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
@@ -2246,8 +2245,7 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
             <span class="n">haystack</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screenshot</span><span class="p">()</span>
             <span class="n">helper</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_find_multiple_helper</span><span class="p">,</span> <span class="n">haystack</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">matching</span><span class="p">,</span> <span class="n">grayscale</span><span class="p">)</span>
 
-            <span class="k">with</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">n_cpus</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
-                <span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">helper</span><span class="p">,</span> <span class="n">paths</span><span class="p">)</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">helper</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">]</span>
 
             <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
             <span class="k">if</span> <span class="kc">None</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
@@ -6025,7 +6023,6 @@ Defaults to False.</p></td>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: Ignoring best=False for now. It will be supported in the future.&#39;</span><span class="p">)</span>
 
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">n_cpus</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">elapsed_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
@@ -6035,8 +6032,7 @@ Defaults to False.</p></td>
         <span class="n">haystack</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screenshot</span><span class="p">()</span>
         <span class="n">helper</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_find_multiple_helper</span><span class="p">,</span> <span class="n">haystack</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">matching</span><span class="p">,</span> <span class="n">grayscale</span><span class="p">)</span>
 
-        <span class="k">with</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">n_cpus</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">helper</span><span class="p">,</span> <span class="n">paths</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">helper</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">]</span>
 
         <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
         <span class="k">if</span> <span class="kc">None</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>

@@ -83,7 +83,8 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
         },
         "safebrowsing.enabled": True,
         "credentials_enable_service": False,
-        "profile.password_manager_enabled": False
+        "profile.password_manager_enabled": False,
+        "plugins.always_open_pdf_externally": True
     }
 
     chrome_options.add_experimental_option("prefs", prefs)

@@ -1111,7 +1111,8 @@ class WebBot(BaseBot):
 
     def install_firefox_extension(self, extension):
         """
-        Install a extension in the Firefox browser.
+        Install an extension in the Firefox browser.
+        This will start the browser if it was not started yet.
 
         Args:
             extension (str): The path of the .xpi extension to be loaded.

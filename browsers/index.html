@@ -696,6 +696,9 @@ If None, a new temporary directory is used. Defaults to None.</p></td>
     <span class="n">chrome_options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--metrics-recording-only&quot;</span><span class="p">)</span>
     <span class="n">chrome_options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--safebrowsing-disable-auto-update&quot;</span><span class="p">)</span>
 
+    <span class="c1"># Disable What&#39;s New banner for new chrome installs</span>
+    <span class="n">chrome_options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--disable-features=ChromeWhatsNewUI&quot;</span><span class="p">)</span>
+
     <span class="n">chrome_options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--disable-blink-features=AutomationControlled&quot;</span><span class="p">)</span>
 
     <span class="c1"># Disable banner for Browser being remote-controlled</span>

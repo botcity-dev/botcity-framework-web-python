@@ -1022,6 +1022,17 @@ class WebBot(BaseBot):
         Args:
             timeout (int, optional): Timeout in millis. Defaults to 120000.
         """
+        if self.browser in [Browser.CHROME, Browser.EDGE] and self.headless:
+            start_time = time.time()
+            while True:
+                elapsed_time = (time.time() - start_time) * 1000
+                if elapsed_time > timeout:
+                    return False
+                downloads_count = self.get_file_count(self.download_folder_path, ".crdownload")
+                if downloads_count == 0:
+                    return True
+                self.sleep(config.DEFAULT_SLEEP_AFTER_ACTION)
+
         wait_method = BROWSER_CONFIGS.get(self.browser).get("wait_for_downloads")
         # waits for all the files to be completed
         WebDriverWait(self._driver, timeout/1000, 1).until(wait_method)

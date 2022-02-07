@@ -1890,6 +1890,7 @@ class WebBot(BaseBot):
                 if self.browser == Browser.FIREFOX and os.path.exists(path + '.part'):
                     # if *.part exists, the download is not completed.
                     continue
+                self.sleep(config.DEFAULT_SLEEP_AFTER_ACTION)
                 return True
             self.sleep(config.DEFAULT_SLEEP_AFTER_ACTION)
 
@@ -1948,7 +1949,8 @@ class WebBot(BaseBot):
             elapsed_time = (time.time() - start_time) * 1000
             if elapsed_time > timeout:
                 return None
-            pdf_count = self.get_file_count(path, f"*{file_extension}")
-            if pdf_count == current_count + 1:
+            file_count = self.get_file_count(path, f"*{file_extension}")
+            if file_count == current_count + 1:
+                self.sleep(config.DEFAULT_SLEEP_AFTER_ACTION)
                 return self.get_last_created_file(path, f"*{file_extension}")
             self.sleep(config.DEFAULT_SLEEP_AFTER_ACTION)

@@ -3,6 +3,7 @@ import enum
 from . import chrome
 from . import firefox
 from . import edge
+from . import ie
 
 
 class Browser(str, enum.Enum):
@@ -13,10 +14,12 @@ class Browser(str, enum.Enum):
         CHROME (str): Google Chrome
         FIREFOX (str): Mozilla Firefox
         EDGE (str): Microsoft Edge
+        IE (str): Microsoft Internet Explorer
     """
     CHROME = "chrome"
     FIREFOX = "firefox"
     EDGE = "edge"
+    IE = "ie"
 
 
 BROWSER_CONFIGS = {
@@ -40,5 +43,12 @@ BROWSER_CONFIGS = {
         "options": edge.default_options,
         "capabilities": edge.default_capabilities,
         "wait_for_downloads": edge.wait_for_downloads
+    },
+    Browser.IE: {
+        "driver": "IEDriverServer",
+        "class": ie.Ie,
+        "options": ie.default_options,
+        "capabilities": ie.default_capabilities,
+        "wait_for_downloads": ie.wait_for_downloads
     },
 }

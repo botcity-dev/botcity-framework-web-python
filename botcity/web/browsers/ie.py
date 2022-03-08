@@ -8,10 +8,6 @@ from selenium.webdriver.ie.options import Options
 def default_options(headless=False, download_folder_path=None, user_data_dir=None) -> Options:
     """Retrieve the default options for this browser curated by BotCity.
 
-    Useful links:
-    IE Driver Documentation: https://www.selenium.dev/documentation/ie_driver_server/
-    IE Command-Line Options: https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/general-info/hh826025(v=vs.85)
-
     Returns:
         Options: The Internet Explorer options.
     """

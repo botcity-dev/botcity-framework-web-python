@@ -233,11 +233,16 @@ class WebBot(BaseBot):
     def stop_browser(self):
         """
         Stops the Chrome browser and clean up the User Data Directory.
+
+        Warning:
+            After invoking this method, you will need to reassign your custom options and capabilities.
         """
         if not self._driver:
             return
         self._driver.close()
         self._driver.quit()
+        self.options = None
+        self.capabilities = None
         self._driver = None
 
     def set_screen_resolution(self, width=None, height=None):

@@ -16,6 +16,7 @@ Here is a list of supported browsers along with links for you to download the pr
 | Chrome  | [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads)       |
 | Firefox | [GeckoDriver](https://github.com/mozilla/geckodriver/releases)                       |
 | Edge    | [MSDriverEdge](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/)|
+| IE      | [IEDriverServer](https://www.selenium.dev/downloads/)                                |
 
 Please follow the instructions on the WebDriver website for installation and setup.
 

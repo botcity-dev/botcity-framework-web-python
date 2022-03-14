@@ -10,6 +10,7 @@ import random
 import shutil
 import time
 from typing import List
+from contextlib import contextmanager
 
 from botcity.base import BaseBot, State
 from botcity.base.utils import only_if_element
@@ -21,7 +22,8 @@ from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.wait import WebDriverWait, TimeoutException, NoSuchElementException
+from selenium.webdriver.support import expected_conditions as EC
 
 from . import config, cv2find
 from .browsers import BROWSER_CONFIGS, Browser
@@ -233,11 +235,16 @@ class WebBot(BaseBot):
     def stop_browser(self):
         """
         Stops the Chrome browser and clean up the User Data Directory.
+
+        Warning:
+            After invoking this method, you will need to reassign your custom options and capabilities.
         """
         if not self._driver:
             return
         self._driver.close()
         self._driver.quit()
+        self.options = None
+        self.capabilities = None
         self._driver = None
 
     def set_screen_resolution(self, width=None, height=None):
@@ -854,6 +861,26 @@ class WebBot(BaseBot):
         """
         self.navigate_to(url)
 
+    @contextmanager
+    def wait_for_new_page(self, waiting_time=10000, activate=True):
+        """Context manager to wait for a new page to load and activate it.
+
+        Args:
+            waiting_time (int, optional): The maximum waiting time. Defaults to 10000.
+            activate (bool, optional): Whether or not to activate the new page. Defaults to True.
+
+        """
+        tabs = self.get_tabs()
+        yield
+        start_time = time.time()
+        while tabs == self.get_tabs():
+            elapsed_time = (time.time() - start_time) * 1000
+            if elapsed_time > waiting_time:
+                return None
+            time.sleep(0.1)
+        if activate:
+            self.activate_tab(self.get_tabs()[-1])
+
     def execute_javascript(self, code):
         """
         Execute the given javascript code.
@@ -1032,15 +1059,19 @@ class WebBot(BaseBot):
 
         wait_method = BROWSER_CONFIGS.get(self.browser).get("wait_for_downloads")
         # waits for all the files to be completed
-        WebDriverWait(self._driver, timeout/1000, 1).until(wait_method)
+        WebDriverWait(self._driver, timeout/1000.0, 1).until(wait_method)
 
-    def find_elements(self, selector: str, by: By = By.CSS_SELECTOR) -> List[WebElement]:
+    def find_elements(self, selector: str, by: By = By.CSS_SELECTOR,
+                      waiting_time=10000, ensure_visible: bool = True) -> List[WebElement]:
         """Find elements using the specified selector with selector type specified by `by`.
 
         Args:
             selector (str): The selector string to be used.
             by (str, optional): Selector type. Defaults to By.CSS_SELECTOR.
                 [See more](https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By)
+            waiting_time (int, optional): Maximum wait time (ms) to search for a hit.
+                Defaults to 10000ms (10s).
+            ensure_visible (bool, optional): Whether to wait for the element to be visible. Defaults to True.
 
         Returns:
             List[WebElement]: List of elements found.
@@ -1054,9 +1085,24 @@ class WebBot(BaseBot):
         ...
         ```
         """
-        return self._driver.find_elements(by, selector)
+        if ensure_visible:
+            condition = EC.visibility_of_all_elements_located
+        else:
+            condition = EC.presence_of_all_elements_located
 
-    def find_element(self, selector: str, by: str = By.CSS_SELECTOR) -> WebElement:
+        try:
+            elements = WebDriverWait(
+                self._driver, timeout=waiting_time / 1000.0
+            ).until(
+                condition((by, selector))
+            )
+            return elements
+        except (TimeoutException, NoSuchElementException) as ex:
+            print("Exception on find_elements", ex)
+            return None
+
+    def find_element(self, selector: str, by: str = By.CSS_SELECTOR, waiting_time=10000,
+                     ensure_visible: bool = False, ensure_clickable: bool = False) -> WebElement:
         """Find an element using the specified selector with selector type specified by `by`.
         If more than one element is found, the first instance is returned.
 
@@ -1064,6 +1110,11 @@ class WebBot(BaseBot):
             selector (str): The selector string to be used.
             by (str, optional): Selector type. Defaults to By.CSS_SELECTOR.
                 [See more](https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By)
+            waiting_time (int, optional): Maximum wait time (ms) to search for a hit.
+                Defaults to 10000ms (10s).
+            ensure_visible (bool, optional): Whether to wait for the element to be visible. Defaults to False.
+            ensure_clickable (bool, optional): Whether to wait for the element to be clickable. Defaults to False.
+                If True, `ensure_clickable` takes precedence over `ensure_visible`.
 
         Returns:
             WebElement: The element found.
@@ -1079,9 +1130,47 @@ class WebBot(BaseBot):
         ...
         ```
         """
-        out = self.find_elements(selector=selector, by=by)
-        if out:
-            return out[0]
+        condition = EC.visibility_of_element_located if ensure_visible else EC.presence_of_element_located
+        condition = EC.element_to_be_clickable if ensure_clickable else condition
+
+        try:
+            element = WebDriverWait(
+                self._driver, timeout=waiting_time/1000.0
+            ).until(
+                condition((by, selector))
+            )
+            return element
+        except (TimeoutException, NoSuchElementException):
+            return None
+
+    def wait_for_stale_element(self, element: WebElement, timeout: int = 10000):
+        """
+        Wait until the WebElement element becomes stale (outdated).
+
+        Args:
+            element (WebElement): The element to monitor for staleness.
+            timeout (int, optional): Timeout in millis. Defaults to 120000.
+        """
+        try:
+            WebDriverWait(self._driver, timeout=timeout/1000.0).until(EC.staleness_of(element))
+        except (TimeoutException, NoSuchElementException):
+            pass
+
+    def wait_for_element_visibility(self, element: WebElement, visible: bool = True, waiting_time=10000):
+        """Wait for the element to be visible or hidden.
+
+        Args:
+            element (WebElement): The element to wait for.
+            visible (bool, optional): Whether to wait for the element to be visible. Defaults to True.
+            waiting_time (int, optional): Maximum wait time (ms) to search for a hit.
+                Defaults to 10000ms (10s).
+        """
+        if visible:
+            wait_method = EC.visibility_of
+        else:
+            wait_method = EC.invisibility_of_element
+
+        WebDriverWait(self._driver, timeout=waiting_time/1000.0).until(wait_method(element))
 
     def set_file_input_element(self, element: WebElement, filepath: str):
         """Configure the filepath for upload in a file element.

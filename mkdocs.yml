@@ -7,6 +7,8 @@ nav:
     - Home: index.md
     - Getting Started: intro.md
     - Framework: bot.md
+    - Handling Data: parsers.md
+    - Interacting with Forms: forms.md
     - Browsers: browsers.md
 
 theme:
@@ -32,6 +34,8 @@ theme:
         name: Switch to light mode
 
 markdown_extensions:
+  - admonition
+  - pymdownx.details
   - pymdownx.highlight
   - pymdownx.superfences
 

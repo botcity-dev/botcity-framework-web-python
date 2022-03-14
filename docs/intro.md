@@ -63,14 +63,14 @@ class Bot(WebBot):
 
         # Changes the Browser to Firefox
         self.browser = Browser.FIREFOX
-        
+
         # For Chrome
         # self.browser = Browser.CHROME
-        
+
         ...
 ```
 
-From the snippet above the key takeaway is the `self.browser` piece in which we set it to one of the values 
+From the snippet above the key takeaway is the `self.browser` piece in which we set it to one of the values
 from the `Browser` *enum* as mentioned before.
 
 #### Defining the WebDriver Path
@@ -90,7 +90,7 @@ class Bot(WebBot):
 
         # Inform the WebDriver path for Google Chrome's chromedriver
         self.driver_path = "/home/username/drivers/chromedriver"
-        
+
         ...
 ```
 
@@ -101,20 +101,20 @@ By default the browsers are launched with a set of curated options which we pick
 Before getting into how to customize those details let's walk through some of the assumptions and
 details which are covered by the `default options`.
 
-- **Headless Execution**: Depending on the `headless` property set on your Bot class we pick the 
+- **Headless Execution**: Depending on the `headless` property set on your Bot class we pick the
 proper configuration to launch the browser in the desired mode.
-  
+
 - **Downloads Folder Path**: By default we save all downloaded files on the Desktop folder.
 
 - **User Profile**: By default we generate a temporary directory (which is later erased) to be used
   as the profile directory. This procedure ensure that every execution starts with a clean browser session
   and things such as cookies and stored passwords or certificates from one execution won't interfere with
   the others.
-  
-A handful of other options are also set and they can be inspected on the source code for each browser on the 
+
+A handful of other options are also set and they can be inspected on the source code for each browser on the
 `botcity.web.browsers` module.
 
-If you really need to customize the options you can do so via the `options` property. You can fetch 
+If you really need to customize the options you can do so via the `options` property. You can fetch
 the `default options` curated by BotCity and make your changes or start your options from scratch.
 
 In the following snippet we will cover how to build on top of the existing options.
@@ -140,13 +140,13 @@ class Bot(WebBot):
             download_folder_path=self.download_folder_path,
             user_data_dir=None  # Informing None here will generate a temporary directory
         )
-        
+
         # Add your customized argument
         def_options.add_argument("<My Special Argument>")
-        
+
         # Update the options to use the customized Options.
         self.options = def_options
-        
+
         ...
 ```
 
@@ -155,6 +155,16 @@ Every supported browser will have an exclusive module with curated default optio
 
 This function takes in arguments to define the mode of execution (headless or not), default download folder path
 and user data/profile directory.
+
+### Parsing Data
+
+When extracting data from websites we often need to read information from tables and other common sources.
+The `Handling Data` section highlights how we can do that and which functions are available to be used.
+
+### Forms
+
+It is common while navigating websites to have to fill up forms and submit them.
+To facilitate this we have a `Interacting with Forms` section which highlights the available functions to be used.
 
 ### Next Steps
 

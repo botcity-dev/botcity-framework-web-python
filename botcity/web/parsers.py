@@ -28,7 +28,7 @@ def sanitize_header(labels: List[str]):
             label = label.lower()
 
             # remove punctuations
-            label = ''.join([l for l in label if l not in string.punctuation])
+            label = ''.join([l for l in label if l not in string.punctuation])  # noqa: E741
 
             # replace spaces with underscores
             label = label.replace(" ", "_")
@@ -47,7 +47,8 @@ def sanitize_header(labels: List[str]):
     return labels
 
 
-def table_to_dict(table: WebElement, has_header: bool = True, skip_rows: int = 0, header_tag: str = "th") -> List[Dict]:
+def table_to_dict(table: WebElement, has_header: bool = True,
+                  skip_rows: int = 0, header_tag: str = "th") -> List[Dict]:
     """Convert a table WebElement to a dict of lists.
 
     Args:

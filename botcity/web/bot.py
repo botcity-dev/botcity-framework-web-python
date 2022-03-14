@@ -1061,7 +1061,8 @@ class WebBot(BaseBot):
         # waits for all the files to be completed
         WebDriverWait(self._driver, timeout/1000.0, 1).until(wait_method)
 
-    def find_elements(self, selector: str, by: By = By.CSS_SELECTOR, waiting_time=10000, ensure_visible: bool = True) -> List[WebElement]:
+    def find_elements(self, selector: str, by: By = By.CSS_SELECTOR,
+                      waiting_time=10000, ensure_visible: bool = True) -> List[WebElement]:
         """Find elements using the specified selector with selector type specified by `by`.
 
         Args:
@@ -1084,7 +1085,10 @@ class WebBot(BaseBot):
         ...
         ```
         """
-        condition = EC.visibility_of_all_elements_located if ensure_visible else EC.presence_of_all_elements_located
+        if ensure_visible:
+            condition = EC.visibility_of_all_elements_located
+        else:
+            condition = EC.presence_of_all_elements_located
 
         try:
             elements = WebDriverWait(
@@ -1097,7 +1101,8 @@ class WebBot(BaseBot):
             print("Exception on find_elements", ex)
             return None
 
-    def find_element(self, selector: str, by: str = By.CSS_SELECTOR, waiting_time=10000, ensure_visible: bool = False, ensure_clickable: bool = False) -> WebElement:
+    def find_element(self, selector: str, by: str = By.CSS_SELECTOR, waiting_time=10000,
+                     ensure_visible: bool = False, ensure_clickable: bool = False) -> WebElement:
         """Find an element using the specified selector with selector type specified by `by`.
         If more than one element is found, the first instance is returned.
 

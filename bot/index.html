@@ -1010,6 +1010,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.wait_for_element_visibility" class="md-nav__link">
+    wait_for_element_visibility()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.wait_for_file" class="md-nav__link">
     wait_for_file()
   </a>
@@ -1023,6 +1030,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.wait_for_new_page" class="md-nav__link">
+    wait_for_new_page()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.wait_for_stale_element" class="md-nav__link">
+    wait_for_stale_element()
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1032,6 +1053,36 @@
   
 </nav>
       
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parsers/" class="md-nav__link">
+        Handling Data
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../forms/" class="md-nav__link">
+        Interacting with Forms
+      </a>
     </li>
   
 
@@ -1786,6 +1837,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.wait_for_element_visibility" class="md-nav__link">
+    wait_for_element_visibility()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.wait_for_file" class="md-nav__link">
     wait_for_file()
   </a>
@@ -1795,6 +1853,20 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.wait_for_new_file" class="md-nav__link">
     wait_for_new_file()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.wait_for_new_page" class="md-nav__link">
+    wait_for_new_page()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.wait_for_stale_element" class="md-nav__link">
+    wait_for_stale_element()
   </a>
   
 </li>
@@ -2067,11 +2139,16 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
     <span class="k">def</span> <span class="nf">stop_browser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Stops the Chrome browser and clean up the User Data Directory.</span>
+
+<span class="sd">        Warning:</span>
+<span class="sd">            After invoking this method, you will need to reassign your custom options and capabilities.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capabilities</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">set_screen_resolution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -2688,6 +2765,26 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">navigate_to</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
+    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">wait_for_new_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">activate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Context manager to wait for a new page to load and activate it.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            waiting_time (int, optional): The maximum waiting time. Defaults to 10000.</span>
+<span class="sd">            activate (bool, optional): Whether or not to activate the new page. Defaults to True.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tabs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tabs</span><span class="p">()</span>
+        <span class="k">yield</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">tabs</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tabs</span><span class="p">():</span>
+            <span class="n">elapsed_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+            <span class="k">if</span> <span class="n">elapsed_time</span> <span class="o">&gt;</span> <span class="n">waiting_time</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">activate</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activate_tab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_tabs</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
     <span class="k">def</span> <span class="nf">execute_javascript</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Execute the given javascript code.</span>
@@ -2866,15 +2963,19 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 
         <span class="n">wait_method</span> <span class="o">=</span> <span class="n">BROWSER_CONFIGS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;wait_for_downloads&quot;</span><span class="p">)</span>
         <span class="c1"># waits for all the files to be completed</span>
-        <span class="n">WebDriverWait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">wait_method</span><span class="p">)</span>
+        <span class="n">WebDriverWait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">wait_method</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">find_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="n">By</span> <span class="o">=</span> <span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">WebElement</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">find_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="n">By</span> <span class="o">=</span> <span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">,</span>
+                      <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">ensure_visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">WebElement</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Find elements using the specified selector with selector type specified by `by`.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            selector (str): The selector string to be used.</span>
 <span class="sd">            by (str, optional): Selector type. Defaults to By.CSS_SELECTOR.</span>
 <span class="sd">                [See more](https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By)</span>
+<span class="sd">            waiting_time (int, optional): Maximum wait time (ms) to search for a hit.</span>
+<span class="sd">                Defaults to 10000ms (10s).</span>
+<span class="sd">            ensure_visible (bool, optional): Whether to wait for the element to be visible. Defaults to True.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            List[WebElement]: List of elements found.</span>
@@ -2888,9 +2989,24 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 <span class="sd">        ...</span>
 <span class="sd">        ```</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span><span class="n">by</span><span class="p">,</span> <span class="n">selector</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ensure_visible</span><span class="p">:</span>
+            <span class="n">condition</span> <span class="o">=</span> <span class="n">EC</span><span class="o">.</span><span class="n">visibility_of_all_elements_located</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">condition</span> <span class="o">=</span> <span class="n">EC</span><span class="o">.</span><span class="n">presence_of_all_elements_located</span>
 
-    <span class="k">def</span> <span class="nf">find_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WebElement</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">elements</span> <span class="o">=</span> <span class="n">WebDriverWait</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">waiting_time</span> <span class="o">/</span> <span class="mf">1000.0</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span>
+                <span class="n">condition</span><span class="p">((</span><span class="n">by</span><span class="p">,</span> <span class="n">selector</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">elements</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">TimeoutException</span><span class="p">,</span> <span class="n">NoSuchElementException</span><span class="p">)</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exception on find_elements&quot;</span><span class="p">,</span> <span class="n">ex</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">find_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+                     <span class="n">ensure_visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ensure_clickable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WebElement</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Find an element using the specified selector with selector type specified by `by`.</span>
 <span class="sd">        If more than one element is found, the first instance is returned.</span>
 
@@ -2898,6 +3014,11 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 <span class="sd">            selector (str): The selector string to be used.</span>
 <span class="sd">            by (str, optional): Selector type. Defaults to By.CSS_SELECTOR.</span>
 <span class="sd">                [See more](https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By)</span>
+<span class="sd">            waiting_time (int, optional): Maximum wait time (ms) to search for a hit.</span>
+<span class="sd">                Defaults to 10000ms (10s).</span>
+<span class="sd">            ensure_visible (bool, optional): Whether to wait for the element to be visible. Defaults to False.</span>
+<span class="sd">            ensure_clickable (bool, optional): Whether to wait for the element to be clickable. Defaults to False.</span>
+<span class="sd">                If True, `ensure_clickable` takes precedence over `ensure_visible`.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            WebElement: The element found.</span>
@@ -2913,9 +3034,47 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 <span class="sd">        ...</span>
 <span class="sd">        ```</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span><span class="n">selector</span><span class="o">=</span><span class="n">selector</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="n">by</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">condition</span> <span class="o">=</span> <span class="n">EC</span><span class="o">.</span><span class="n">visibility_of_element_located</span> <span class="k">if</span> <span class="n">ensure_visible</span> <span class="k">else</span> <span class="n">EC</span><span class="o">.</span><span class="n">presence_of_element_located</span>
+        <span class="n">condition</span> <span class="o">=</span> <span class="n">EC</span><span class="o">.</span><span class="n">element_to_be_clickable</span> <span class="k">if</span> <span class="n">ensure_clickable</span> <span class="k">else</span> <span class="n">condition</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">element</span> <span class="o">=</span> <span class="n">WebDriverWait</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">waiting_time</span><span class="o">/</span><span class="mf">1000.0</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span>
+                <span class="n">condition</span><span class="p">((</span><span class="n">by</span><span class="p">,</span> <span class="n">selector</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">element</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">TimeoutException</span><span class="p">,</span> <span class="n">NoSuchElementException</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">wait_for_stale_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">WebElement</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wait until the WebElement element becomes stale (outdated).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            element (WebElement): The element to monitor for staleness.</span>
+<span class="sd">            timeout (int, optional): Timeout in millis. Defaults to 120000.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">WebDriverWait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">staleness_of</span><span class="p">(</span><span class="n">element</span><span class="p">))</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">TimeoutException</span><span class="p">,</span> <span class="n">NoSuchElementException</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">wait_for_element_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">WebElement</span><span class="p">,</span> <span class="n">visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Wait for the element to be visible or hidden.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            element (WebElement): The element to wait for.</span>
+<span class="sd">            visible (bool, optional): Whether to wait for the element to be visible. Defaults to True.</span>
+<span class="sd">            waiting_time (int, optional): Maximum wait time (ms) to search for a hit.</span>
+<span class="sd">                Defaults to 10000ms (10s).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">visible</span><span class="p">:</span>
+            <span class="n">wait_method</span> <span class="o">=</span> <span class="n">EC</span><span class="o">.</span><span class="n">visibility_of</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">wait_method</span> <span class="o">=</span> <span class="n">EC</span><span class="o">.</span><span class="n">invisibility_of_element</span>
+
+        <span class="n">WebDriverWait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">waiting_time</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">wait_method</span><span class="p">(</span><span class="n">element</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">set_file_input_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">WebElement</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Configure the filepath for upload in a file element.</span>
@@ -5678,7 +5837,7 @@ Defaults to False.</p></td>
 
 
 <h3 class="doc doc-heading" id="botcity.web.bot.WebBot.find_element">
-<code class="highlight language-python"><span class="n">find_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;css selector&#39;</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">find_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;css selector&#39;</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">ensure_visible</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ensure_clickable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 
 </h3>
@@ -5712,6 +5871,26 @@ If more than one element is found, the first instance is returned.</p>
 <a href="https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By">See more</a></p></td>
         <td><code>&#39;css selector&#39;</code></td>
       </tr>
+      <tr>
+        <td><code>waiting_time</code></td>
+        <td><code>int</code></td>
+        <td><p>Maximum wait time (ms) to search for a hit.
+Defaults to 10000ms (10s).</p></td>
+        <td><code>10000</code></td>
+      </tr>
+      <tr>
+        <td><code>ensure_visible</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to wait for the element to be visible. Defaults to False.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>ensure_clickable</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to wait for the element to be clickable. Defaults to False.
+If True, <code>ensure_clickable</code> takes precedence over <code>ensure_visible</code>.</p></td>
+        <td><code>False</code></td>
+      </tr>
   </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -5740,7 +5919,8 @@ If more than one element is found, the first instance is returned.</p>
 
         <details class="quote">
           <summary>Source code in <code>web/bot.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">find_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WebElement</span><span class="p">:</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">find_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+                 <span class="n">ensure_visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ensure_clickable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WebElement</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Find an element using the specified selector with selector type specified by `by`.</span>
 <span class="sd">    If more than one element is found, the first instance is returned.</span>
 
@@ -5748,6 +5928,11 @@ If more than one element is found, the first instance is returned.</p>
 <span class="sd">        selector (str): The selector string to be used.</span>
 <span class="sd">        by (str, optional): Selector type. Defaults to By.CSS_SELECTOR.</span>
 <span class="sd">            [See more](https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By)</span>
+<span class="sd">        waiting_time (int, optional): Maximum wait time (ms) to search for a hit.</span>
+<span class="sd">            Defaults to 10000ms (10s).</span>
+<span class="sd">        ensure_visible (bool, optional): Whether to wait for the element to be visible. Defaults to False.</span>
+<span class="sd">        ensure_clickable (bool, optional): Whether to wait for the element to be clickable. Defaults to False.</span>
+<span class="sd">            If True, `ensure_clickable` takes precedence over `ensure_visible`.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        WebElement: The element found.</span>
@@ -5763,9 +5948,18 @@ If more than one element is found, the first instance is returned.</p>
 <span class="sd">    ...</span>
 <span class="sd">    ```</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span><span class="n">selector</span><span class="o">=</span><span class="n">selector</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="n">by</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">out</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">condition</span> <span class="o">=</span> <span class="n">EC</span><span class="o">.</span><span class="n">visibility_of_element_located</span> <span class="k">if</span> <span class="n">ensure_visible</span> <span class="k">else</span> <span class="n">EC</span><span class="o">.</span><span class="n">presence_of_element_located</span>
+    <span class="n">condition</span> <span class="o">=</span> <span class="n">EC</span><span class="o">.</span><span class="n">element_to_be_clickable</span> <span class="k">if</span> <span class="n">ensure_clickable</span> <span class="k">else</span> <span class="n">condition</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">element</span> <span class="o">=</span> <span class="n">WebDriverWait</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">waiting_time</span><span class="o">/</span><span class="mf">1000.0</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span>
+            <span class="n">condition</span><span class="p">((</span><span class="n">by</span><span class="p">,</span> <span class="n">selector</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">element</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">TimeoutException</span><span class="p">,</span> <span class="n">NoSuchElementException</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
 </code></pre></div>
         </details>
     </div>
@@ -5779,7 +5973,7 @@ If more than one element is found, the first instance is returned.</p>
 
 
 <h3 class="doc doc-heading" id="botcity.web.bot.WebBot.find_elements">
-<code class="highlight language-python"><span class="n">find_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;css selector&#39;</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">find_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;css selector&#39;</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">ensure_visible</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 
 </h3>
@@ -5812,6 +6006,19 @@ If more than one element is found, the first instance is returned.</p>
 <a href="https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By">See more</a></p></td>
         <td><code>&#39;css selector&#39;</code></td>
       </tr>
+      <tr>
+        <td><code>waiting_time</code></td>
+        <td><code>int</code></td>
+        <td><p>Maximum wait time (ms) to search for a hit.
+Defaults to 10000ms (10s).</p></td>
+        <td><code>10000</code></td>
+      </tr>
+      <tr>
+        <td><code>ensure_visible</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to wait for the element to be visible. Defaults to True.</p></td>
+        <td><code>True</code></td>
+      </tr>
   </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -5838,13 +6045,17 @@ If more than one element is found, the first instance is returned.</p>
 
         <details class="quote">
           <summary>Source code in <code>web/bot.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">find_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="n">By</span> <span class="o">=</span> <span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">WebElement</span><span class="p">]:</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">find_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">by</span><span class="p">:</span> <span class="n">By</span> <span class="o">=</span> <span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">,</span>
+                  <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">ensure_visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">WebElement</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Find elements using the specified selector with selector type specified by `by`.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        selector (str): The selector string to be used.</span>
 <span class="sd">        by (str, optional): Selector type. Defaults to By.CSS_SELECTOR.</span>
 <span class="sd">            [See more](https://selenium-python.readthedocs.io/api.html#selenium.webdriver.common.by.By)</span>
+<span class="sd">        waiting_time (int, optional): Maximum wait time (ms) to search for a hit.</span>
+<span class="sd">            Defaults to 10000ms (10s).</span>
+<span class="sd">        ensure_visible (bool, optional): Whether to wait for the element to be visible. Defaults to True.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        List[WebElement]: List of elements found.</span>
@@ -5858,7 +6069,21 @@ If more than one element is found, the first instance is returned.</p>
 <span class="sd">    ...</span>
 <span class="sd">    ```</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span><span class="n">by</span><span class="p">,</span> <span class="n">selector</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ensure_visible</span><span class="p">:</span>
+        <span class="n">condition</span> <span class="o">=</span> <span class="n">EC</span><span class="o">.</span><span class="n">visibility_of_all_elements_located</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">condition</span> <span class="o">=</span> <span class="n">EC</span><span class="o">.</span><span class="n">presence_of_all_elements_located</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="n">WebDriverWait</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">waiting_time</span> <span class="o">/</span> <span class="mf">1000.0</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span>
+            <span class="n">condition</span><span class="p">((</span><span class="n">by</span><span class="p">,</span> <span class="n">selector</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">elements</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">TimeoutException</span><span class="p">,</span> <span class="n">NoSuchElementException</span><span class="p">)</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exception on find_elements&quot;</span><span class="p">,</span> <span class="n">ex</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
 </code></pre></div>
         </details>
     </div>
@@ -9751,17 +9976,26 @@ Note: This method does not submit the form.</p>
     <div class="doc doc-contents ">
 
       <p>Stops the Chrome browser and clean up the User Data Directory.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>After invoking this method, you will need to reassign your custom options and capabilities.</p>
+</div>
 
         <details class="quote">
           <summary>Source code in <code>web/bot.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">stop_browser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Stops the Chrome browser and clean up the User Data Directory.</span>
+
+<span class="sd">    Warning:</span>
+<span class="sd">        After invoking this method, you will need to reassign your custom options and capabilities.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">:</span>
         <span class="k">return</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">capabilities</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="o">=</span> <span class="kc">None</span>
 </code></pre></div>
         </details>
@@ -10402,7 +10636,78 @@ Beware that this method replaces the current page with the downloads window.</p>
 
     <span class="n">wait_method</span> <span class="o">=</span> <span class="n">BROWSER_CONFIGS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;wait_for_downloads&quot;</span><span class="p">)</span>
     <span class="c1"># waits for all the files to be completed</span>
-    <span class="n">WebDriverWait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">wait_method</span><span class="p">)</span>
+    <span class="n">WebDriverWait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">wait_method</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.wait_for_element_visibility">
+<code class="highlight language-python"><span class="n">wait_for_element_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Wait for the element to be visible or hidden.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>element</code></td>
+        <td><code>WebElement</code></td>
+        <td><p>The element to wait for.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>visible</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to wait for the element to be visible. Defaults to True.</p></td>
+        <td><code>True</code></td>
+      </tr>
+      <tr>
+        <td><code>waiting_time</code></td>
+        <td><code>int</code></td>
+        <td><p>Maximum wait time (ms) to search for a hit.
+Defaults to 10000ms (10s).</p></td>
+        <td><code>10000</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">wait_for_element_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">WebElement</span><span class="p">,</span> <span class="n">visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wait for the element to be visible or hidden.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        element (WebElement): The element to wait for.</span>
+<span class="sd">        visible (bool, optional): Whether to wait for the element to be visible. Defaults to True.</span>
+<span class="sd">        waiting_time (int, optional): Maximum wait time (ms) to search for a hit.</span>
+<span class="sd">            Defaults to 10000ms (10s).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">visible</span><span class="p">:</span>
+        <span class="n">wait_method</span> <span class="o">=</span> <span class="n">EC</span><span class="o">.</span><span class="n">visibility_of</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">wait_method</span> <span class="o">=</span> <span class="n">EC</span><span class="o">.</span><span class="n">invisibility_of_element</span>
+
+    <span class="n">WebDriverWait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">waiting_time</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">wait_method</span><span class="p">(</span><span class="n">element</span><span class="p">))</span>
 </code></pre></div>
         </details>
     </div>
@@ -10607,6 +10912,135 @@ Defaults to 60000ms (60s).</p></td>
 
 
 
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.wait_for_new_page">
+<code class="highlight language-python"><span class="n">wait_for_new_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">activate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Context manager to wait for a new page to load and activate it.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>waiting_time</code></td>
+        <td><code>int</code></td>
+        <td><p>The maximum waiting time. Defaults to 10000.</p></td>
+        <td><code>10000</code></td>
+      </tr>
+      <tr>
+        <td><code>activate</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether or not to activate the new page. Defaults to True.</p></td>
+        <td><code>True</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">wait_for_new_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">activate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Context manager to wait for a new page to load and activate it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        waiting_time (int, optional): The maximum waiting time. Defaults to 10000.</span>
+<span class="sd">        activate (bool, optional): Whether or not to activate the new page. Defaults to True.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tabs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tabs</span><span class="p">()</span>
+    <span class="k">yield</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">while</span> <span class="n">tabs</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tabs</span><span class="p">():</span>
+        <span class="n">elapsed_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+        <span class="k">if</span> <span class="n">elapsed_time</span> <span class="o">&gt;</span> <span class="n">waiting_time</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">activate</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activate_tab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_tabs</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.wait_for_stale_element">
+<code class="highlight language-python"><span class="n">wait_for_stale_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Wait until the WebElement element becomes stale (outdated).</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>element</code></td>
+        <td><code>WebElement</code></td>
+        <td><p>The element to monitor for staleness.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>timeout</code></td>
+        <td><code>int</code></td>
+        <td><p>Timeout in millis. Defaults to 120000.</p></td>
+        <td><code>10000</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">wait_for_stale_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">WebElement</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wait until the WebElement element becomes stale (outdated).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        element (WebElement): The element to monitor for staleness.</span>
+<span class="sd">        timeout (int, optional): Timeout in millis. Defaults to 120000.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">WebDriverWait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">)</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">EC</span><span class="o">.</span><span class="n">staleness_of</span><span class="p">(</span><span class="n">element</span><span class="p">))</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">TimeoutException</span><span class="p">,</span> <span class="n">NoSuchElementException</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
 
 
   </div>
@@ -10648,13 +11082,13 @@ Defaults to 60000ms (60s).</p></td>
       
       
         
-        <a href="../browsers/" class="md-footer__link md-footer__link--next" aria-label="Next: Browsers" rel="next">
+        <a href="../parsers/" class="md-footer__link md-footer__link--next" aria-label="Next: Handling Data" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Browsers
+              Handling Data
             </div>
           </div>
           <div class="md-footer__button md-icon">

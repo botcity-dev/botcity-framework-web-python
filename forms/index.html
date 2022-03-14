@@ -8,19 +8,19 @@
       
       
       
-      <link rel="icon" href="/assets/favicon.ico">
+      <link rel="icon" href="../assets/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.5">
     
     
       
-        <title>BotCity Framework Web - Python</title>
+        <title>Interacting with Forms - BotCity Framework Web - Python</title>
       
     
     
-      <link rel="stylesheet" href="/assets/stylesheets/main.2d9f7617.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.2d9f7617.min.css">
       
         
-        <link rel="stylesheet" href="/assets/stylesheets/palette.e6a45f82.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
         
       
     
@@ -35,9 +35,9 @@
       
     
     
-      <link rel="stylesheet" href="/assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("/",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -74,6 +74,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#interacting-with-forms" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -84,9 +89,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="/." title="BotCity Framework Web - Python" class="md-header__button md-logo" aria-label="BotCity Framework Web - Python" data-md-component="logo">
+    <a href=".." title="BotCity Framework Web - Python" class="md-header__button md-logo" aria-label="BotCity Framework Web - Python" data-md-component="logo">
       
-  <img src="/assets/logo.png" alt="logo">
+  <img src="../assets/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -102,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              Interacting with Forms
             
           </span>
         </div>
@@ -203,9 +208,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/." title="BotCity Framework Web - Python" class="md-nav__button md-logo" aria-label="BotCity Framework Web - Python" data-md-component="logo">
+    <a href=".." title="BotCity Framework Web - Python" class="md-nav__button md-logo" aria-label="BotCity Framework Web - Python" data-md-component="logo">
       
-  <img src="/assets/logo.png" alt="logo">
+  <img src="../assets/logo.png" alt="logo">
 
     </a>
     BotCity Framework Web - Python
@@ -233,7 +238,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         Home
       </a>
     </li>
@@ -248,7 +253,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/intro/" class="md-nav__link">
+      <a href="../intro/" class="md-nav__link">
         Getting Started
       </a>
     </li>
@@ -263,7 +268,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/bot/" class="md-nav__link">
+      <a href="../bot/" class="md-nav__link">
         Framework
       </a>
     </li>
@@ -278,7 +283,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/parsers/" class="md-nav__link">
+      <a href="../parsers/" class="md-nav__link">
         Handling Data
       </a>
     </li>
@@ -291,11 +296,92 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="/forms/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Interacting with Forms
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Interacting with Forms
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#select-element" class="md-nav__link">
+    Select Element
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#botcity.web.util.element_as_select" class="md-nav__link">
+    element_as_select()
+  </a>
+  
+    <nav class="md-nav" aria-label="element_as_select()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-usage" class="md-nav__link">
+    Example usage
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-upload" class="md-nav__link">
+    File Upload
+  </a>
+  
+    <nav class="md-nav" aria-label="File Upload">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-usage_1" class="md-nav__link">
+    Example usage
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -308,7 +394,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/browsers/" class="md-nav__link">
+      <a href="../browsers/" class="md-nav__link">
         Browsers
       </a>
     </li>
@@ -322,12 +408,189 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#select-element" class="md-nav__link">
+    Select Element
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#botcity.web.util.element_as_select" class="md-nav__link">
+    element_as_select()
+  </a>
+  
+    <nav class="md-nav" aria-label="element_as_select()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-usage" class="md-nav__link">
+    Example usage
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-upload" class="md-nav__link">
+    File Upload
+  </a>
+  
+    <nav class="md-nav" aria-label="File Upload">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-usage_1" class="md-nav__link">
+    Example usage
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
-  <h1>404 - Not found</h1>
+                
+<a href="https://github.com/botcity-dev/botcity-framework-web-python/edit/master/docs/forms.md" title="Edit this page" class="md-content__button md-icon">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+</a>
 
+
+
+<h1 id="interacting-with-forms">Interacting with Forms</h1>
+<p>When dealing with forms, we often need to fill in the form and submit it.</p>
+<p>While most of the operations are trivial, there are some things that are not such as selecting a select element or dealing with file uploads.</p>
+<p>For that we developed some utilitary functions that you can use.</p>
+<h2 id="select-element">Select Element</h2>
+<p>After grabing the element via the <code>find_element</code> or <code>find_elements</code> functions, we can use the <code>element_as_select</code> to convert it into a <code>Select</code> object.</p>
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 class="doc doc-heading" id="botcity.web.util.element_as_select">
+<code class="highlight language-python"><span class="n">botcity</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">element_as_select</span><span class="p">(</span><span class="n">element</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents first">
+
+      <p>Wraps a WebElement in a Select object.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>element</code></td>
+        <td><code>WebElement</code></td>
+        <td><p>The element to wrap.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Select</code></td>
+      <td><p>The Select object.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/util.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">element_as_select</span><span class="p">(</span><span class="n">element</span><span class="p">:</span> <span class="n">WebElement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Select</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Wraps a WebElement in a Select object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        element (WebElement): The element to wrap.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Select: The Select object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Select</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+<h3 id="example-usage">Example usage</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Import the function</span>
+<span class="kn">from</span> <span class="nn">botcity.web.util</span> <span class="kn">import</span> <span class="n">element_as_select</span>
+<span class="o">...</span>
+<span class="c1"># Fetch the select element</span>
+<span class="n">element</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="s2">&quot;select&quot;</span><span class="p">,</span> <span class="n">By</span><span class="o">.</span><span class="n">TAG_NAME</span><span class="p">)</span>
+<span class="c1"># Convert the element into a Select object</span>
+<span class="n">select_element</span> <span class="o">=</span> <span class="n">element_as_select</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+<span class="c1"># Select the option based on visible text</span>
+<span class="n">select_element</span><span class="o">.</span><span class="n">select_by_visible_text</span><span class="p">(</span><span class="s2">&quot;Option 1&quot;</span><span class="p">)</span>
+<span class="o">...</span>
+</code></pre></div>
+<h2 id="file-upload">File Upload</h2>
+<p>After grabing the element via the <code>find_element</code> or <code>find_elements</code> functions, we can use the <code>set_file_input_element</code> to assign the file path to the element.</p>
+<h3 id="example-usage_1">Example usage</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">botcity.web</span> <span class="kn">import</span> <span class="n">By</span>
+<span class="o">...</span>
+<span class="c1"># Find the input element of type `file` using CSS_SELECTOR.</span>
+<span class="n">elem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="s2">&quot;body &gt; form &gt; input[type=file]&quot;</span><span class="p">,</span> <span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">)</span>
+<span class="c1"># Configure the file to be used when processing the upload</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">set_file_input_element</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="s2">&quot;./test.txt&quot;</span><span class="p">)</span>
+<span class="o">...</span>
+</code></pre></div>
+
+              
             </article>
           </div>
         </div>
@@ -340,6 +603,41 @@
       </main>
       
         <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../parsers/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Handling Data" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Handling Data
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../browsers/" class="md-footer__link md-footer__link--next" aria-label="Next: Browsers" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Browsers
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -376,10 +674,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "/", "features": ["navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "/assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
     
     
-      <script src="/assets/javascripts/bundle.467223ff.min.js"></script>
+      <script src="../assets/javascripts/bundle.467223ff.min.js"></script>
       
     
   </body>

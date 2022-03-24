@@ -54,6 +54,14 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
         chrome_options.add_argument("--hide-scrollbars")
         chrome_options.add_argument("--mute-audio")
 
+    # Check if user is root
+    try:
+        # This is only valid with Unix
+        if os.geteuid() == 0:
+            chrome_options.add_argument("--no-sandbox")
+    except AttributeError:
+        pass
+
     if not user_data_dir:
         temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")
         user_data_dir = temp_dir.name

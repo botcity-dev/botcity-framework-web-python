@@ -40,6 +40,7 @@ logger = logging.getLogger(__name__)
 
 class WebBot(BaseBot):
     KEYS = Keys
+    DEFAULT_DIMENSIONS = (1600, 900)
     """
     Base class for Web Bots.
     Users must implement the `action` method in their classes.
@@ -72,7 +73,6 @@ class WebBot(BaseBot):
         # State for Key modifiers
         self._shift_hold = False
 
-        self._dimensions = (1600, 900)
         self._download_folder_path = os.getcwd()
 
     @property
@@ -255,18 +255,18 @@ class WebBot(BaseBot):
             width (int): The desired width.
             height (int): The desired height.
         """
-        self._dimensions = (width or 1600, height or 900)
+        dimensions = (width or self.DEFAULT_DIMENSIONS[0], height or self.DEFAULT_DIMENSIONS[1])
 
         if self.headless:
             # When running headless the window size is the viewport size
-            window_size = self._dimensions
+            window_size = dimensions
         else:
             # When running non-headless we need to account for the borders and etc
             # So the size must be bigger to have the same viewport size as before
             window_size = self._driver.execute_script("""
                 return [window.outerWidth - window.innerWidth + arguments[0],
                   window.outerHeight - window.innerHeight + arguments[1]];
-                """, *self._dimensions)
+                """, *dimensions)
         self._driver.set_window_size(*window_size)
 
     def _webdriver_command(self, command, params=None, req_type="POST"):
@@ -312,13 +312,14 @@ class WebBot(BaseBot):
         if not region:
             region = (0, 0, 0, 0)
 
-        x = region[0] or 0
-        y = region[1] or 0
-        width = region[2] or self._dimensions[0]
-        height = region[3] or self._dimensions[1]
         data = self._driver.get_screenshot_as_base64()
         image_data = base64.b64decode(data)
         img = Image.open(io.BytesIO(image_data))
+
+        x = region[0]
+        y = region[1]
+        width = region[2] or self._get_page_size()[0]
+        height = region[3] or self._get_page_size()[1]
         img = img.crop((x, y, x + width, y + height))
         return img
 
@@ -333,6 +334,21 @@ class WebBot(BaseBot):
         # Access each dimension individually
         width = self._driver.get_window_size().get("width")
         height = self._driver.get_window_size().get("height")
+        return width, height
+
+    def _get_page_size(self):
+        """
+        Returns the browser current page size.
+
+        Returns:
+            width (int): The current page width.
+            height (int): The current page height.
+        """
+        if not self._driver:
+            return self.DEFAULT_DIMENSIONS
+
+        width = self.execute_javascript("return window.innerWidth")
+        height = self.execute_javascript("return window.innerHeight")
         return width, height
 
     def add_image(self, label, path):
@@ -391,7 +407,7 @@ class WebBot(BaseBot):
         def _to_dict(lbs, elems):
             return {k: v for k, v in zip(lbs, elems)}
 
-        screen_w, screen_h = self._dimensions
+        screen_w, screen_h = self._get_page_size()
         x = x or 0
         y = y or 0
         w = width or screen_w
@@ -492,7 +508,7 @@ class WebBot(BaseBot):
             element (NamedTuple): The element coordinates. None if not found.
         """
         self.state.element = None
-        screen_w, screen_h = self._dimensions
+        screen_w, screen_h = self._get_page_size()
         x = x or 0
         y = y or 0
         w = width or screen_w
@@ -595,7 +611,7 @@ class WebBot(BaseBot):
             return elems
 
         self.state.element = None
-        screen_w, screen_h = self._dimensions
+        screen_w, screen_h = self._get_page_size()
         x = x or 0
         y = y or 0
         w = width or screen_w
@@ -678,7 +694,7 @@ class WebBot(BaseBot):
         Returns:
             size (Tuple): The screen dimension (width and height) in pixels.
         """
-        return self._dimensions
+        return self._get_page_size()
 
     def screenshot(self, filepath=None, region=None):
         """
@@ -722,7 +738,7 @@ class WebBot(BaseBot):
         Returns:
             Image: The screenshot Image object
         """
-        screen_size = self._dimensions
+        screen_size = self._get_page_size()
         x = x or 0
         y = y or 0
         width = width or screen_size[0]
@@ -759,7 +775,7 @@ class WebBot(BaseBot):
             coords (Tuple): A tuple containing the x and y coordinates for the element.
         """
         self.state.element = None
-        screen_size = self._dimensions
+        screen_size = self._get_page_size()
         x = x or 0
         y = y or 0
         width = width or screen_size[0]

@@ -417,6 +417,7 @@ class WebBot(BaseBot):
 
         results = [None] * len(labels)
         paths = [self._search_image_file(la) for la in labels]
+        paths = [self._image_path_as_image(la) for la in paths]
 
         if threshold:
             # TODO: Figure out how we should do threshold
@@ -517,6 +518,7 @@ class WebBot(BaseBot):
         region = (x, y, w, h)
 
         element_path = self._search_image_file(label)
+        element_path = self._image_path_as_image(element_path)
 
         if threshold:
             # TODO: Figure out how we should do threshold
@@ -620,6 +622,7 @@ class WebBot(BaseBot):
         region = (x, y, w, h)
 
         element_path = self._search_image_file(label)
+        element_path = self._image_path_as_image(element_path)
 
         if threshold:
             # TODO: Figure out how we should do threshold
@@ -785,8 +788,11 @@ class WebBot(BaseBot):
         if not best:
             print('Warning: Ignoring best=False for now. It will be supported in the future.')
 
+        element_path = self._search_image_file(label)
+        element_path = self._image_path_as_image(element_path)
         haystack = self.get_screen_image()
-        it = cv2find.locate_all_opencv(self.state.map_images[label], haystack_image=haystack,
+
+        it = cv2find.locate_all_opencv(element_path, haystack_image=haystack,
                                        region=region, confidence=matching)
         try:
             ele = next(it)

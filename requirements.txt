@@ -1,4 +1,4 @@
-botcity-framework-base>=0.2.0
+botcity-framework-base>=0.2.2
 beautifulsoup4
 msedge-selenium-tools==3.141.3
 numpy

@@ -883,6 +883,24 @@ class WebBot(BaseBot):
         """
         self.navigate_to(url)
 
+    def back(self):
+        """
+        Goes one step backward in the browser history.
+        """
+        self._driver.back()
+
+    def forward(self):
+        """
+        Goes one step forward in the browser history.
+        """
+        self._driver.forward()
+
+    def refresh(self):
+        """
+        Refreshes the current page.
+        """
+        self._driver.refresh()
+
     @contextmanager
     def wait_for_new_page(self, waiting_time=10000, activate=True):
         """Context manager to wait for a new page to load and activate it.

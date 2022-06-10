@@ -360,6 +360,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.back" class="md-nav__link">
+    back()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.backspace" class="md-nav__link">
     backspace()
   </a>
@@ -544,6 +551,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.find_until" class="md-nav__link">
     find_until()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.forward" class="md-nav__link">
+    forward()
   </a>
   
 </li>
@@ -817,6 +831,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.print_pdf" class="md-nav__link">
     print_pdf()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.refresh" class="md-nav__link">
+    refresh()
   </a>
   
 </li>
@@ -1187,6 +1208,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.back" class="md-nav__link">
+    back()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.backspace" class="md-nav__link">
     backspace()
   </a>
@@ -1371,6 +1399,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.find_until" class="md-nav__link">
     find_until()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.forward" class="md-nav__link">
+    forward()
   </a>
   
 </li>
@@ -1644,6 +1679,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.print_pdf" class="md-nav__link">
     print_pdf()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.refresh" class="md-nav__link">
+    refresh()
   </a>
   
 </li>
@@ -2787,6 +2829,24 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 <span class="sd">            url (str):  The URL to be visited.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">navigate_to</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">back</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Goes one step backward in the browser history.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">back</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Goes one step forward in the browser history.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">forward</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Refreshes the current page.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
 
     <span class="nd">@contextmanager</span>
     <span class="k">def</span> <span class="nf">wait_for_new_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">waiting_time</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">activate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -4278,6 +4338,35 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
 <span class="sd">        path (str): The path for the image on disk</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">map_images</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.back">
+<code class="highlight language-python"><span class="n">back</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Goes one step backward in the browser history.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">back</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Goes one step backward in the browser history.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">back</span><span class="p">()</span>
 </code></pre></div>
         </details>
     </div>
@@ -6607,6 +6696,35 @@ Defaults to False.</p></td>
         <span class="k">if</span> <span class="n">ele</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">ele</span>
             <span class="k">return</span> <span class="n">ele</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.forward">
+<code class="highlight language-python"><span class="n">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Goes one step forward in the browser history.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Goes one step forward in the browser history.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">forward</span><span class="p">()</span>
 </code></pre></div>
         </details>
     </div>
@@ -9053,6 +9171,35 @@ This will start the browser if it was not started yet.</p>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">bytes_file</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">path</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.refresh">
+<code class="highlight language-python"><span class="n">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Refreshes the current page.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Refreshes the current page.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
 </code></pre></div>
         </details>
     </div>

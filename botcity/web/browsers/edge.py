@@ -2,6 +2,7 @@ import atexit
 import json
 import os
 import tempfile
+import time
 from typing import Dict
 
 from msedge.selenium_tools import Edge, EdgeOptions  # noqa: F401, F403
@@ -124,6 +125,7 @@ def wait_for_downloads(driver):
     """
     if not driver.current_url.startswith("edge://downloads"):
         driver.get("edge://downloads/")
+        time.sleep(1)
     return driver.execute_script("""
         var items = Array.from(document.querySelector(".downloads-list")
             .querySelectorAll('[role="listitem"]'));

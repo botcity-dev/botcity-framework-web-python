@@ -1,5 +1,5 @@
 pygments
 mkdocs
-mkdocstrings
+mkdocstrings[python-legacy]>=0.18
 mkdocs-material
 livereload

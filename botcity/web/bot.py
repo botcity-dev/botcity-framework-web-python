@@ -312,14 +312,18 @@ class WebBot(BaseBot):
         if not region:
             region = (0, 0, 0, 0)
 
-        data = self._driver.get_screenshot_as_base64()
-        image_data = base64.b64decode(data)
-        img = Image.open(io.BytesIO(image_data))
-
         x = region[0]
         y = region[1]
         width = region[2] or self._get_page_size()[0]
         height = region[3] or self._get_page_size()[1]
+
+        try:
+            data = self._driver.get_screenshot_as_base64()
+            image_data = base64.b64decode(data)
+            img = Image.open(io.BytesIO(image_data))
+        except:  # noqa: E722
+            img = Image.new("RGB", (width, height))
+
         img = img.crop((x, y, x + width, y + height))
         return img
 

@@ -2020,8 +2020,8 @@ class WebBot(BaseBot):
             if elapsed_time > timeout:
                 return False
             if os.path.isfile(path) and os.access(path, os.R_OK):
-                if self.browser == Browser.FIREFOX and os.path.exists(path + '.part'):
-                    # if *.part exists, the download is not completed.
+                if self.browser == Browser.FIREFOX and os.path.getsize(path) == 0:
+                    # if file is empty, the download is not completed.
                     continue
                 self.sleep(config.DEFAULT_SLEEP_AFTER_ACTION)
                 return True

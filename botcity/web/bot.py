@@ -26,7 +26,7 @@ from selenium.webdriver.support.wait import WebDriverWait, TimeoutException, NoS
 from selenium.webdriver.support import expected_conditions as EC
 
 from . import config, cv2find
-from .browsers import BROWSER_CONFIGS, Browser
+from .browsers import BROWSER_CONFIGS, Browser, PageLoadStrategy
 
 try:
     from botcity.maestro import BotMaestroSDK
@@ -62,6 +62,7 @@ class WebBot(BaseBot):
 
         self._driver = None
         self._headless = headless
+        self._page_load_strategy = PageLoadStrategy.NORMAL
 
         self._clipboard = ""
 
@@ -201,6 +202,28 @@ class WebBot(BaseBot):
             logger.warning("Browser is running. Invoke stop_browser and start browser for changes to take effect.")
         self._headless = headless
 
+    @property
+    def page_load_strategy(self) -> PageLoadStrategy:
+        """
+        The page load strategy to be used.
+
+        Returns:
+            page_load_strategy (PageLoadStrategy): The page load strategy to be used.
+        """
+        return self._page_load_strategy
+
+    @page_load_strategy.setter
+    def page_load_strategy(self, page_load_strategy: PageLoadStrategy):
+        """
+        The page load strategy to be used.
+
+        Args:
+            page_load_strategy (PageLoadStrategy): The page load strategy to be used.
+        """
+        if self._driver:
+            logger.warning("Browser is running. Invoke stop_browser and start browser for changes to take effect.")
+        self._page_load_strategy = page_load_strategy
+
     def start_browser(self):
         """
         Starts the selected browser.
@@ -222,7 +245,9 @@ class WebBot(BaseBot):
         # Specific capabilities method for a given browser
         func_def_capabilities = BROWSER_CONFIGS.get(self.browser).get("capabilities")
 
-        opt = self.options or func_def_options(self.headless, self._download_folder_path, None)
+        opt = self.options or func_def_options(
+            self.headless, self._download_folder_path, None, self.page_load_strategy
+        )
         cap = self.capabilities or func_def_capabilities()
         self.options = opt
         self.capabilities = cap

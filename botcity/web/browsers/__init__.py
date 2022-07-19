@@ -22,6 +22,22 @@ class Browser(str, enum.Enum):
     IE = "ie"
 
 
+class PageLoadStrategy(str, enum.Enum):
+    """
+    Page Load Strategy.
+
+    Attributes:
+        NORMAL (str): Wait for the entire page is loaded. When set to normal,
+            waits until the load event fire is returned.
+        EAGER (str): Wait until the initial HTML document has been completely
+            loaded and parsed, and discards loading of stylesheets, images and subframes.
+        NONE (str): Only waits until the initial page is downloaded
+    """
+    NORMAL = "normal"
+    EAGER = "eager"
+    NONE = "none"
+
+
 BROWSER_CONFIGS = {
     Browser.CHROME: {
         "driver": "chromedriver",

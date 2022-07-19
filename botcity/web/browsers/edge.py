@@ -11,7 +11,8 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from ..util import cleanup_temp_dir
 
 
-def default_options(headless=False, download_folder_path=None, user_data_dir=None) -> EdgeOptions:
+def default_options(headless=False, download_folder_path=None, user_data_dir=None,
+                    page_load_strategy="normal") -> EdgeOptions:
     """Retrieve the default options for this browser curated by BotCity.
 
     Args:
@@ -20,11 +21,17 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
             If None, the current directory is used. Defaults to None.
         user_data_dir ([type], optional): The directory to use as user profile.
             If None, a new temporary directory is used. Defaults to None.
+        page_load_strategy (str, optional): The page load strategy. Defaults to "normal".
 
     Returns:
         EdgeOptions: The Edge options.
     """
     edge_options = EdgeOptions()
+    try:
+        page_load_strategy = page_load_strategy.value
+    except AttributeError:
+        page_load_strategy = page_load_strategy
+    edge_options.page_load_strategy = page_load_strategy
     edge_options.use_chromium = True
     edge_options.add_argument("--remote-debugging-port=0")
     edge_options.add_argument("--no-first-run")

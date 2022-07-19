@@ -336,7 +336,8 @@ FIREFOX_MIMETYPES_TO_DOWNLOAD = ['application/vnd.hzn-3d-crossword', 'video/3gpp
                                  'application/vnd.zzazz.deck+xml']
 
 
-def default_options(headless=False, download_folder_path=None, user_data_dir=None) -> FirefoxOptions:
+def default_options(headless=False, download_folder_path=None, user_data_dir=None,
+                    page_load_strategy="normal") -> FirefoxOptions:
     """Retrieve the default options for this browser curated by BotCity.
 
     Args:
@@ -345,11 +346,17 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
             If None, the current directory is used. Defaults to None.
         user_data_dir ([type], optional): The directory to use as user profile.
             If None, a new temporary directory is used. Defaults to None.
+        page_load_strategy (str, optional): The page load strategy to use.
 
     Returns:
         FirefoxOptions: The Firefox options.
     """
     firefox_options = FirefoxOptions()
+    try:
+        page_load_strategy = page_load_strategy.value
+    except AttributeError:
+        page_load_strategy = page_load_strategy
+    firefox_options.page_load_strategy = page_load_strategy
     firefox_options.headless = headless
     if not user_data_dir:
         temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")

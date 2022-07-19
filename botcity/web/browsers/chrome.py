@@ -11,7 +11,8 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from ..util import cleanup_temp_dir
 
 
-def default_options(headless=False, download_folder_path=None, user_data_dir=None) -> ChromeOptions:
+def default_options(headless=False, download_folder_path=None, user_data_dir=None,
+                    page_load_strategy="normal") -> ChromeOptions:
     """Retrieve the default options for this browser curated by BotCity.
 
     Args:
@@ -20,11 +21,17 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
             If None, the current directory is used. Defaults to None.
         user_data_dir ([type], optional): The directory to use as user profile.
             If None, a new temporary directory is used. Defaults to None.
+        page_load_strategy (str, optional): The page load strategy. Defaults to "normal".
 
     Returns:
         ChromeOptions: The Chrome options.
     """
     chrome_options = ChromeOptions()
+    try:
+        page_load_strategy = page_load_strategy.value
+    except AttributeError:
+        page_load_strategy = page_load_strategy
+    chrome_options.page_load_strategy = page_load_strategy
     chrome_options.add_argument("--remote-debugging-port=0")
     chrome_options.add_argument("--no-first-run")
     chrome_options.add_argument("--no-default-browser-check")

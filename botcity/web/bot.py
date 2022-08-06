@@ -1187,7 +1187,8 @@ class WebBot(BaseBot):
         except (TimeoutException, NoSuchElementException):
             return None
 
-    def scroll_element(self, element: WebElement, steps: int = 100, interval:float=500, start: int=0, end: int=None):
+    def scroll_element(self, element: WebElement, steps: int = 100, interval: float = 500,
+                       start: int = 0, end: int = None):
         """Scrolls down an element by its scroll height or a given amount defined by `start` and `end`.
 
         This is useful for scrolling down a page to load more content or

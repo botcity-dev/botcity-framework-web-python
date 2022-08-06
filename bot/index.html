@@ -906,6 +906,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.scroll_element" class="md-nav__link">
+    scroll_element()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.scroll_up" class="md-nav__link">
     scroll_up()
   </a>
@@ -1756,6 +1763,13 @@
           <li class="md-nav__item">
   <a href="#botcity.web.bot.WebBot.scroll_down" class="md-nav__link">
     scroll_down()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#botcity.web.bot.WebBot.scroll_element" class="md-nav__link">
+    scroll_element()
   </a>
   
 </li>
@@ -3172,6 +3186,32 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
             <span class="k">return</span> <span class="n">element</span>
         <span class="k">except</span> <span class="p">(</span><span class="n">TimeoutException</span><span class="p">,</span> <span class="n">NoSuchElementException</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">scroll_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">WebElement</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+                       <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Scrolls down an element by its scroll height or a given amount defined by `start` and `end`.</span>
+
+<span class="sd">        This is useful for scrolling down a page to load more content or</span>
+<span class="sd">        to scroll down a dynamically loaded element.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            element (WebElement): The element to scroll.</span>
+<span class="sd">            steps (int, optional): Number of steps in which to conclude the scroll. Defaults to 100.</span>
+<span class="sd">            interval (float, optional): Time interval between each step. Defaults to 500ms.</span>
+<span class="sd">            start (int, optional): Start position. Defaults to 0.</span>
+<span class="sd">            end (int, optional): End position. Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ele_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span>
+            <span class="s2">&quot;return arguments[0].scrollHeight;&quot;</span><span class="p">,</span> <span class="n">element</span>
+        <span class="p">)</span>
+
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ele_height</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span> <span class="k">if</span> <span class="n">end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">ele_height</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span>
+                <span class="s2">&quot;arguments[0].scrollTo(0, arguments[1])&quot;</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">interval</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">wait_for_stale_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">WebElement</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -9799,6 +9839,100 @@ This method needs to be invoked after holding Shift or similar.</p>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">clicks</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;window.scrollTo(0, window.scrollY + 200)&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 class="doc doc-heading" id="botcity.web.bot.WebBot.scroll_element">
+<code class="highlight language-python"><span class="n">scroll_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Scrolls down an element by its scroll height or a given amount defined by <code>start</code> and <code>end</code>.</p>
+<p>This is useful for scrolling down a page to load more content or
+to scroll down a dynamically loaded element.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>element</code></td>
+        <td><code>WebElement</code></td>
+        <td><p>The element to scroll.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>steps</code></td>
+        <td><code>int</code></td>
+        <td><p>Number of steps in which to conclude the scroll. Defaults to 100.</p></td>
+        <td><code>100</code></td>
+      </tr>
+      <tr>
+        <td><code>interval</code></td>
+        <td><code>float</code></td>
+        <td><p>Time interval between each step. Defaults to 500ms.</p></td>
+        <td><code>500</code></td>
+      </tr>
+      <tr>
+        <td><code>start</code></td>
+        <td><code>int</code></td>
+        <td><p>Start position. Defaults to 0.</p></td>
+        <td><code>0</code></td>
+      </tr>
+      <tr>
+        <td><code>end</code></td>
+        <td><code>int</code></td>
+        <td><p>End position. Defaults to None.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>web/bot.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">scroll_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">WebElement</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+                   <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Scrolls down an element by its scroll height or a given amount defined by `start` and `end`.</span>
+
+<span class="sd">    This is useful for scrolling down a page to load more content or</span>
+<span class="sd">    to scroll down a dynamically loaded element.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        element (WebElement): The element to scroll.</span>
+<span class="sd">        steps (int, optional): Number of steps in which to conclude the scroll. Defaults to 100.</span>
+<span class="sd">        interval (float, optional): Time interval between each step. Defaults to 500ms.</span>
+<span class="sd">        start (int, optional): Start position. Defaults to 0.</span>
+<span class="sd">        end (int, optional): End position. Defaults to None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ele_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span>
+        <span class="s2">&quot;return arguments[0].scrollHeight;&quot;</span><span class="p">,</span> <span class="n">element</span>
+    <span class="p">)</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ele_height</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span> <span class="k">if</span> <span class="n">end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">ele_height</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span>
+            <span class="s2">&quot;arguments[0].scrollTo(0, arguments[1])&quot;</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">interval</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>

@@ -9,6 +9,9 @@ Here is an example on how to do that:
 ```python
 from botcity.web import WebBot, Browser
 
+# Page Load Strategy
+from botcity.web import PageLoadStrategy
+
 # For Chrome
 from botcity.web.browsers.chrome import default_options, default_capabilities
 # For Firefox
@@ -24,13 +27,16 @@ class Bot(WebBot):
         # Configure whether or not to run on headless mode
         self.headless = False
 
+        self.page_load_strategy = PageLoadStrategy.NORMAL
+
         # Fetch the default options for my preferred browser
         # Pass in the headless, download_folder_path and user_data_dir
         # to be used when building the default_options
         def_options = default_options(
             headless=self.headless,
             download_folder_path=self.download_folder_path,
-            user_data_dir=None  # Informing None here will generate a temporary directory
+            user_data_dir=None,  # Informing None here will generate a temporary directory
+            page_load_strategy=self.page_load_strategy
         )
 
         # Add your customized argument
@@ -50,6 +56,14 @@ class Bot(WebBot):
 
         ...
 ```
+
+## Page Load Strategy
+
+Page Load Strategy is a browser option that determines how the browser will load the page.
+
+::: botcity.web.browsers.PageLoadStrategy
+    rendering:
+      heading_level: 4
 
 ## Specific Browser Modules
 
@@ -94,4 +108,4 @@ If you have any questions about the driver see [IE Driver Server Documentation](
 
 See the [list of supported arguments in IE](https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/general-info/hh826025(v=vs.85)).
 
-During execution some errors may occur, [see the list of common errors](https://testguild.com/selenium-webdriver-fix-for-3-common-ie-errors/). 
+During execution some errors may occur, [see the list of common errors](https://testguild.com/selenium-webdriver-fix-for-3-common-ie-errors/).

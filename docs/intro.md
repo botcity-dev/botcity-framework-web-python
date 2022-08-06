@@ -111,6 +111,9 @@ proper configuration to launch the browser in the desired mode.
   and things such as cookies and stored passwords or certificates from one execution won't interfere with
   the others.
 
+- **Page Load Strategy**: By default we use the `NORMAL` strategy which waits for the page to load completely.
+
+
 A handful of other options are also set and they can be inspected on the source code for each browser on the
 `botcity.web.browsers` module.
 
@@ -120,7 +123,7 @@ the `default options` curated by BotCity and make your changes or start your opt
 In the following snippet we will cover how to build on top of the existing options.
 
 ```python
-from botcity.web import WebBot, Browser
+from botcity.web import WebBot, Browser, PageLoadStrategy
 
 # For Chrome
 from botcity.web.browsers.chrome import default_options
@@ -138,7 +141,8 @@ class Bot(WebBot):
         def_options = default_options(
             headless=self.headless,
             download_folder_path=self.download_folder_path,
-            user_data_dir=None  # Informing None here will generate a temporary directory
+            user_data_dir=None,  # Informing None here will generate a temporary directory
+            page_load_strategy=PageLoadStrategy.NORMAL
         )
 
         # Add your customized argument

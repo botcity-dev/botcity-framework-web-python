@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../assets/favicon.ico">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.9">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.3.9">
     
     
       
@@ -669,13 +669,16 @@ proper configuration to launch the browser in the desired mode.</p>
   and things such as cookies and stored passwords or certificates from one execution won't interfere with
   the others.</p>
 </li>
+<li>
+<p><strong>Page Load Strategy</strong>: By default we use the <code>NORMAL</code> strategy which waits for the page to load completely.</p>
+</li>
 </ul>
 <p>A handful of other options are also set and they can be inspected on the source code for each browser on the
 <code>botcity.web.browsers</code> module.</p>
 <p>If you really need to customize the options you can do so via the <code>options</code> property. You can fetch
 the <code>default options</code> curated by BotCity and make your changes or start your options from scratch.</p>
 <p>In the following snippet we will cover how to build on top of the existing options.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">botcity.web</span> <span class="kn">import</span> <span class="n">WebBot</span><span class="p">,</span> <span class="n">Browser</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">botcity.web</span> <span class="kn">import</span> <span class="n">WebBot</span><span class="p">,</span> <span class="n">Browser</span><span class="p">,</span> <span class="n">PageLoadStrategy</span>
 
 <span class="c1"># For Chrome</span>
 <span class="kn">from</span> <span class="nn">botcity.web.browsers.chrome</span> <span class="kn">import</span> <span class="n">default_options</span>
@@ -693,7 +696,8 @@ the <code>default options</code> curated by BotCity and make your changes or sta
         <span class="n">def_options</span> <span class="o">=</span> <span class="n">default_options</span><span class="p">(</span>
             <span class="n">headless</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headless</span><span class="p">,</span>
             <span class="n">download_folder_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">download_folder_path</span><span class="p">,</span>
-            <span class="n">user_data_dir</span><span class="o">=</span><span class="kc">None</span>  <span class="c1"># Informing None here will generate a temporary directory</span>
+            <span class="n">user_data_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># Informing None here will generate a temporary directory</span>
+            <span class="n">page_load_strategy</span><span class="o">=</span><span class="n">PageLoadStrategy</span><span class="o">.</span><span class="n">NORMAL</span>
         <span class="p">)</span>
 
         <span class="c1"># Add your customized argument</span>

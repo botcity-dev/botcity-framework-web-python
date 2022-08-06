@@ -5,7 +5,8 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.ie.options import Options
 
 
-def default_options(headless=False, download_folder_path=None, user_data_dir=None) -> Options:
+def default_options(headless=False, download_folder_path=None, user_data_dir=None,
+                    page_load_strategy="normal") -> Options:
     """Retrieve the default options for this browser curated by BotCity.
 
     Returns:

@@ -1067,7 +1067,7 @@ class WebBot(BaseBot):
             str: the saved file path
         """
         title = self.page_title() or "document"
-        title = re.sub('[\\\\|\/:–]', "", title)
+        title = re.sub("[\\\\|/:–]", "", title)
         timeout = 60000
         default_path = os.path.expanduser(os.path.join(self.download_folder_path, f"{title}.pdf"))
 

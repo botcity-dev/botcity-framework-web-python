@@ -1363,14 +1363,14 @@ class WebBot(BaseBot):
         if self.browser == Browser.FIREFOX:
             # Reset coordinates if the page has gone stale. Only required for Firefox
             if self._html_elem is None:
-                self._html_elem = self._driver.find_element_by_tag_name('body')
+                self._html_elem = self._driver.find_element(By.TAG_NAME, 'body')
                 self._x = 0
                 self._y = 0
             else:
                 try:
                     self._html_elem.is_enabled()
                 except StaleElementReferenceException:
-                    self._html_elem = self._driver.find_element_by_tag_name('body')
+                    self._html_elem = self._driver.find_element(By.NAME, 'body')
                     self._x = 0
                     self._y = 0
 

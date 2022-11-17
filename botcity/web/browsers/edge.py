@@ -5,14 +5,16 @@ import tempfile
 import time
 from typing import Dict
 
-from msedge.selenium_tools import Edge, EdgeOptions  # noqa: F401, F403
+# from msedge.selenium_tools import Edge, EdgeOptions  # noqa: F401, F403
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.edge.options import Options
+from selenium.webdriver import Edge # noqa: F401, F403
 
 from ..util import cleanup_temp_dir
 
 
 def default_options(headless=False, download_folder_path=None, user_data_dir=None,
-                    page_load_strategy="normal") -> EdgeOptions:
+                    page_load_strategy="normal") -> Options:
     """Retrieve the default options for this browser curated by BotCity.
 
     Args:
@@ -26,7 +28,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     Returns:
         EdgeOptions: The Edge options.
     """
-    edge_options = EdgeOptions()
+    edge_options = Options()
     try:
         page_load_strategy = page_load_strategy.value
     except AttributeError:

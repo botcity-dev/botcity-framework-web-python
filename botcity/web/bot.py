@@ -254,8 +254,10 @@ class WebBot(BaseBot):
         self.capabilities = cap
         driver_path = self.driver_path or check_driver()
         self.driver_path = driver_path
-
-        self._driver = driver_class(options=opt, desired_capabilities=cap, executable_path=driver_path)
+        if BROWSER_CONFIGS.get(self.browser).get("driver") == "msedgedriver":
+            self._driver = driver_class(options=opt, capabilities=cap, executable_path=driver_path)
+        else:
+            self._driver = driver_class(options=opt, desired_capabilities=cap, executable_path=driver_path)
         self.set_screen_resolution()
 
     def stop_browser(self):

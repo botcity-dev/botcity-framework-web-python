@@ -1,5 +1,8 @@
 import os
 import json
+import shutil
+import tempfile
+
 import pytest
 import typing
 import platform
@@ -14,69 +17,84 @@ TEST_PAGE = "https://lf2a.github.io/webpage-test/test.html"
 INDEX_PAGE = "https://lf2a.github.io/webpage-test/"
 
 
-def setup_chrome(headless: bool) -> WebBot:
+def get_fake_bin_path(web: WebBot) -> str:
+    return os.path.join(web.download_folder_path, 'fake.bin')
+
+
+def get_driver_path(driver: str) -> str:
+    if OS_NAME.lower() == 'windows':
+        return os.path.join(PROJECT_DIR, 'web-drivers', 'windows', f'{driver}.exe')
+
+    if OS_NAME.lower() == 'linux':
+        return os.path.join(PROJECT_DIR, 'web-drivers', 'linux', driver)
+
+    if OS_NAME.lower() == 'darwin':
+        return os.path.join(PROJECT_DIR, 'web-drivers', 'macos', driver)
+
+    raise ValueError(f'OS [{OS_NAME}] not supported.')
+
+
+def setup_chrome(headless: bool, tmp_folder: str) -> WebBot:
     web = WebBot(headless)
     web.browser = Browser.CHROME
 
-    if OS_NAME == 'Windows':
-        web.driver_path = os.path.join(PROJECT_DIR, 'web-drivers', 'windows', 'chromedriver.exe')
-    elif OS_NAME == 'Linux':
-        web.driver_path = os.path.join(PROJECT_DIR, 'web-drivers', 'linux', 'chromedriver')
-    elif OS_NAME == 'Darwin':
-        web.driver_path = os.path.join(PROJECT_DIR, 'web-drivers', 'macos', 'chromedriver')
-    else:
-        raise ValueError(f'OS [{OS_NAME}] not supported.')
+    web.driver_path = get_driver_path(driver='chromedriver')
+    web.download_folder_path = tmp_folder
     return web
 
 
-def setup_firefox(headless: bool) -> WebBot:
+def setup_firefox(headless: bool, tmp_folder: str) -> WebBot:
     web = WebBot(headless)
     web.browser = Browser.FIREFOX
 
-    if OS_NAME == 'Windows':
-        web.driver_path = os.path.join(PROJECT_DIR, 'web-drivers', 'windows', 'geckodriver.exe')
-    elif OS_NAME == 'Linux':
-        web.driver_path = os.path.join(PROJECT_DIR, 'web-drivers', 'linux', 'geckodriver')
-    elif OS_NAME == 'Darwin':
-        web.driver_path = os.path.join(PROJECT_DIR, 'web-drivers', 'macos', 'geckodriver')
-    else:
-        raise ValueError(f'OS [{OS_NAME}] not supported.')
+    web.driver_path = get_driver_path(driver='geckodriver')
+    web.download_folder_path = tmp_folder
+
     return web
 
 
-def setup_edge(headless: bool) -> WebBot:
+def setup_edge(headless: bool, tmp_folder: str) -> WebBot:
     web = WebBot(headless)
     web.browser = Browser.EDGE
 
-    opt = browsers.edge.default_options(headless=headless, download_folder_path=web.download_folder_path)
+    web.driver_path = get_driver_path(driver='msedgedriver')
+    web.download_folder_path = tmp_folder
+    opt = browsers.edge.default_options(headless=headless, download_folder_path=tmp_folder)
     opt.set_capability('platform', 'ANY')  # WINDOWS is default value:
 
-    if OS_NAME == 'Windows':
-        web.driver_path = os.path.join(PROJECT_DIR, 'web-drivers', 'windows', 'msedgedriver.exe')
-    elif OS_NAME == 'Linux':
-        web.driver_path = os.path.join(PROJECT_DIR, 'web-drivers', 'linux', 'msedgedriver')
-    elif OS_NAME == 'Darwin':
-        web.driver_path = os.path.join(PROJECT_DIR, 'web-drivers', 'macos', 'msedgedriver')
-    else:
-        raise ValueError(f'OS [{OS_NAME}] not supported.')
     web.options = opt
     return web
 
 
+def factory_setup_browser(browser: str, is_headless: bool, tmp_folder: str) -> WebBot:
+    dict_browsers = {
+        'chrome': setup_chrome,
+        'firefox': setup_firefox,
+        'edge': setup_edge
+    }
+
+    setup_browser = dict_browsers.get(browser, None)
+
+    if setup_browser is None:
+        raise ValueError(f'Browser [{browser}] not supported.')
+
+    return setup_browser(headless=is_headless, tmp_folder=tmp_folder)
+
+
 @pytest.fixture
-def web(request):
+def tmp_folder() -> str:
+    folder = tempfile.mkdtemp()
+    yield folder
+    shutil.rmtree(folder)
+
+
+@pytest.fixture
+def web(request, tmp_folder: str):
 
     browser = request.config.getoption("--browser") or Browser.CHROME
     is_headless = request.config.getoption("--headless")
 
-    if browser == 'chrome':
-        web = setup_chrome(is_headless)
-    elif browser == 'firefox':
-        web = setup_firefox(is_headless)
-    elif browser == 'edge':
-        web = setup_edge(is_headless)
-    else:
-        raise ValueError(f'Browser [{browser}] not supported.')
+    web = factory_setup_browser(browser=browser, is_headless=is_headless, tmp_folder=tmp_folder)
     yield web
     web.stop_browser()
 

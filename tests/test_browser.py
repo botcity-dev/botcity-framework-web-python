@@ -8,7 +8,6 @@ from botcity.web import WebBot, By
 
 def test_create_tab(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
-    web.wait(2_000)
 
     title = web.page_title()
     assert title == 'Botcity - web test'
@@ -17,7 +16,6 @@ def test_create_tab(web: WebBot):
 def test_close_page(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.create_window(url=conftest.TEST_PAGE)
-    web.wait(5_000)
     web.close_page()
 
     title = web.page_title()
@@ -27,7 +25,6 @@ def test_close_page(web: WebBot):
 def test_create_window(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.create_window(url=conftest.TEST_PAGE)
-    web.wait(2_000)
 
     title = web.page_title()
     assert title == 'Page test'
@@ -36,7 +33,6 @@ def test_create_window(web: WebBot):
 def test_display_size(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.set_screen_resolution(1280, 720)
-    web.wait(2_000)
     (w, h) = web.display_size()
 
     assert w == 1280
@@ -63,7 +59,6 @@ def test_get_tabs(web: WebBot):
 def test_navigate_to(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.navigate_to(url=conftest.TEST_PAGE)
-    web.wait(2_000)
 
     title = web.page_title()
     assert title == 'Page test'
@@ -173,7 +168,6 @@ def test_set_file_input_element(web: WebBot):
 
     pdf_file = os.path.join(conftest.PROJECT_DIR, 'sample.pdf')
     web.set_file_input_element(input_file_element, pdf_file)
-    web.wait(5_000)
 
     file_name = input_file_element.get_attribute('value')
     assert file_name == 'C:\\fakepath\\sample.pdf'
@@ -221,7 +215,7 @@ def test_scroll_up(web: WebBot):
     web.type_keys([web.KEYS.SHIFT, 'd'])  # scroll down trigger
     web.scroll_up(20)
 
-    mouse_icon = web.find("mouse", matching=0.97, waiting_time=10_000)
+    mouse_icon = web.find("mouse", matching=0.97, waiting_time=10000)
     assert mouse_icon is not None
 
 
@@ -229,55 +223,36 @@ def test_scroll_up(web: WebBot):
 def test_set_screen_resolution(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.set_screen_resolution(500, 500)
-    web.wait(2000)
 
     page_size = web.find_element('page-size', By.ID).text
     width = page_size.split('x')[0]
     assert width == '500'
 
 
-def test_wait_for_downloads_and_file(web: WebBot):
-    if os.path.exists(conftest.FAKE_BIN_PATH):
-        os.remove(conftest.FAKE_BIN_PATH)
+def test_wait_for_downloads(web: WebBot):
+    fake_bin_path = conftest.get_fake_bin_path(web=web)
 
-    try:
-        web.browse(conftest.INDEX_PAGE)
-        web.wait(1000)
+    web.browse(conftest.INDEX_PAGE)
 
-        web.type_keys([web.KEYS.SHIFT, 'q'])
-        web.wait(5000)
+    web.type_keys([web.KEYS.SHIFT, 'q'])
 
-        web.wait_for_downloads(timeout=120_000)
-        web.wait(2000)
-
-        assert os.path.exists(conftest.FAKE_BIN_PATH) and os.path.getsize(conftest.FAKE_BIN_PATH) > 0
-    finally:
-        os.remove(conftest.FAKE_BIN_PATH)
-        wait_for_file(web=web)
+    web.wait_for_downloads(timeout=20000)
+    assert os.path.exists(fake_bin_path) and os.path.getsize(fake_bin_path) > 0
 
 
-def wait_for_file(web: WebBot):
-    try:
-        if os.path.exists(conftest.FAKE_BIN_PATH):
-            os.remove(conftest.FAKE_BIN_PATH)
+def test_wait_for_file(web: WebBot):
+    fake_bin_path = conftest.get_fake_bin_path(web=web)
 
-        web.browse(conftest.INDEX_PAGE)
-        web.wait(1000)
+    web.browse(conftest.INDEX_PAGE)
 
-        web.type_keys([web.KEYS.SHIFT, 'q'])
-        web.wait(5000)
+    web.type_keys([web.KEYS.SHIFT, 'q'])
 
-        web.wait_for_file(conftest.FAKE_BIN_PATH, timeout=120_000)
-        web.wait(2000)
-
-        assert os.path.exists(conftest.FAKE_BIN_PATH) and os.path.getsize(conftest.FAKE_BIN_PATH) > 0
-    finally:
-        os.remove(conftest.FAKE_BIN_PATH)
+    web.wait_for_file(fake_bin_path, timeout=20000)
+    assert os.path.exists(fake_bin_path) and os.path.getsize(fake_bin_path) > 0
 
 
 def test_set_current_element(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
-    web.wait(1000)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
     web.add_image('git', os.path.join(conftest.PROJECT_DIR, 'resources', 'git.png'))

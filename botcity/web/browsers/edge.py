@@ -5,18 +5,15 @@ import tempfile
 import time
 from typing import Dict
 
-# from msedge.selenium_tools import Edge, EdgeOptions  # noqa: F401, F403
+from msedge.selenium_tools import Edge, EdgeOptions  # noqa: F401, F403
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from selenium.webdriver.edge.options import Options
-from selenium.webdriver import Edge # noqa: F401, F403
 
 from ..util import cleanup_temp_dir
 
 
 def default_options(headless=False, download_folder_path=None, user_data_dir=None,
-                    page_load_strategy="normal") -> Options:
+                    page_load_strategy="normal") -> EdgeOptions:
     """Retrieve the default options for this browser curated by BotCity.
-
     Args:
         headless (bool, optional): Whether or not to use the headless mode. Defaults to False.
         download_folder_path (str, optional): The default path in which to save files.
@@ -24,11 +21,10 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
         user_data_dir ([type], optional): The directory to use as user profile.
             If None, a new temporary directory is used. Defaults to None.
         page_load_strategy (str, optional): The page load strategy. Defaults to "normal".
-
     Returns:
         EdgeOptions: The Edge options.
     """
-    edge_options = Options()
+    edge_options = EdgeOptions()
     try:
         page_load_strategy = page_load_strategy.value
     except AttributeError:
@@ -121,7 +117,6 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
 
 def default_capabilities() -> Dict:
     """Fetch the default capabilities for this browser.
-
     Returns:
         Dict: Dictionary with the default capabilities defined.
     """

@@ -267,7 +267,7 @@ def test_set_current_element(web: WebBot):
     web.click(wait_after=2000)
 
     result = conftest.get_event_result('element-result', web)
-    assert result['data'] == ['Left']
+    assert result['data'] == ['Left2'] or result['data'] == ['Left']
 
 
 def test_print_pdf(web: WebBot):

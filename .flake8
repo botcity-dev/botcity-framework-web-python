@@ -6,5 +6,6 @@ exclude =
     dist,
     versioneer.py,
     botcity/maestro/_version.py,
-    docs/source/conf.py
+    docs/source/conf.py,
+    tests
 max-line-length = 115

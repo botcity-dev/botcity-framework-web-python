@@ -4,6 +4,11 @@ on:
   push:
   pull_request:
 
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -16,6 +21,12 @@ jobs:
         python-version: [3.7]
     steps:
       - uses: actions/checkout@v2
+      - name: Install libgl1
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt update
+          sudo apt install libgl1-mesa-dev libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libnss3-dev libxss-dev libasound2 -y
+
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -30,6 +41,15 @@ jobs:
         run: |
           pip install .
 
-      - name: Run Tests
+      - uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
+
+      - name: Run Tests in Chrome
         run: |
-          python run_tests.py
+          pytest -v -vrxs --headless --browser=chrome 
+
+      - uses: browser-actions/setup-firefox@latest
+      - name: Run Tests in Firefox
+        run: |
+          pytest -v -vrxs --headless --browser=firefox

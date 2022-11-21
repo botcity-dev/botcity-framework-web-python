@@ -8,6 +8,9 @@ import typing
 import platform
 
 from botcity.web import WebBot, Browser, By, browsers
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 OS_NAME = platform.system()
 
@@ -21,52 +24,39 @@ def get_fake_bin_path(web: WebBot) -> str:
     return os.path.join(web.download_folder_path, 'fake.bin')
 
 
-def get_driver_path(driver: str) -> str:
-    if OS_NAME.lower() == 'windows':
-        return os.path.join(PROJECT_DIR, 'web-drivers', 'windows', f'{driver}.exe')
-
-    if OS_NAME.lower() == 'linux':
-        return os.path.join(PROJECT_DIR, 'web-drivers', 'linux', driver)
-
-    if OS_NAME.lower() == 'darwin':
-        return os.path.join(PROJECT_DIR, 'web-drivers', 'macos', driver)
-
-    raise ValueError(f'OS [{OS_NAME}] not supported.')
-
-
-def setup_chrome(headless: bool, tmp_folder: str) -> WebBot:
+def setup_chrome(headless: bool, tmp_folder: str, download_driver: str) -> WebBot:
     web = WebBot(headless)
     web.browser = Browser.CHROME
 
-    web.driver_path = get_driver_path(driver='chromedriver')
+    web.driver_path = download_driver
     web.download_folder_path = tmp_folder
     return web
 
 
-def setup_firefox(headless: bool, tmp_folder: str) -> WebBot:
+def setup_firefox(headless: bool, tmp_folder: str, download_driver: str) -> WebBot:
     web = WebBot(headless)
     web.browser = Browser.FIREFOX
 
-    web.driver_path = get_driver_path(driver='geckodriver')
+    web.driver_path = download_driver
     web.download_folder_path = tmp_folder
 
     return web
 
 
-def setup_edge(headless: bool, tmp_folder: str) -> WebBot:
+def setup_edge(headless: bool, tmp_folder: str, download_driver: str) -> WebBot:
     web = WebBot(headless)
     web.browser = Browser.EDGE
 
-    web.driver_path = get_driver_path(driver='msedgedriver')
+    web.driver_path = download_driver
     web.download_folder_path = tmp_folder
     opt = browsers.edge.default_options(headless=headless, download_folder_path=tmp_folder)
-    opt.set_capability('platform', 'ANY')  # WINDOWS is default value:
+    opt.set_capability('platform', 'ANY')
 
     web.options = opt
     return web
 
 
-def factory_setup_browser(browser: str, is_headless: bool, tmp_folder: str) -> WebBot:
+def factory_setup_browser(browser: str, is_headless: bool, tmp_folder: str, download_driver: str) -> WebBot:
     dict_browsers = {
         'chrome': setup_chrome,
         'firefox': setup_firefox,
@@ -78,7 +68,22 @@ def factory_setup_browser(browser: str, is_headless: bool, tmp_folder: str) -> W
     if setup_browser is None:
         raise ValueError(f'Browser [{browser}] not supported.')
 
-    return setup_browser(headless=is_headless, tmp_folder=tmp_folder)
+    return setup_browser(headless=is_headless, tmp_folder=tmp_folder, download_driver=download_driver)
+
+
+def factory_driver_manager(browser: str):
+    dict_driver_manager = {
+        'chrome': ChromeDriverManager,
+        'firefox': GeckoDriverManager,
+        'edge': EdgeChromiumDriverManager
+    }
+
+    driver_manager = dict_driver_manager.get(browser, None)
+
+    if dict_driver_manager is None:
+        raise ValueError(f'Driver to [{browser}] not supported.')
+
+    return driver_manager
 
 
 @pytest.fixture
@@ -88,13 +93,23 @@ def tmp_folder() -> str:
     shutil.rmtree(folder)
 
 
-@pytest.fixture
-def web(request, tmp_folder: str):
+@pytest.fixture(autouse=True, scope="session")
+def download_driver(request):
+    folder_driver = tempfile.mkdtemp()
+    browser = request.config.getoption("--browser") or Browser.CHROME
+    manager = factory_driver_manager(browser=browser)
+    installed_driver = manager(path=folder_driver).install()
+    yield installed_driver
+    shutil.rmtree(folder_driver)
 
+
+@pytest.fixture
+def web(request, tmp_folder: str, download_driver: str):
     browser = request.config.getoption("--browser") or Browser.CHROME
     is_headless = request.config.getoption("--headless")
 
-    web = factory_setup_browser(browser=browser, is_headless=is_headless, tmp_folder=tmp_folder)
+    web = factory_setup_browser(browser=browser, is_headless=is_headless, tmp_folder=tmp_folder,
+                                download_driver=download_driver)
     yield web
     web.stop_browser()
 

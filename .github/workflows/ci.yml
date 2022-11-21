@@ -6,8 +6,8 @@ on:
 
 
 env:
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GH_TOKEN: {{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: {{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
@@ -18,7 +18,9 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.7]
+        python-version: ["3.10"]
+        browser: [firefox, chrome]
+
     steps:
       - uses: actions/checkout@v2
       - name: Install libgl1
@@ -26,7 +28,6 @@ jobs:
           sudo dpkg --add-architecture i386
           sudo apt update
           sudo apt install libgl1-mesa-dev libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libnss3-dev libxss-dev libasound2 -y
-
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -42,14 +43,13 @@ jobs:
           pip install .
 
       - uses: browser-actions/setup-chrome@latest
+        if: ${{ matrix.browser }} == "chrome"
         with:
           chrome-version: stable
 
-      - name: Run Tests in Chrome
-        run: |
-          pytest -v -vrxs --headless --browser=chrome
-
       - uses: browser-actions/setup-firefox@latest
-      - name: Run Tests in Firefox
+        if: ${{ matrix.browser }} == "firefox"
+
+      - name: Run Tests in ${{ matrix.browser }}
         run: |
-          pytest -v -vrxs --headless --browser=firefox
+          pytest -v -vrxs --headless --browser=${{ matrix.browser }}

@@ -236,7 +236,7 @@ def test_wait_for_downloads(web: WebBot):
 
     web.type_keys([web.KEYS.SHIFT, 'q'])
 
-    web.wait_for_downloads(timeout=20000)
+    web.wait_for_downloads(timeout=30000)
     assert os.path.exists(fake_bin_path) and os.path.getsize(fake_bin_path) > 0
 
 
@@ -247,7 +247,7 @@ def test_wait_for_file(web: WebBot):
 
     web.type_keys([web.KEYS.SHIFT, 'q'])
 
-    web.wait_for_file(fake_bin_path, timeout=20000)
+    web.wait_for_file(fake_bin_path, timeout=30000)
     assert os.path.exists(fake_bin_path) and os.path.getsize(fake_bin_path) > 0
 
 

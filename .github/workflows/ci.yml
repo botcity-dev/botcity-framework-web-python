@@ -52,4 +52,4 @@ jobs:
       - uses: browser-actions/setup-firefox@latest
       - name: Run Tests in Firefox
         run: |
-          pytest -v -vrxs --headless --browser=firefox
+          pytest -n 2 -v -vrxs --headless --browser=firefox

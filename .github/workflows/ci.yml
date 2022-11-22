@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -19,7 +22,8 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         python-version: ["3.10"]
-        browser: [firefox, chrome]
+        browser: [firefox, chrome, edge]
+        headless: [true]
 
     steps:
       - uses: actions/checkout@v2
@@ -50,6 +54,9 @@ jobs:
       - uses: browser-actions/setup-firefox@latest
         if: ${{ matrix.browser }} == "firefox"
 
+      - uses: browser-actions/setup-edge@latest
+        if: ${{ matrix.browser }} == "edge"
+
       - name: Run Tests in ${{ matrix.browser }}
         run: |
-          pytest -v -vrxs --headless --browser=${{ matrix.browser }}
+          pytest -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}

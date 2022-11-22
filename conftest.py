@@ -105,8 +105,8 @@ def download_driver(request):
 @pytest.fixture
 def web(request, tmp_folder: str, download_driver: str):
     browser = request.config.getoption("--browser") or Browser.CHROME
-    is_headless = request.config.getoption("--headless")
-
+    is_headless = request.config.getoption("--headless") or "false"
+    is_headless = True if is_headless.lower() == "true" else False
     web = factory_setup_browser(browser=browser, is_headless=is_headless, tmp_folder=tmp_folder,
                                 download_driver=download_driver)
     yield web
@@ -119,6 +119,6 @@ def get_event_result(id_event: str, web: WebBot) -> typing.Dict:
 
 
 def pytest_addoption(parser):
-    parser.addoption('--headless', action='store_const', const=True)
+    parser.addoption('--headless', action='store', default="true")
     parser.addoption('--browser', action='store', default='chrome')
 

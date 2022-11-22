@@ -4,6 +4,14 @@ on:
   push:
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -13,9 +21,17 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.7]
+        python-version: ["3.10"]
+        browser: [firefox, chrome, edge]
+        headless: [true]
+
     steps:
       - uses: actions/checkout@v2
+      - name: Install libgl1
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt update
+          sudo apt install libgl1-mesa-dev libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libnss3-dev libxss-dev libasound2 -y
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -30,6 +46,17 @@ jobs:
         run: |
           pip install .
 
-      - name: Run Tests
+      - uses: browser-actions/setup-chrome@latest
+        if: ${{ matrix.browser }} == "chrome"
+        with:
+          chrome-version: stable
+
+      - uses: browser-actions/setup-firefox@latest
+        if: ${{ matrix.browser }} == "firefox"
+
+      - uses: browser-actions/setup-edge@latest
+        if: ${{ matrix.browser }} == "edge"
+
+      - name: Run Tests in ${{ matrix.browser }}
         run: |
-          python run_tests.py
+          pytest -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}

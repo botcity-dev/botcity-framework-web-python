@@ -116,7 +116,7 @@ def test_get_screen_image(web: WebBot):
 
 def test_get_screenshot(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
-    fp = os.path.join('resources', 'screenshot_test.png')
+    fp = os.path.join(conftest.PROJECT_DIR, 'resources', 'screenshot_test.png')
     img = web.get_screenshot(fp)
 
     assert Image.isImageType(img) and os.path.isfile(fp)
@@ -125,7 +125,7 @@ def test_get_screenshot(web: WebBot):
 
 def test_screen_cut(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
-    fp = os.path.join('resources', 'screen_cut_test.png')
+    fp = os.path.join(conftest.PROJECT_DIR, 'resources', 'screen_cut_test.png')
     img = web.screen_cut(0, 0, 100, 200)
     img.save(fp)
 
@@ -166,7 +166,7 @@ def test_set_file_input_element(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     input_file_element = web.find_element('file', By.ID)
 
-    pdf_file = os.path.join(conftest.PROJECT_DIR, 'sample.pdf')
+    pdf_file = os.path.join(conftest.PROJECT_DIR, 'resources', 'sample.pdf')
     web.set_file_input_element(input_file_element, pdf_file)
 
     file_name = input_file_element.get_attribute('value')
@@ -236,7 +236,8 @@ def test_wait_for_downloads(web: WebBot):
 
     web.type_keys([web.KEYS.SHIFT, 'q'])
 
-    web.wait_for_downloads(timeout=30000)
+    web.wait_for_downloads(timeout=60000)
+    web.wait(3000)
     assert os.path.exists(fake_bin_path) and os.path.getsize(fake_bin_path) > 0
 
 
@@ -253,7 +254,6 @@ def test_wait_for_file(web: WebBot):
 
 def test_set_current_element(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
-
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
     web.add_image('git', os.path.join(conftest.PROJECT_DIR, 'resources', 'git.png'))
 

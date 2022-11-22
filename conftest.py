@@ -14,8 +14,7 @@ from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 OS_NAME = platform.system()
 
-PROJECT_DIR = os.path.abspath('')
-FAKE_BIN_PATH = os.path.join(PROJECT_DIR, 'fake.bin')
+PROJECT_DIR = os.path.abspath('tests')
 TEST_PAGE = "https://lf2a.github.io/webpage-test/test.html"
 INDEX_PAGE = "https://lf2a.github.io/webpage-test/"
 

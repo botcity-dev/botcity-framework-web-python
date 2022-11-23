@@ -59,4 +59,4 @@ jobs:
 
       - name: Run Tests in ${{ matrix.browser }}
         run: |
-          pytest -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}
+          pytest -n 2 -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}

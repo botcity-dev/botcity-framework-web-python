@@ -22,7 +22,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         python-version: ["3.10"]
-        browser: [firefox]
+        browser: [firefox, chrome, edge]
         headless: [true]
 
     steps:

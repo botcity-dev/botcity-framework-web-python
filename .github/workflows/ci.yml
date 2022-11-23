@@ -13,21 +13,30 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  build:
+  test:
     runs-on: ${{ matrix.os }}
     defaults:
         run:
           shell: bash
     strategy:
+      # Don't abort if a matrix combination fails
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.10"]
-        browser: [firefox, chrome, edge]
+        browser: ["firefox", "chrome", "edge"]
         headless: [true]
-
+        exclude:
+          # Can't install firefox using setup-firefox on Windows
+          # See the issues below
+          #   * https://github.com/browser-actions/setup-firefox/issues/252
+          #   * https://github.com/abhi1693/setup-browser/issues/8
+          - os: windows-latest
+            browser: "firefox"
     steps:
       - uses: actions/checkout@v2
       - name: Install libgl1
+        if: runner.os == 'Linux'
         run: |
           sudo dpkg --add-architecture i386
           sudo apt update
@@ -47,15 +56,15 @@ jobs:
           pip install .
 
       - uses: browser-actions/setup-chrome@latest
-        if: ${{ matrix.browser }} == "chrome"
+        if: matrix.browser == 'chrome'
         with:
           chrome-version: stable
 
       - uses: browser-actions/setup-firefox@latest
-        if: ${{ matrix.browser }} == "firefox"
+        if: matrix.browser == 'firefox'
 
       - uses: browser-actions/setup-edge@latest
-        if: ${{ matrix.browser }} == "edge"
+        if: matrix.browser == 'edge'
 
       - name: Run Tests in ${{ matrix.browser }}
         run: |

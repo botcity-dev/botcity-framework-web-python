@@ -53,7 +53,7 @@ def test_triple_click_relative(web: WebBot):
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
     web.triple_click_relative(16, 140)
-
+    web.wait(5000)
     result = conftest.get_event_result('element-result', web, test="test_triple_click_relative")
     assert result['data'] == ['Left2', 'Left2', 'Left2']
 
@@ -91,7 +91,7 @@ def test_left_click_relative(web: WebBot):
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
     web.click_relative(16, 140)
-
+    web.wait(5000)
     result = conftest.get_event_result('element-result', web, test="test_left_click_relative")
     assert result['data'] == ['Left2']
 
@@ -105,7 +105,7 @@ def test_left_double_click_relative(web: WebBot):
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
     web.double_click_relative(16, 140)
-
+    web.wait(5000)
     result = conftest.get_event_result('element-result', web, test="test_left_double_click_relative")
     assert result['data'] == ['Left2', 'Left2']
 
@@ -119,7 +119,7 @@ def test_right_click_relative(web: WebBot):
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
     web.right_click_relative(16, 140)
-
+    web.wait(5000)
     result = conftest.get_event_result('element-result', web, test="test_right_click_relative")
     assert result['data'] == ['Right2']
 

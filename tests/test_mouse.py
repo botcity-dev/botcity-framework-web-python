@@ -13,7 +13,7 @@ def test_left_click(web: WebBot):
     web.click()
 
     result = conftest.get_event_result('element-result', web)
-    assert result['data'] == ['Left']
+    assert result['data'] == ['Left'] or result['data'] == ['Left2']
 
 
 def test_left_double_click(web: WebBot):
@@ -25,7 +25,7 @@ def test_left_double_click(web: WebBot):
     web.double_click()
 
     result = conftest.get_event_result('element-result', web)
-    assert result['data'] == ['Left', 'Left']
+    assert result['data'] == ['Left', 'Left'] or result['data'] == ['Left2', 'Left2']
 
 
 def test_left_triple_click(web: WebBot):
@@ -37,7 +37,7 @@ def test_left_triple_click(web: WebBot):
     web.triple_click()
 
     result = conftest.get_event_result('element-result', web)
-    assert result['data'] == ['Left', 'Left', 'Left']
+    assert result['data'] == ['Left', 'Left', 'Left'] or result['data'] == ['Left2', 'Left2', 'Left2']
 
 
 def test_triple_click_reltive(web: WebBot):
@@ -61,7 +61,7 @@ def test_right_click(web: WebBot):
     web.right_click()
 
     result = conftest.get_event_result('element-result', web)
-    assert result['data'] == ['Right']
+    assert result['data'] == ['Right'] or result['data'] == ['Right2']
 
 
 def test_right_double_click(web: WebBot):
@@ -73,7 +73,7 @@ def test_right_double_click(web: WebBot):
     web.right_click(clicks=2)
 
     result = conftest.get_event_result('element-result', web)
-    assert result['data'] == ['Right', 'Right']
+    assert result['data'] == ['Right', 'Right'] or result['data'] == ['Right2', 'Right2']
 
 
 def test_left_click_relative(web: WebBot):
@@ -149,7 +149,7 @@ def test_move_mouse(web: WebBot):
     web.move()
 
     result = conftest.get_event_result('element-result', web)
-    assert result['data'] == ['mouse-over']
+    assert result['data'] == ['mouse-over'] or result['data'] == ['mouse-over2']
 
 
 def test_move_relative(web: WebBot):
@@ -212,7 +212,7 @@ def test_click_on(web: WebBot):
     web.click_on(label='mouse')
 
     result = conftest.get_event_result('element-result', web)
-    assert result['data'] == ['Left']
+    assert result['data'] == ['Left'] or result['data'] == ['Left2']
 
 
 def test_get_element_coors(web: WebBot):
@@ -223,7 +223,7 @@ def test_get_element_coors(web: WebBot):
     web.click_at(x, y)
 
     result = conftest.get_event_result('element-result', web)
-    assert result['data'] == ['Left']
+    assert result['data'] == ['Left'] or result['data'] == ['Left2']
 
 
 def test_get_element_coors_centered(web: WebBot):
@@ -234,4 +234,5 @@ def test_get_element_coors_centered(web: WebBot):
     web.click_at(x, y)
 
     result = conftest.get_event_result('element-result', web)
-    assert result['data'] == ['Left']
+    assert result['data'] == ['Left'] or result['data'] == ['Left2']
+

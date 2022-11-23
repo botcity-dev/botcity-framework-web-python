@@ -43,7 +43,7 @@ def test_left_triple_click(web: WebBot):
     assert result['data'] == ['Left', 'Left', 'Left'] or result['data'] == ['Left2', 'Left2', 'Left2']
 
 
-def test_triple_click_reltive(web: WebBot):
+def test_triple_click_relative(web: WebBot):
     if web.browser.lower() in BROWSER_ERRORS:
         xfail(reason=f"Error in {web.browser} in decode dict.")
 
@@ -54,7 +54,7 @@ def test_triple_click_reltive(web: WebBot):
         raise Exception('Image not found: mouse')
     web.triple_click_relative(16, 140)
 
-    result = conftest.get_event_result('element-result', web)
+    result = conftest.get_event_result('element-result', web, test="test_triple_click_relative")
     assert result['data'] == ['Left2', 'Left2', 'Left2']
 
 
@@ -92,13 +92,13 @@ def test_left_click_relative(web: WebBot):
         raise Exception('Image not found: mouse')
     web.click_relative(16, 140)
 
-    result = conftest.get_event_result('element-result', web)
+    result = conftest.get_event_result('element-result', web, test="test_left_click_relative")
     assert result['data'] == ['Left2']
 
 
 def test_left_double_click_relative(web: WebBot):
-    if web.browser.lower() in BROWSER_ERRORS:
-        xfail(reason=f"Error in {web.browser} in decode dict.")
+    # if web.browser.lower() in BROWSER_ERRORS:
+    #     xfail(reason=f"Error in {web.browser} in decode dict.")
     web.browse(conftest.INDEX_PAGE)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
@@ -106,7 +106,7 @@ def test_left_double_click_relative(web: WebBot):
         raise Exception('Image not found: mouse')
     web.double_click_relative(16, 140)
 
-    result = conftest.get_event_result('element-result', web)
+    result = conftest.get_event_result('element-result', web, test="test_left_double_click_relative")
     assert result['data'] == ['Left2', 'Left2']
 
 
@@ -120,7 +120,7 @@ def test_right_click_relative(web: WebBot):
         raise Exception('Image not found: mouse')
     web.right_click_relative(16, 140)
 
-    result = conftest.get_event_result('element-result', web)
+    result = conftest.get_event_result('element-result', web, test="test_right_click_relative")
     assert result['data'] == ['Right2']
 
 

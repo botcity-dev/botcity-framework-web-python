@@ -113,8 +113,11 @@ def web(request, tmp_folder: str, download_driver: str):
     web.stop_browser()
 
 
-def get_event_result(id_event: str, web: WebBot) -> typing.Dict:
+def get_event_result(id_event: str, web: WebBot, test: str = "") -> typing.Dict:
     event_result = web.find_element(id_event, By.ID)
+    if test in ["test_left_double_click_relative", "test_right_click_relative", "test_left_click_relative"
+                "test_triple_click_relative"]:
+        print(event_result)
     return json.loads(event_result.text)
 
 

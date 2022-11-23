@@ -8,7 +8,9 @@ from botcity.web import WebBot, By
 
 def test_create_tab(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
-
+    teste = web.browser
+    if 'chrome' == teste.lower():
+        print("entrou")
     title = web.page_title()
     assert title == 'Botcity - web test'
 

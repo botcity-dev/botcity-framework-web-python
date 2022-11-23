@@ -2,6 +2,9 @@ import os
 import conftest
 
 from botcity.web import WebBot, By
+from pytest import xfail
+
+BROWSER_ERRORS = ['firefox']
 
 
 def test_left_click(web: WebBot):
@@ -41,6 +44,9 @@ def test_left_triple_click(web: WebBot):
 
 
 def test_triple_click_reltive(web: WebBot):
+    if web.browser.lower() in BROWSER_ERRORS:
+        xfail(reason=f"Error in {web.browser} in decode dict.")
+
     web.browse(conftest.INDEX_PAGE)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
@@ -77,6 +83,8 @@ def test_right_double_click(web: WebBot):
 
 
 def test_left_click_relative(web: WebBot):
+    if web.browser.lower() in BROWSER_ERRORS:
+        xfail(reason=f"Error in {web.browser} in decode dict.")
     web.browse(conftest.INDEX_PAGE)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
@@ -89,6 +97,8 @@ def test_left_click_relative(web: WebBot):
 
 
 def test_left_double_click_relative(web: WebBot):
+    if web.browser.lower() in BROWSER_ERRORS:
+        xfail(reason=f"Error in {web.browser} in decode dict.")
     web.browse(conftest.INDEX_PAGE)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
@@ -101,6 +111,8 @@ def test_left_double_click_relative(web: WebBot):
 
 
 def test_right_click_relative(web: WebBot):
+    if web.browser.lower() in BROWSER_ERRORS:
+        xfail(reason=f"Error in {web.browser} visual automation headless")
     web.browse(conftest.INDEX_PAGE)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))

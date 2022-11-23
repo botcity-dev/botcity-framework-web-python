@@ -4,8 +4,6 @@ import conftest
 from botcity.web import WebBot, By
 from pytest import xfail
 
-BROWSER_ERRORS = ['firefox']
-
 
 def test_left_click(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
@@ -44,8 +42,8 @@ def test_left_triple_click(web: WebBot):
 
 
 def test_triple_click_relative(web: WebBot):
-    # if web.browser.lower() in BROWSER_ERRORS:
-    #     xfail(reason=f"Error in {web.browser} in decode dict.")
+    if web.browser.lower() in 'firefox' and os.getenv('CI') is not None:
+        xfail(reason=f"Firefox is not working in CI")
 
     web.browse(conftest.INDEX_PAGE)
 
@@ -53,8 +51,8 @@ def test_triple_click_relative(web: WebBot):
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
     web.triple_click_relative(16, 140)
-    web.wait(5000)
-    result = conftest.get_event_result('element-result', web, test="test_triple_click_relative")
+
+    result = conftest.get_event_result('element-result', web)
     assert result['data'] == ['Left2', 'Left2', 'Left2']
 
 
@@ -83,44 +81,45 @@ def test_right_double_click(web: WebBot):
 
 
 def test_left_click_relative(web: WebBot):
-    # if web.browser.lower() in BROWSER_ERRORS:
-    #     xfail(reason=f"Error in {web.browser} in decode dict.")
+    if web.browser.lower() in 'firefox' and os.getenv('CI') is not None:
+        xfail(reason=f"Firefox is not working in CI")
     web.browse(conftest.INDEX_PAGE)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
     web.click_relative(16, 140)
-    web.wait(5000)
-    result = conftest.get_event_result('element-result', web, test="test_left_click_relative")
+
+    result = conftest.get_event_result('element-result', web)
     assert result['data'] == ['Left2']
 
 
 def test_left_double_click_relative(web: WebBot):
-    # if web.browser.lower() in BROWSER_ERRORS:
-    #     xfail(reason=f"Error in {web.browser} in decode dict.")
+    if web.browser.lower() in 'firefox' and os.getenv('CI') is not None:
+        xfail(reason=f"Firefox is not working in CI")
+
     web.browse(conftest.INDEX_PAGE)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
     web.double_click_relative(16, 140)
-    web.wait(5000)
-    result = conftest.get_event_result('element-result', web, test="test_left_double_click_relative")
+
+    result = conftest.get_event_result('element-result', web)
     assert result['data'] == ['Left2', 'Left2']
 
 
 def test_right_click_relative(web: WebBot):
-    # if web.browser.lower() in BROWSER_ERRORS:
-    #     xfail(reason=f"Error in {web.browser} visual automation headless")
+    if web.browser.lower() in 'firefox' and os.getenv('CI') is not None:
+        xfail(reason=f"Firefox is not working in CI")
     web.browse(conftest.INDEX_PAGE)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
     web.right_click_relative(16, 140)
-    web.wait(5000)
-    result = conftest.get_event_result('element-result', web, test="test_right_click_relative")
+
+    result = conftest.get_event_result('element-result', web)
     assert result['data'] == ['Right2']
 
 
@@ -170,7 +169,7 @@ def test_move_relative(web: WebBot):
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
-    web.move()  # posicionando o mouse
+    web.move()
     web.move_relative(16, 140)
 
     result = conftest.get_event_result('element-result', web)
@@ -247,4 +246,3 @@ def test_get_element_coors_centered(web: WebBot):
 
     result = conftest.get_event_result('element-result', web)
     assert result['data'] == ['Left'] or result['data'] == ['Left2']
-

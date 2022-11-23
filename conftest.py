@@ -118,6 +118,7 @@ def get_event_result(id_event: str, web: WebBot, test: str = "") -> typing.Dict:
     if test in ["test_left_double_click_relative", "test_right_click_relative", "test_left_click_relative"
                 "test_triple_click_relative"]:
         print(event_result)
+        print(event_result.text)
     return json.loads(event_result.text)
 
 

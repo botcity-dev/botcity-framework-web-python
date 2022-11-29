@@ -6,6 +6,13 @@ from PIL import Image
 from botcity.web import WebBot, By
 
 
+def test_context(web: WebBot):
+    with web:
+        web.browse(conftest.INDEX_PAGE)
+        assert web.driver
+    assert web.driver is None
+
+
 def test_create_tab(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     title = web.page_title()

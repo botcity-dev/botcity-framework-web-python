@@ -78,7 +78,7 @@ class WebBot(BaseBot):
         self._download_folder_path = os.getcwd()
 
     def __enter__(self):
-        self.start_browser()
+        pass
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.stop_browser()

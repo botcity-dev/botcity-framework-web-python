@@ -5,9 +5,9 @@ import tempfile
 import time
 from typing import Dict
 
-from msedge.selenium_tools import Edge, EdgeOptions  # noqa: F401, F403
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
+from selenium.webdriver import Edge, EdgeOptions # noqa: F401, F403
+from selenium.webdriver.edge.service import Service as EdgeService # noqa: F401, F403
 from ..util import cleanup_temp_dir
 
 

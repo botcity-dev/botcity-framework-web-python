@@ -3,7 +3,6 @@ import os
 import tempfile
 from typing import Dict
 
-from selenium import webdriver
 from selenium.webdriver import Firefox  # noqa: F401, F403
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.firefox.options import Options as FirefoxOptions

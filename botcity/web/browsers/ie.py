@@ -3,7 +3,7 @@ from typing import Dict
 from selenium.webdriver import Ie  # noqa: F401, F403
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.ie.options import Options
-from selenium.webdriver.ie.service import Service as IeService # noqa: F401, F403
+from selenium.webdriver.ie.service import Service as IeService  # noqa: F401, F403
 
 
 def default_options(headless=False, download_folder_path=None, user_data_dir=None,

@@ -26,7 +26,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait, TimeoutException, NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 
-from . import config, cv2find
+from . import config, cv2find, compat
 from .browsers import BROWSER_CONFIGS, Browser, PageLoadStrategy
 
 try:
@@ -235,7 +235,6 @@ class WebBot(BaseBot):
         """
         Starts the selected browser.
         """
-
         def check_driver():
             # Look for driver
             driver_name = BROWSER_CONFIGS.get(self.browser).get("driver")
@@ -260,11 +259,14 @@ class WebBot(BaseBot):
         self.capabilities = cap
         driver_path = self.driver_path or check_driver()
         self.driver_path = driver_path
-        service = BROWSER_CONFIGS.get(self.browser).get("service")
-        service = service(executable_path=self.driver_path)
-        service.desired_capabilities = cap
+        if compat.version_selenium_is_larger_than_four():
+            service = BROWSER_CONFIGS.get(self.browser).get("service")
+            service = service(executable_path=self.driver_path)
+            service.desired_capabilities = cap
 
-        self._driver = driver_class(options=opt, service=service)
+            self._driver = driver_class(options=opt, service=service)
+        else:
+            self._driver = driver_class(options=opt, desired_capabilities=cap, executable_path=driver_path)
         self.set_screen_resolution()
 
     def stop_browser(self):

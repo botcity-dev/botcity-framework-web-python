@@ -4,3 +4,4 @@ numpy
 opencv-python
 pillow
 selenium==4.6.1
+undetected-chromedriver

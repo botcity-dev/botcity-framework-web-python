@@ -282,9 +282,9 @@ class WebBot(BaseBot):
     def _others_configurations(self):
         if self.browser == Browser.UNDETECTED_CHROME:
             """
-            There is a problem in undetected chrome that prevents downloading files even passing 
-            download_folder_path in preferences. 
-            This solution is taken from the following issue 
+            There is a problem in undetected chrome that prevents downloading files even passing
+            download_folder_path in preferences.
+            This solution is taken from the following issue
             https://github.com/ultrafunkamsterdam/undetected-chromedriver/issues/260#issuecomment-901276808.
             It will be a temporary solution.
             """

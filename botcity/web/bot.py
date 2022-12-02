@@ -259,15 +259,40 @@ class WebBot(BaseBot):
         self.capabilities = cap
         driver_path = self.driver_path or check_driver()
         self.driver_path = driver_path
-        if compat.version_selenium_is_larger_than_four():
-            service = BROWSER_CONFIGS.get(self.browser).get("service")
-            service = service(executable_path=self.driver_path)
-            service.desired_capabilities = cap
-
-            self._driver = driver_class(options=opt, service=service)
-        else:
-            self._driver = driver_class(options=opt, desired_capabilities=cap, executable_path=driver_path)
+        self._driver = driver_class(**self._get_parameters_to_driver())
+        self._others_configurations()
         self.set_screen_resolution()
+
+    def _get_parameters_to_driver(self):
+        if self.browser == Browser.UNDETECTED_CHROME:
+            return {"driver_executable_path": self.driver_path, "options": self.options,
+                    "desired_capabilities": self.capabilities}
+        if compat.version_selenium_is_larger_than_four():
+            return {"options": self.options, "service": self._get_service()}
+
+        return {"options": self.options, "desired_capabilities": self.capabilities,
+                "executable_path": self.driver_path}
+
+    def _get_service(self):
+        service = BROWSER_CONFIGS.get(self.browser).get("service")
+        service = service(executable_path=self.driver_path)
+        service.desired_capabilities = self.capabilities
+        return service
+
+    def _others_configurations(self):
+        if self.browser == Browser.UNDETECTED_CHROME:
+            """
+            There is a problem in undetected chrome that prevents downloading files even passing 
+            download_folder_path in preferences. 
+            This solution is taken from the following issue 
+            https://github.com/ultrafunkamsterdam/undetected-chromedriver/issues/260#issuecomment-901276808.
+            It will be a temporary solution.
+            """
+            params = {
+                "behavior": "allow",
+                "downloadPath": self.download_folder_path
+            }
+            self.driver.execute_cdp_cmd("Page.setDownloadBehavior", params)
 
     def stop_browser(self):
         """
@@ -1128,7 +1153,7 @@ class WebBot(BaseBot):
         Args:
             timeout (int, optional): Timeout in millis. Defaults to 120000.
         """
-        if self.browser in [Browser.CHROME, Browser.EDGE] and self.headless:
+        if self.browser in [Browser.CHROME, Browser.UNDETECTED_CHROME, Browser.EDGE] and self.headless:
             start_time = time.time()
             while True:
                 elapsed_time = (time.time() - start_time) * 1000

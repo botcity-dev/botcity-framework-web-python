@@ -32,6 +32,15 @@ def setup_chrome(headless: bool, tmp_folder: str, download_driver: str) -> WebBo
     return web
 
 
+def setup_undetected_chrome(headless: bool, tmp_folder: str, download_driver: str) -> WebBot:
+    web = WebBot(headless)
+    web.browser = Browser.UNDETECTED_CHROME
+
+    web.driver_path = download_driver
+    web.download_folder_path = tmp_folder
+    return web
+
+
 def setup_firefox(headless: bool, tmp_folder: str, download_driver: str) -> WebBot:
     web = WebBot(headless)
     web.browser = Browser.FIREFOX
@@ -66,7 +75,8 @@ def factory_setup_browser(browser: str, is_headless: bool, tmp_folder: str, down
     dict_browsers = {
         'chrome': setup_chrome,
         'firefox': setup_firefox,
-        'edge': setup_edge
+        'edge': setup_edge,
+        'undetected_chrome': setup_undetected_chrome
     }
 
     setup_browser = dict_browsers.get(browser, None)
@@ -81,7 +91,8 @@ def factory_driver_manager(browser: str):
     dict_driver_manager = {
         'chrome': ChromeDriverManager,
         'firefox': GeckoDriverManager,
-        'edge': EdgeChromiumDriverManager
+        'edge': EdgeChromiumDriverManager,
+        'undetected_chrome': ChromeDriverManager
     }
 
     driver_manager = dict_driver_manager.get(browser, None)

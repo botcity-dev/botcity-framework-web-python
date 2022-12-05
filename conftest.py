@@ -2,6 +2,7 @@ import os
 import json
 import shutil
 import tempfile
+import time
 
 import pytest
 import typing
@@ -17,6 +18,12 @@ OS_NAME = platform.system()
 PROJECT_DIR = os.path.abspath('tests')
 TEST_PAGE = "https://lf2a.github.io/webpage-test/test.html"
 INDEX_PAGE = "https://lf2a.github.io/webpage-test/"
+
+platforms = {
+    "Linux": "linux",
+    "Darwin": "mac",
+    "Windows": "windows"
+}
 
 
 def get_fake_bin_path(web: WebBot) -> str:
@@ -58,11 +65,6 @@ def setup_edge(headless: bool, tmp_folder: str, download_driver: str) -> WebBot:
     web.driver_path = download_driver
     web.download_folder_path = tmp_folder
     opt = browsers.edge.default_options(headless=headless, download_folder_path=tmp_folder)
-    platforms = {
-        "Linux": "linux",
-        "Darwin": "mac",
-        "Windows": "windows"
-    }
     platform_name = platforms.get(platform.system())
 
     opt.platform_name = platform_name
@@ -117,6 +119,9 @@ def download_driver(request):
     manager = factory_driver_manager(browser=browser)
     installed_driver = manager(path=folder_driver).install()
     yield installed_driver
+    # Issue: https://github.com/ultrafunkamsterdam/undetected-chromedriver/issues/551
+    if platforms.get(platform.system()) == "windows" and browser == Browser.UNDETECTED_CHROME:
+        time.sleep(3)
     shutil.rmtree(folder_driver)
 
 
@@ -139,4 +144,3 @@ def get_event_result(id_event: str, web: WebBot) -> typing.Dict:
 def pytest_addoption(parser):
     parser.addoption('--headless', action='store', default="true")
     parser.addoption('--browser', action='store', default='chrome')
-

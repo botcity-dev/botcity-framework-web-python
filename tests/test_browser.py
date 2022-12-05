@@ -202,7 +202,11 @@ def test_get_view_port_size(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     size = web.get_viewport_size()
 
-    element = web.find_element('window-size', By.ID).text.split('x')
+    element = web.find_element('window-size', By.ID).text
+    print(f"Elements by selenium {element}")
+    element = element.split('x')
+    print(f"Elements by split to x {element}")
+    print(f"Transform in int and insert in tuple: {tuple(int(e) for e in element)}")
     assert size == tuple(int(e) for e in element)
 
 

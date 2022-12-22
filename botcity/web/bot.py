@@ -1338,7 +1338,6 @@ class WebBot(BaseBot):
             raise ValueError(f'Element not available. Cannot find {label}.')
         self.click_at(x, y)
 
-    @only_if_element
     def get_last_x(self):
         """
         Get the last X position for the mouse.

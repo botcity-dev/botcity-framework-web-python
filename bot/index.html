@@ -3320,7 +3320,6 @@ botcity.web.bot.WebBot            (<span title="botcity.base.bot.BaseBot">BaseBo
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Element not available. Cannot find </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">click_at</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
-    <span class="nd">@only_if_element</span>
     <span class="k">def</span> <span class="nf">get_last_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the last X position for the mouse.</span>
@@ -7537,8 +7536,7 @@ the first find. Defaults to True.</p></td>
 </table>
         <details class="quote">
           <summary>Source code in <code>web/bot.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="nd">@only_if_element</span>
-<span class="k">def</span> <span class="nf">get_last_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_last_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the last X position for the mouse.</span>
 

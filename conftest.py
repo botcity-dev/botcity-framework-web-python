@@ -49,7 +49,14 @@ def setup_edge(headless: bool, tmp_folder: str, download_driver: str) -> WebBot:
     web.driver_path = download_driver
     web.download_folder_path = tmp_folder
     opt = browsers.edge.default_options(headless=headless, download_folder_path=tmp_folder)
-    opt.set_capability('platform', 'ANY')
+    platforms = {
+        "Linux": "linux",
+        "Darwin": "mac",
+        "Windows": "windows"
+    }
+    platform_name = platforms.get(platform.system())
+
+    opt.platform_name = platform_name
 
     web.options = opt
     return web

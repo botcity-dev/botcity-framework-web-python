@@ -3,4 +3,6 @@ beautifulsoup4
 numpy
 opencv-python
 pillow
-selenium==4.6.1
+selenium>=4.6.1,<5
+undetected-chromedriver
+packaging

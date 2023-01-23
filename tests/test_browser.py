@@ -1,9 +1,11 @@
 import os
+import platform
+
 import pytest
 import conftest
 
 from PIL import Image
-from botcity.web import WebBot, By
+from botcity.web import WebBot, By, Browser
 
 
 def test_context(web: WebBot):
@@ -201,8 +203,12 @@ def test_leave_iframe(web: WebBot):
 def test_get_view_port_size(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     size = web.get_viewport_size()
-
-    element = web.find_element('window-size', By.ID).text.split('x')
+    if web.browser == Browser.UNDETECTED_CHROME and conftest.platforms.get(platform.system()) == 'mac':
+        width = web.execute_javascript("return window.innerWidth")
+        height = web.execute_javascript("return window.innerHeight")
+        element = [width, height]
+    else:
+        element = web.find_element('window-size', By.ID).text.split('x')
     assert size == tuple(int(e) for e in element)
 
 

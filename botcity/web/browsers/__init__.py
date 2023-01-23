@@ -4,6 +4,7 @@ from . import chrome
 from . import firefox
 from . import edge
 from . import ie
+from . import undetected_chrome
 
 
 class Browser(str, enum.Enum):
@@ -20,6 +21,7 @@ class Browser(str, enum.Enum):
     FIREFOX = "firefox"
     EDGE = "edge"
     IE = "ie"
+    UNDETECTED_CHROME = 'undetected_chrome'
 
 
 class PageLoadStrategy(str, enum.Enum):
@@ -54,6 +56,14 @@ BROWSER_CONFIGS = {
         "capabilities": firefox.default_capabilities,
         "wait_for_downloads": firefox.wait_for_downloads,
         "service": firefox.FirefoxService
+    },
+    Browser.UNDETECTED_CHROME: {
+        "driver": "chromedriver",
+        "class": undetected_chrome.Chrome,  # noqa: F401, F403
+        "options": undetected_chrome.default_options,
+        "capabilities": undetected_chrome.default_capabilities,
+        "wait_for_downloads": undetected_chrome.wait_for_downloads,
+        "service": undetected_chrome.ChromeService
     },
     Browser.EDGE: {
         "driver": "msedgedriver",

@@ -2,7 +2,7 @@
   <h1 align="center">BotCity Framework Web - Python</h1>
 
   <p align="center">
-    <strong>« Explore Framework <a href="https://botcity-dev.github.io/botcity-framework-web-python/">docs</a> »</strong>
+    <strong>« Explore Framework <a href="https://documentation.botcity.dev/frameworks/web/">docs</a> »</strong>
   </p>
 </p>
 
@@ -44,7 +44,7 @@ Operate any UI interface independent of the technology or platform (desktop, web
 
 Use our Development Tool alongside your favorite IDE to select UI components and generate python code.
 
-[![BotCity Studio](https://botcity.dev/github/readme/studio/studio.gif)](https://botcity.atlassian.net/l/c/eBJ6bLLV)
+[![BotCity Studio](https://botcity.dev/github/readme/studio/studio.gif)](https://documentation.botcity.dev/studio/)
 
 [SIGN UP](https://botcity.dev/app/signup) and download our tools.
 
@@ -69,11 +69,11 @@ pip install botcity-framework-web
 
 ### ⭐ Developing Your First Automation
 
-[![First Automation](https://botcity.dev/github/readme/python-web/firstbot.png)](https://botcity-dev.github.io/botcity-framework-web-python/intro/)
+[![First Automation](https://botcity.dev/github/readme/python-web/firstbot.png)](https://documentation.botcity.dev/tutorials/python-automations/web/)
 
 ## 📚 Documentation
 
-Documentation is available at https://botcity-dev.github.io/botcity-framework-web-python.
+Documentation is available at https://documentation.botcity.dev/frameworks/web/.
 
 ## 💻 Developers Portal
 
@@ -89,29 +89,29 @@ BotCity is a platform to develop, deploy, manage and maintain automations. Autom
 ### 1️⃣  All in One Platform
 Develop, deploy, manage and scale your Automation Ops using All in One platform that provides task queue, runtime environment management, reports, alerts, logs and much more.
 
-[![BotCity Maestro](https://botcity.dev/github/readme/maestro/maestro.png)](https://botcity.atlassian.net/l/c/WWGswYRX)
+[![BotCity Maestro](https://botcity.dev/github/readme/maestro/maestro.png)](https://documentation.botcity.dev/maestro/)
 
 ### 2️⃣  Deploy with a Single Line
 
 Use BotCity command-line interface (CLI) to deploy your bot into a runtime environment with a single line:
 
-[![BotCity CLI](https://botcity.dev/github/readme/cli/botcli.gif)](https://botcity.atlassian.net/l/c/hJHE1ZFv)
+[![BotCity CLI](https://botcity.dev/github/readme/cli/botcli.gif)](https://documentation.botcity.dev/cli/)
 
 ### 3️⃣  Manage your Task Queue
 
-[![BotCity Maestro Task Queue](https://botcity.dev/github/readme/maestro/tasks.png)](https://botcity.atlassian.net/l/c/gR3AAd2a)
+[![BotCity Maestro Task Queue](https://botcity.dev/github/readme/maestro/tasks.png)](https://documentation.botcity.dev/maestro/features/task-queue/)
 
 ### 4️⃣  Manage your Runtime Environments
 
-[![BotCity Maestro Machines](https://botcity.dev/github/readme/maestro/machines.png)](https://botcity.atlassian.net/l/c/uDB087nK)
+[![BotCity Maestro Runners](https://botcity.dev/github/readme/maestro/machines.png)](https://documentation.botcity.dev/maestro/features/runners/)
 
 ### 5️⃣  Create Alerts and Reports from the Automation Execution
 
-[![BotCity Maestro Alerts](https://botcity.dev/github/readme/maestro/alerts.png)](https://botcity.atlassian.net/l/c/McH09qYw)
+[![BotCity Maestro Alerts](https://botcity.dev/github/readme/maestro/alerts.png)](https://documentation.botcity.dev/maestro/features/alerts/)
 
 ### 6️⃣  Create Google Data Studio Dashboards
 
-[![BotCity Maestro Dashboards](https://botcity.dev/github/readme/maestro/dashboard.png)](https://botcity.atlassian.net/l/c/Z1uMY1vX)
+[![BotCity Maestro Dashboards](https://botcity.dev/github/readme/maestro/dashboard.png)](https://documentation.botcity.dev/maestro/features/dashboards/)
 
 ### 7️⃣  Create your Community Account
 
@@ -123,7 +123,7 @@ We have a community account for hobbyists and students. Just signup and start au
 ## 🤝 Contributing to BotCity Framework
 
 - [Guidelines](https://github.com/botcity-dev/botcity-framework-web-python/blob/main/.github/CONTRIBUTING.md)
-- [Documentation](https://botcity-dev.github.io/botcity-framework-web-python/)
+- [Documentation](https://documentation.botcity.dev/frameworks/web/)
 
 ## ⛑ Support
 

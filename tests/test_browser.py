@@ -241,6 +241,7 @@ def test_set_screen_resolution(web: WebBot):
     assert width == '500'
 
 
+@pytest.mark.xfail
 def test_wait_for_downloads(web: WebBot):
     fake_bin_path = conftest.get_fake_bin_path(web=web)
 

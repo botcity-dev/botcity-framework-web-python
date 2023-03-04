@@ -265,7 +265,8 @@ class WebBot(BaseBot):
 
     def _get_parameters_to_driver(self):
         if self.browser == Browser.UNDETECTED_CHROME:
-            return {"driver_executable_path": self.driver_path, "options": self.options,
+            # Force download to undetected
+            return {"driver_executable_path": None, "options": self.options,
                     "desired_capabilities": self.capabilities}
         if compat.version_selenium_is_larger_than_four():
             return {"options": self.options, "service": self._get_service()}

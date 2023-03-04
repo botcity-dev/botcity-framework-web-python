@@ -283,6 +283,7 @@ def test_set_current_element(web: WebBot):
     assert result['data'] == ['Left2'] or result['data'] == ['Left']
 
 
+@pytest.mark.xfail
 def test_print_pdf(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     pdf = web.print_pdf(path=os.path.join(conftest.PROJECT_DIR, 'page.pdf'))

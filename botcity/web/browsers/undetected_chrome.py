@@ -6,9 +6,13 @@ from typing import Dict
 
 from undetected_chromedriver import Chrome  # noqa: F401, F403
 from undetected_chromedriver.options import ChromeOptions
-from undetected_chromedriver import Service as ChromeService  # noqa: F401, F403
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from ..util import cleanup_temp_dir
+
+try:
+    from undetected_chromedriver import Service as ChromeService # noqa: F401, F403
+except ImportError:
+    from undetected_chromedriver import Chrome as ChromeService  # noqa: F401, F403
 
 
 def default_options(headless=False, download_folder_path=None, user_data_dir=None,
@@ -56,7 +60,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     # chrome_options.add_experimental_option('useAutomationExtension', False)
 
     if headless:
-        chrome_options.headless = True
+        chrome_options.add_argument('--headless')
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--hide-scrollbars")
         chrome_options.add_argument("--mute-audio")

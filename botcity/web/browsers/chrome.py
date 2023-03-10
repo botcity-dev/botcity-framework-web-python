@@ -57,6 +57,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
 
     if headless:
         chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--headless=new")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--hide-scrollbars")
         chrome_options.add_argument("--mute-audio")

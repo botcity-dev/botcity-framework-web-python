@@ -9,9 +9,8 @@ from undetected_chromedriver.options import ChromeOptions
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from ..util import cleanup_temp_dir
 
-
 try:
-    from undetected_chromedriver import Service as ChromeService # noqa: F401, F403
+    from undetected_chromedriver import Service as ChromeService  # noqa: F401, F403
 except ImportError:
     from undetected_chromedriver import Chrome as ChromeService  # noqa: F401, F403
 

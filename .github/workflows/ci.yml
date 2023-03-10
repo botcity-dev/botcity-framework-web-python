@@ -24,7 +24,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.10"]
-        browser: ["firefox", "chrome", "edge", "undetected_chrome"]
+        # Insert "undetected_chrome" when all issues with the lib are resolved.
+        browser: ["firefox", "chrome", "edge"]
         headless: [true]
         exclude:
           # Can't install firefox using setup-firefox on Windows
@@ -56,7 +57,7 @@ jobs:
           pip install .
 
       - uses: browser-actions/setup-chrome@latest
-        if: matrix.browser == 'chrome'
+        if: matrix.browser == 'chrome' || matrix.browser == 'undetected_chrome'
         with:
           chrome-version: stable
 

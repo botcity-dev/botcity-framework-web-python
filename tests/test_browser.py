@@ -284,10 +284,10 @@ def test_set_current_element(web: WebBot):
     assert result['data'] == ['Left2'] or result['data'] == ['Left']
 
 
-@pytest.mark.xfail(reason="Unknown chrome/undetected error to be investigated.")
-def test_print_pdf(web: WebBot):
+# @pytest.mark.xfail(reason="Unknown chrome/undetected error to be investigated.")
+def test_print_pdf(web: WebBot, tmp_folder):
     web.browse(conftest.INDEX_PAGE)
-    pdf = web.print_pdf(path=os.path.join(conftest.PROJECT_DIR, 'page.pdf'))
+    pdf = web.print_pdf(path=os.path.join(tmp_folder, 'page.pdf'))
 
     assert os.path.exists(pdf)
     os.remove(pdf)

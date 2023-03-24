@@ -25,6 +25,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait, TimeoutException, NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.print_page_options import PrintOptions
 
 from . import config, cv2find, compat
 from .browsers import BROWSER_CONFIGS, Browser, PageLoadStrategy
@@ -266,7 +267,7 @@ class WebBot(BaseBot):
     def _get_parameters_to_driver(self):
         if self.browser == Browser.UNDETECTED_CHROME:
             return {"driver_executable_path": self.driver_path, "options": self.options,
-                    "desired_capabilities": self.capabilities}
+                    "desired_capabilities": self.capabilities, "headless": True}
         if compat.version_selenium_is_larger_than_four():
             return {"options": self.options, "service": self._get_service()}
 
@@ -1137,7 +1138,13 @@ class WebBot(BaseBot):
                 'marginTop': 0,
                 'marginBottom': 0
             }
-        data = self._webdriver_command("print", print_options)
+        print_options = PrintOptions()
+        print_options.page_ranges = ['1-2']
+        print_options.margin_top = 0
+        print_options.margin_bottom = 0
+        print_options.background = True
+        print_options.orientation = 'landscape'
+        data = self._driver.print_page(print_options)
         bytes_file = base64.b64decode(data)
         if not path:
             path = default_path

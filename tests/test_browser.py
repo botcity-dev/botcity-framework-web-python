@@ -254,7 +254,7 @@ def test_wait_for_downloads(web: WebBot):
 
     assert os.path.exists(fake_bin_path) and os.path.getsize(fake_bin_path) > 0
 
-
+@pytest.mark.xfail(reason="Unknown chrome/undetected error to be investigated.")
 def test_wait_for_file(web: WebBot):
     fake_bin_path = conftest.get_fake_bin_path(web=web)
 

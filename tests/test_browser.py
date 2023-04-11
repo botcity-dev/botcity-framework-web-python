@@ -263,6 +263,7 @@ def test_wait_for_file(web: WebBot):
     web.type_keys([web.KEYS.SHIFT, 'q'])
 
     web.wait_for_file(fake_bin_path, timeout=30000)
+
     assert os.path.exists(fake_bin_path) and os.path.getsize(fake_bin_path) > 0
 
 

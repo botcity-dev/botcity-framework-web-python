@@ -60,6 +60,7 @@ jobs:
         if: matrix.browser == 'chrome'
         with:
           chrome-version: stable
+        run: chrome --version
 
       - uses: browser-actions/setup-firefox@latest
         if: matrix.browser == 'firefox'

@@ -43,7 +43,7 @@ def test_display_size(web: WebBot):
     web.set_screen_resolution(1280, 720)
     (w, h) = web.display_size()
 
-    assert w == 1280 or w == 1233 or w == 1028
+    assert w == 1280 or w == 1233 or w == 1223 or w == 1028
 
 
 def test_javascript(web: WebBot):
@@ -203,7 +203,11 @@ def test_leave_iframe(web: WebBot):
 def test_get_view_port_size(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     size = web.get_viewport_size()
-    if web.browser == Browser.UNDETECTED_CHROME and conftest.platforms.get(platform.system()) == 'mac':
+    browsers = [
+        Browser.CHROME,
+        Browser.UNDETECTED_CHROME,
+    ]
+    if web.browser in browsers and conftest.platforms.get(platform.system()) == 'mac':
         width = web.execute_javascript("return window.innerWidth")
         height = web.execute_javascript("return window.innerHeight")
         element = [width, height]

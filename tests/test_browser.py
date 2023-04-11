@@ -206,6 +206,7 @@ def test_get_view_port_size(web: WebBot):
     browsers = [
         Browser.CHROME,
         Browser.UNDETECTED_CHROME,
+        Browser.EDGE
     ]
     if web.browser in browsers and conftest.platforms.get(platform.system()) == 'mac':
         width = web.execute_javascript("return window.innerWidth")

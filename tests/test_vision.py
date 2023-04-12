@@ -1,4 +1,7 @@
 import os
+
+import pytest
+
 import conftest
 
 from botcity.web import WebBot

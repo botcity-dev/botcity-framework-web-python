@@ -281,7 +281,7 @@ class WebBot(BaseBot):
         return service
 
     def _others_configurations(self):
-        if self.browser == Browser.UNDETECTED_CHROME:
+        if self.browser in [Browser.UNDETECTED_CHROME, Browser.CHROME, Browser.EDGE]:
             """
             There is a problem in undetected chrome that prevents downloading files even passing
             download_folder_path in preferences.
@@ -1130,20 +1130,12 @@ class WebBot(BaseBot):
             return default_path
 
         if print_options is None:
-            print_options = {
-                'landscape': False,
-                'displayHeaderFooter': False,
-                'printBackground': True,
-                'preferCSSPageSize': True,
-                'marginTop': 0,
-                'marginBottom': 0
-            }
-        print_options = PrintOptions()
-        print_options.page_ranges = ['1-2']
-        print_options.margin_top = 0
-        print_options.margin_bottom = 0
-        print_options.background = True
-        print_options.orientation = 'landscape'
+            print_options = PrintOptions()
+            print_options.page_ranges = ['1-2']
+            print_options.margin_top = 0
+            print_options.margin_bottom = 0
+            print_options.background = True
+            print_options.orientation = 'landscape'
         data = self._driver.print_page(print_options)
         bytes_file = base64.b64decode(data)
         if not path:

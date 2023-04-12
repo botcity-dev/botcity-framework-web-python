@@ -44,7 +44,6 @@ def test_get_last_element(web: WebBot):
     assert ele is not None
 
 
-@pytest.mark.xfail(reason="find return None in windows chrome")
 def test_find_text(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.set_screen_resolution(3000, 2000)

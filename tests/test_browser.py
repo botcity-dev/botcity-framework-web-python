@@ -236,7 +236,6 @@ def test_scroll_up(web: WebBot):
     assert mouse_icon is not None
 
 
-@pytest.mark.xfail
 def test_set_screen_resolution(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.set_screen_resolution(500, 500)
@@ -246,12 +245,10 @@ def test_set_screen_resolution(web: WebBot):
     assert width == '500'
 
 
-@pytest.mark.xfail(reason="Unknown chrome/undetected error to be investigated.")
 def test_wait_for_downloads(web: WebBot):
     fake_bin_path = conftest.get_fake_bin_path(web=web)
 
     web.browse(conftest.INDEX_PAGE)
-
     web.type_keys([web.KEYS.SHIFT, 'q'])
 
     web.wait_for_downloads(timeout=60000)
@@ -259,7 +256,7 @@ def test_wait_for_downloads(web: WebBot):
 
     assert os.path.exists(fake_bin_path) and os.path.getsize(fake_bin_path) > 0
 
-@pytest.mark.xfail(reason="Unknown chrome/undetected error to be investigated.")
+
 def test_wait_for_file(web: WebBot):
     fake_bin_path = conftest.get_fake_bin_path(web=web)
 
@@ -290,7 +287,6 @@ def test_set_current_element(web: WebBot):
     assert result['data'] == ['Left2'] or result['data'] == ['Left']
 
 
-# @pytest.mark.xfail(reason="Unknown chrome/undetected error to be investigated.")
 def test_print_pdf(web: WebBot, tmp_folder):
     web.browse(conftest.INDEX_PAGE)
     pdf = web.print_pdf(path=os.path.join(tmp_folder, 'page.pdf'))

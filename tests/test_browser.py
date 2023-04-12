@@ -43,7 +43,7 @@ def test_display_size(web: WebBot):
     web.set_screen_resolution(1280, 720)
     (w, h) = web.display_size()
 
-    assert w == 1280 or w == 1233 or w == 1223 or w == 1028
+    assert w in [1280, 1233, 1223, 1028]
 
 
 def test_javascript(web: WebBot):

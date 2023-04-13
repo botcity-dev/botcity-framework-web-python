@@ -266,7 +266,8 @@ class WebBot(BaseBot):
 
     def _get_parameters_to_driver(self):
         if self.browser == Browser.UNDETECTED_CHROME:
-            return {"options": self.options, "desired_capabilities": self.capabilities, "headless": self.headless}
+            return {"options": self.options,
+                    "desired_capabilities": self.capabilities}
         if compat.version_selenium_is_larger_than_four():
             return {"options": self.options, "service": self._get_service()}
 

@@ -70,5 +70,11 @@ jobs:
         if: matrix.browser == 'edge'
 
       - name: Run Tests in ${{ matrix.browser }}
+        if: matrix.browser == 'edge' || matrix.browser == 'chrome' || matrix.browser == 'firefox'
         run: |
           pytest -n 2 -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}
+
+      - name: Run Tests in ${{ matrix.browser }}
+        if: matrix.browser == 'undetected_chrome'
+        run: |
+          pytest -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}

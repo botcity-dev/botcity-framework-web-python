@@ -59,7 +59,7 @@ jobs:
           pip install .
 
       - uses: browser-actions/setup-chrome@latest
-        if: matrix.browser == 'chrome'
+        if: matrix.browser == 'chrome' || matrix.browser == 'undetected_chrome'
         with:
           chrome-version: stable
 

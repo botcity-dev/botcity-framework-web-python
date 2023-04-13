@@ -215,7 +215,7 @@ def test_get_view_port_size(web: WebBot):
     else:
         element = web.find_element('window-size', By.ID).text.split('x')
     sizes = [tuple(int(e) for e in element), (1600, 900)]
-    assert size == sizes
+    assert size in sizes
 
 
 def test_scroll_down(web: WebBot):

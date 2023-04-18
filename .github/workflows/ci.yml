@@ -2,8 +2,9 @@ name: Tests
 
 on:
   workflow_dispatch:
-  branches:
-    - "main"
+  push:
+    branches:
+      - "main"
   pull_request:
 
 concurrency:
@@ -26,8 +27,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.10"]
-        # Insert "undetected_chrome" when all issues with the lib are resolved.
-        browser: ["firefox", "chrome", "edge"]
+        browser: ["firefox", "chrome", "edge", "undetected_chrome"]
         headless: [true]
         exclude:
           # Can't install firefox using setup-firefox on Windows
@@ -36,6 +36,10 @@ jobs:
           #   * https://github.com/abhi1693/setup-browser/issues/8
           - os: windows-latest
             browser: "firefox"
+          # Install wrong version in macOS.
+          - os: macos-latest
+            browser: "undetected_chrome"
+
     steps:
       - uses: actions/checkout@v2
       - name: Install libgl1
@@ -59,7 +63,7 @@ jobs:
           pip install .
 
       - uses: browser-actions/setup-chrome@latest
-        if: matrix.browser == 'chrome'
+        if: matrix.browser == 'chrome' || matrix.browser == 'undetected_chrome'
         with:
           chrome-version: stable
 
@@ -70,5 +74,11 @@ jobs:
         if: matrix.browser == 'edge'
 
       - name: Run Tests in ${{ matrix.browser }}
+        if: matrix.browser == 'edge' || matrix.browser == 'chrome' || matrix.browser == 'firefox'
         run: |
           pytest -n 2 -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}
+
+      - name: Run Tests in ${{ matrix.browser }}
+        if: matrix.browser == 'undetected_chrome'
+        run: |
+          pytest -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}

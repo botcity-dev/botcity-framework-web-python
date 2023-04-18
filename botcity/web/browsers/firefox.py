@@ -357,7 +357,8 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     except AttributeError:
         page_load_strategy = page_load_strategy
     firefox_options.page_load_strategy = page_load_strategy
-    firefox_options.headless = headless
+    if headless:
+        firefox_options.add_argument('-headless')
     if not user_data_dir:
         temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")
         user_data_dir = temp_dir.name

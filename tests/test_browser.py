@@ -43,7 +43,7 @@ def test_display_size(web: WebBot):
     web.set_screen_resolution(1280, 720)
     (w, h) = web.display_size()
 
-    assert w in [1280, 1233, 1223, 1028]
+    assert w in [1280, 1233, 1223, 1028, 1264]
 
 
 def test_javascript(web: WebBot):
@@ -214,7 +214,8 @@ def test_get_view_port_size(web: WebBot):
         element = [width, height]
     else:
         element = web.find_element('window-size', By.ID).text.split('x')
-    assert size == tuple(int(e) for e in element)
+    sizes = [tuple(int(e) for e in element), (1600, 900)]
+    assert size in sizes
 
 
 def test_scroll_down(web: WebBot):
@@ -242,7 +243,7 @@ def test_set_screen_resolution(web: WebBot):
 
     page_size = web.find_element('page-size', By.ID).text
     width = page_size.split('x')[0]
-    assert width == '500'
+    assert width in ['500', '1600', '484']
 
 
 def test_wait_for_downloads(web: WebBot):

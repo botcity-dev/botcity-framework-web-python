@@ -337,7 +337,7 @@ FIREFOX_MIMETYPES_TO_DOWNLOAD = ['application/vnd.hzn-3d-crossword', 'video/3gpp
 
 
 def default_options(headless=False, download_folder_path=None, user_data_dir=None,
-                    page_load_strategy="normal") -> FirefoxOptions:
+                    page_load_strategy="normal", binary_path: str = None) -> FirefoxOptions:
     """Retrieve the default options for this browser curated by BotCity.
 
     Args:
@@ -347,7 +347,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
         user_data_dir ([type], optional): The directory to use as user profile.
             If None, a new temporary directory is used. Defaults to None.
         page_load_strategy (str, optional): The page load strategy to use.
-
+        binary_path (str, optional): The path to the browser binary.
     Returns:
         FirefoxOptions: The Firefox options.
     """
@@ -363,6 +363,8 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
         temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")
         user_data_dir = temp_dir.name
         atexit.register(cleanup_temp_dir, temp_dir)
+    if binary_path:
+        firefox_options.binary_location = str(binary_path)
     firefox_options.set_preference("profile", user_data_dir)
     firefox_options.set_preference("security.default_personal_cert", "Select Automatically")
     firefox_options.set_preference('browser.download.folderList', 2)

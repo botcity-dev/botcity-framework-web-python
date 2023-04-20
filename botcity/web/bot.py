@@ -5,6 +5,7 @@ import io
 import json
 import logging
 import os
+import pathlib
 import platform
 import random
 import re
@@ -65,6 +66,7 @@ class WebBot(BaseBot):
         self._driver = None
         self._headless = headless
         self._page_load_strategy = PageLoadStrategy.NORMAL
+        self._binary_path = None
 
         self._clipboard = ""
 
@@ -232,6 +234,24 @@ class WebBot(BaseBot):
             logger.warning("Browser is running. Invoke stop_browser and start browser for changes to take effect.")
         self._page_load_strategy = page_load_strategy
 
+    @property
+    def binary_path(self):
+        """The binary path to be used.
+
+        Returns:
+             binary_path (pathlib.Path): The binary path to be used.
+        """
+        return pathlib.Path(self._binary_path)
+
+    @binary_path.setter
+    def binary_path(self, binary_path: str):
+        """The binary path to be used.
+
+        Args:
+             binary_path (str): The binary path to be used.
+        """
+        self._binary_path = pathlib.Path(binary_path)
+
     def start_browser(self):
         """
         Starts the selected browser.
@@ -253,7 +273,7 @@ class WebBot(BaseBot):
         func_def_capabilities = BROWSER_CONFIGS.get(self.browser).get("capabilities")
 
         opt = self.options or func_def_options(
-            self.headless, self._download_folder_path, None, self.page_load_strategy
+            self.headless, self._download_folder_path, None, self.page_load_strategy, self._binary_path
         )
         cap = self.capabilities or func_def_capabilities()
         self.options = opt

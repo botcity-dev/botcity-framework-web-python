@@ -12,7 +12,7 @@ from ..util import cleanup_temp_dir
 
 
 def default_options(headless=False, download_folder_path=None, user_data_dir=None,
-                    page_load_strategy="normal") -> ChromeOptions:
+                    page_load_strategy="normal", binary_path: str = None) -> ChromeOptions:
     """Retrieve the default options for this browser curated by BotCity.
 
     Args:
@@ -22,6 +22,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
         user_data_dir ([type], optional): The directory to use as user profile.
             If None, a new temporary directory is used. Defaults to None.
         page_load_strategy (str, optional): The page load strategy. Defaults to "normal".
+        binary_path (str, optional): The path to the browser binary.
 
     Returns:
         ChromeOptions: The Chrome options.
@@ -31,6 +32,8 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
         page_load_strategy = page_load_strategy.value
     except AttributeError:
         page_load_strategy = page_load_strategy
+    if binary_path:
+        chrome_options.binary_location = str(binary_path)
     chrome_options.page_load_strategy = page_load_strategy
     chrome_options.add_argument("--remote-debugging-port=0")
     chrome_options.add_argument("--no-first-run")

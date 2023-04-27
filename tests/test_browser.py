@@ -294,3 +294,9 @@ def test_print_pdf(web: WebBot, tmp_folder):
 
     assert os.path.exists(pdf)
     os.remove(pdf)
+
+
+def test_disable_smart_screen(web: WebBot):
+    web.browse('https://nav.smartscreen.msft.net/other/malware.html')
+    h1 = web.find_element(by=By.XPATH, selector='/html/body/div/h1')
+    assert h1.text.lower() == 'this is a demonstration malware website'

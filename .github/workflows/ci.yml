@@ -36,9 +36,6 @@ jobs:
           #   * https://github.com/abhi1693/setup-browser/issues/8
           - os: windows-latest
             browser: "firefox"
-          # Install wrong version in macOS.
-          - os: macos-latest
-            browser: "undetected_chrome"
 
     steps:
       - uses: actions/checkout@v2

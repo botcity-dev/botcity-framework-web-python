@@ -17,7 +17,7 @@ from botcity.base import BaseBot, State
 from botcity.base.utils import only_if_element
 from bs4 import BeautifulSoup
 from PIL import Image
-from selenium.common.exceptions import InvalidSessionIdException
+from selenium.common.exceptions import InvalidSessionIdException, WebDriverException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.by import By
@@ -260,9 +260,25 @@ class WebBot(BaseBot):
         self.capabilities = cap
         driver_path = self.driver_path or check_driver()
         self.driver_path = driver_path
-        self._driver = driver_class(**self._get_parameters_to_driver())
+        self._driver = self._instance_driver(driver_class=driver_class)
         self._others_configurations()
         self.set_screen_resolution()
+
+    def _instance_driver(self, driver_class):
+        parameters = self._get_parameters_to_driver()
+        try:
+            driver = driver_class(**parameters)
+        except WebDriverException as error:
+            if 'This version of ChromeDriver only supports Chrome version' in error.msg:
+                try:
+                    correct_version = int(error.msg.split('Current browser version is ')[1].split('.')[0])
+                except Exception:
+                    raise error
+                parameters["version_main"] = correct_version
+                driver = driver_class(**parameters)
+            else:
+                raise error
+        return driver
 
     def _get_parameters_to_driver(self):
         if self.browser == Browser.UNDETECTED_CHROME:

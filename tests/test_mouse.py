@@ -234,7 +234,7 @@ def test_get_element_coors(web: WebBot):
     web.click_at(x, y)
 
     result = conftest.get_event_result('element-result', web)
-    results = ['Left2', 'Left', 'mouse-over']
+    results = [['Left2'], ['Left'], ['mouse-over']]
     assert result['data'] in results
 
 

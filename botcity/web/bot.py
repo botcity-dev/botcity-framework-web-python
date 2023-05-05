@@ -260,22 +260,21 @@ class WebBot(BaseBot):
         self.capabilities = cap
         driver_path = self.driver_path or check_driver()
         self.driver_path = driver_path
-        self._driver = self._instance_driver(driver_class=driver_class)
+        self._driver = self._instance_driver(driver_class=driver_class, func_def_options=func_def_options)
         self._others_configurations()
         self.set_screen_resolution()
 
-    def _instance_driver(self, driver_class):
-        parameters = self._get_parameters_to_driver()
+    def _instance_driver(self, driver_class, func_def_options):
         try:
-            driver = driver_class(**parameters)
+            driver = driver_class(**self._get_parameters_to_driver())
         except WebDriverException as error:
             if 'This version of ChromeDriver only supports Chrome version' in error.msg:
                 try:
                     correct_version = int(error.msg.split('Current browser version is ')[1].split('.')[0])
                 except Exception:
                     raise error
-                parameters["version_main"] = correct_version
-                driver = driver_class(**parameters)
+                self.options = func_def_options(self.headless, self._download_folder_path, None, self.page_load_strategy)
+                driver = driver_class(**self._get_parameters_to_driver(), version_main=correct_version)
             else:
                 raise error
         return driver

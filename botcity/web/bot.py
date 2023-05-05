@@ -269,6 +269,7 @@ class WebBot(BaseBot):
             driver = driver_class(**self._get_parameters_to_driver())
         except WebDriverException as error:
             if 'This version of ChromeDriver only supports Chrome version' in error.msg:
+                self.stop_browser()
                 try:
                     correct_version = int(error.msg.split('Current browser version is ')[1].split('.')[0])
                 except Exception:

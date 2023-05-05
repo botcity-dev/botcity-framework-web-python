@@ -303,6 +303,8 @@ class WebBot(BaseBot):
         """
         if not self._driver:
             return
+        if self.get_tabs():
+            self.activate_tab(self.get_tabs()[-1])
         self._driver.close()
         self._driver.quit()
         self.options = None

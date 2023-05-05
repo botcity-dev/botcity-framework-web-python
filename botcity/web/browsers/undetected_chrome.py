@@ -1,6 +1,7 @@
 import atexit
 import json
 import os
+import platform
 import tempfile
 from typing import Dict
 
@@ -64,7 +65,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     # Check if user is root
     try:
         # This is only valid with Unix
-        if os.geteuid() == 0:
+        if os.geteuid() == 0 or platform.system() == 'Darwin':
             chrome_options.add_argument("--no-sandbox")
     except AttributeError:
         pass

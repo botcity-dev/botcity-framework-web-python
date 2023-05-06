@@ -260,11 +260,11 @@ class WebBot(BaseBot):
         self.capabilities = cap
         driver_path = self.driver_path or check_driver()
         self.driver_path = driver_path
-        self._driver = self._instance_driver(driver_class=driver_class, func_def_options=func_def_options)
+        self._driver = self._instantiate_driver(driver_class=driver_class, func_def_options=func_def_options)
         self._others_configurations()
         self.set_screen_resolution()
 
-    def _instance_driver(self, driver_class, func_def_options):
+    def _instantiate_driver(self, driver_class, func_def_options):
         try:
             driver = driver_class(**self._get_parameters_to_driver())
         except WebDriverException as error:

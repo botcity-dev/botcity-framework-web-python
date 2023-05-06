@@ -274,7 +274,8 @@ class WebBot(BaseBot):
                     correct_version = int(error.msg.split('Current browser version is ')[1].split('.')[0])
                 except Exception:
                     raise error
-                self.options = func_def_options(self.headless, self._download_folder_path, None, self.page_load_strategy)
+                self.options = func_def_options(self.headless, self._download_folder_path, None,
+                                                self.page_load_strategy)
                 driver = driver_class(**self._get_parameters_to_driver(), version_main=correct_version)
             else:
                 raise error

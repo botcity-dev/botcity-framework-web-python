@@ -18,7 +18,7 @@ from botcity.base import BaseBot, State
 from botcity.base.utils import only_if_element
 from bs4 import BeautifulSoup
 from PIL import Image
-from selenium.common.exceptions import InvalidSessionIdException
+from selenium.common.exceptions import InvalidSessionIdException, WebDriverException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.by import By
@@ -280,9 +280,31 @@ class WebBot(BaseBot):
         self.capabilities = cap
         driver_path = self.driver_path or check_driver()
         self.driver_path = driver_path
-        self._driver = driver_class(**self._get_parameters_to_driver())
+        self._driver = self._instantiate_driver(driver_class=driver_class, func_def_options=func_def_options)
         self._others_configurations()
         self.set_screen_resolution()
+
+    def _instantiate_driver(self, driver_class, func_def_options):
+        """
+        It is necessary to create this function because we isolated the instantiation of the driver,
+        giving options to solve some bugs, mainly in undetected chrome.
+        """
+        try:
+            driver = driver_class(**self._get_parameters_to_driver())
+        except WebDriverException as error:
+            # TODO: 'Undetected Chrome' fix error to upgrade version chrome.
+            if 'This version of ChromeDriver only supports Chrome version' in error.msg:
+                self.stop_browser()
+                try:
+                    correct_version = int(error.msg.split('Current browser version is ')[1].split('.')[0])
+                except Exception:
+                    raise error
+                self.options = func_def_options(self.headless, self._download_folder_path, None,
+                                                self.page_load_strategy)
+                driver = driver_class(**self._get_parameters_to_driver(), version_main=correct_version)
+            else:
+                raise error
+        return driver
 
     def _get_parameters_to_driver(self):
         if self.browser == Browser.UNDETECTED_CHROME:
@@ -324,6 +346,8 @@ class WebBot(BaseBot):
         """
         if not self._driver:
             return
+        if self.get_tabs():
+            self.activate_tab(self.get_tabs()[-1])
         self._driver.close()
         self._driver.quit()
         self.options = None

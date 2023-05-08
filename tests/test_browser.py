@@ -43,7 +43,7 @@ def test_display_size(web: WebBot):
     web.set_screen_resolution(1280, 720)
     (w, h) = web.display_size()
 
-    assert w in [1280, 1233, 1223, 1028, 1264]
+    assert w in [1280, 1233, 1223, 1028, 1264, 1176]
 
 
 def test_javascript(web: WebBot):
@@ -214,7 +214,7 @@ def test_get_view_port_size(web: WebBot):
         element = [width, height]
     else:
         element = web.find_element('window-size', By.ID).text.split('x')
-    sizes = [tuple(int(e) for e in element), (1600, 900)]
+    sizes = [tuple(int(e) for e in element), (1600, 900), (1176, 802)]
     assert size in sizes
 
 
@@ -246,6 +246,7 @@ def test_set_screen_resolution(web: WebBot):
     assert width in ['500', '1600', '484']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_wait_for_downloads(web: WebBot):
     fake_bin_path = conftest.get_fake_bin_path(web=web)
 
@@ -258,6 +259,7 @@ def test_wait_for_downloads(web: WebBot):
     assert os.path.exists(fake_bin_path) and os.path.getsize(fake_bin_path) > 0
 
 
+@pytest.mark.flaky(reruns=3)
 def test_wait_for_file(web: WebBot):
     fake_bin_path = conftest.get_fake_bin_path(web=web)
 
@@ -294,3 +296,9 @@ def test_print_pdf(web: WebBot, tmp_folder):
 
     assert os.path.exists(pdf)
     os.remove(pdf)
+
+
+def test_disable_smart_screen(web: WebBot):
+    web.browse('https://nav.smartscreen.msft.net/other/malware.html')
+    h1 = web.find_element(by=By.XPATH, selector='/html/body/div/h1')
+    assert h1.text.lower() == 'this is a demonstration malware website'

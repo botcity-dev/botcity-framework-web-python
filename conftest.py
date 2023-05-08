@@ -117,6 +117,7 @@ def download_driver(request):
     browser = request.config.getoption("--browser") or Browser.CHROME
     manager = factory_driver_manager(browser=browser)
     installed_driver = manager(path=folder_driver).install()
+
     yield installed_driver
     # Issue: https://github.com/ultrafunkamsterdam/undetected-chromedriver/issues/551
     if platforms.get(platform.system()) == "windows" and browser == Browser.UNDETECTED_CHROME:

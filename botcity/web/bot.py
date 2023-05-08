@@ -250,9 +250,10 @@ class WebBot(BaseBot):
         Args:
              binary_path (str): The binary path to be used.
         """
-        if not os.path.exists(binary_path):
+        path = pathlib.Path(binary_path)
+        if not path.is_file():
             raise ValueError("There is no file in the binary path.")
-        self._binary_path = pathlib.Path(binary_path)
+        self._binary_path = path
 
     def start_browser(self):
         """

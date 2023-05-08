@@ -265,9 +265,14 @@ class WebBot(BaseBot):
         self.set_screen_resolution()
 
     def _instantiate_driver(self, driver_class, func_def_options):
+        """
+        It is necessary to create this function because we isolated the instantiation of the driver,
+        giving options to solve some bugs, mainly in undetected chrome.
+        """
         try:
             driver = driver_class(**self._get_parameters_to_driver())
         except WebDriverException as error:
+            # TODO: 'Undetected Chrome' fix error to upgrade version chrome.
             if 'This version of ChromeDriver only supports Chrome version' in error.msg:
                 self.stop_browser()
                 try:

@@ -17,7 +17,7 @@ from botcity.base import BaseBot, State
 from botcity.base.utils import only_if_element
 from bs4 import BeautifulSoup
 from PIL import Image
-from selenium.common.exceptions import InvalidSessionIdException
+from selenium.common.exceptions import InvalidSessionIdException, WebDriverException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.by import By
@@ -25,6 +25,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait, TimeoutException, NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.print_page_options import PrintOptions
 
 from . import config, cv2find, compat
 from .browsers import BROWSER_CONFIGS, Browser, PageLoadStrategy
@@ -259,13 +260,35 @@ class WebBot(BaseBot):
         self.capabilities = cap
         driver_path = self.driver_path or check_driver()
         self.driver_path = driver_path
-        self._driver = driver_class(**self._get_parameters_to_driver())
+        self._driver = self._instantiate_driver(driver_class=driver_class, func_def_options=func_def_options)
         self._others_configurations()
         self.set_screen_resolution()
 
+    def _instantiate_driver(self, driver_class, func_def_options):
+        """
+        It is necessary to create this function because we isolated the instantiation of the driver,
+        giving options to solve some bugs, mainly in undetected chrome.
+        """
+        try:
+            driver = driver_class(**self._get_parameters_to_driver())
+        except WebDriverException as error:
+            # TODO: 'Undetected Chrome' fix error to upgrade version chrome.
+            if 'This version of ChromeDriver only supports Chrome version' in error.msg:
+                self.stop_browser()
+                try:
+                    correct_version = int(error.msg.split('Current browser version is ')[1].split('.')[0])
+                except Exception:
+                    raise error
+                self.options = func_def_options(self.headless, self._download_folder_path, None,
+                                                self.page_load_strategy)
+                driver = driver_class(**self._get_parameters_to_driver(), version_main=correct_version)
+            else:
+                raise error
+        return driver
+
     def _get_parameters_to_driver(self):
         if self.browser == Browser.UNDETECTED_CHROME:
-            return {"driver_executable_path": self.driver_path, "options": self.options,
+            return {"options": self.options,
                     "desired_capabilities": self.capabilities}
         if compat.version_selenium_is_larger_than_four():
             return {"options": self.options, "service": self._get_service()}
@@ -280,7 +303,7 @@ class WebBot(BaseBot):
         return service
 
     def _others_configurations(self):
-        if self.browser == Browser.UNDETECTED_CHROME:
+        if self.browser in [Browser.UNDETECTED_CHROME, Browser.CHROME, Browser.EDGE]:
             """
             There is a problem in undetected chrome that prevents downloading files even passing
             download_folder_path in preferences.
@@ -1131,15 +1154,13 @@ class WebBot(BaseBot):
             return default_path
 
         if print_options is None:
-            print_options = {
-                'landscape': False,
-                'displayHeaderFooter': False,
-                'printBackground': True,
-                'preferCSSPageSize': True,
-                'marginTop': 0,
-                'marginBottom': 0
-            }
-        data = self._webdriver_command("print", print_options)
+            print_options = PrintOptions()
+            print_options.page_ranges = ['1-2']
+            print_options.margin_top = 0
+            print_options.margin_bottom = 0
+            print_options.background = True
+            print_options.orientation = 'landscape'
+        data = self._driver.print_page(print_options)
         bytes_file = base64.b64decode(data)
         if not path:
             path = default_path

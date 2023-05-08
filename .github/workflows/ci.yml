@@ -1,7 +1,10 @@
 name: Tests
 
 on:
+  workflow_dispatch:
   push:
+    branches:
+      - "main"
   pull_request:
 
 concurrency:
@@ -33,6 +36,7 @@ jobs:
           #   * https://github.com/abhi1693/setup-browser/issues/8
           - os: windows-latest
             browser: "firefox"
+
     steps:
       - uses: actions/checkout@v2
       - name: Install libgl1
@@ -56,7 +60,7 @@ jobs:
           pip install .
 
       - uses: browser-actions/setup-chrome@latest
-        if: matrix.browser == 'chrome'
+        if: matrix.browser == 'chrome' || matrix.browser == 'undetected_chrome'
         with:
           chrome-version: stable
 
@@ -67,5 +71,11 @@ jobs:
         if: matrix.browser == 'edge'
 
       - name: Run Tests in ${{ matrix.browser }}
+        if: matrix.browser == 'edge' || matrix.browser == 'chrome' || matrix.browser == 'firefox'
         run: |
           pytest -n 2 -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}
+
+      - name: Run Tests in ${{ matrix.browser }}
+        if: matrix.browser == 'undetected_chrome'
+        run: |
+          pytest -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}

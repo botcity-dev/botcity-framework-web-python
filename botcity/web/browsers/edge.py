@@ -44,7 +44,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     edge_options.add_argument("--disable-syncdisable-translate")
     edge_options.add_argument("--metrics-recording-only")
     edge_options.add_argument("--safebrowsing-disable-auto-update")
-
+    edge_options.add_argument("--disable-features=msSmartScreenProtection")
     edge_options.add_argument("--disable-blink-features=AutomationControlled")
 
     # Disable banner for Browser being remote-controlled
@@ -53,6 +53,8 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
 
     if headless:
         edge_options.add_argument("--headless")
+        edge_options.add_argument("--headless=new")
+        edge_options.add_argument("--headless=chrome")
         edge_options.add_argument("--disable-gpu")
         edge_options.add_argument("--hide-scrollbars")
         edge_options.add_argument("--mute-audio")

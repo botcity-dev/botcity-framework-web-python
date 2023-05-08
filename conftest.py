@@ -54,7 +54,6 @@ def setup_firefox(headless: bool, tmp_folder: str, download_driver: str) -> WebB
 
     web.driver_path = download_driver
     web.download_folder_path = tmp_folder
-
     return web
 
 

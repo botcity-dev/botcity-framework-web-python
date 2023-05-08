@@ -5,3 +5,4 @@ numpy
 opencv-python
 pillow
 selenium==3.141
+urllib3>=1,<2

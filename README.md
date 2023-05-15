@@ -25,8 +25,7 @@
   - [3️⃣  Manage your Task Queue](#3️⃣--manage-your-task-queue)
   - [4️⃣  Manage your Runtime Environments](#4️⃣--manage-your-runtime-environments)
   - [5️⃣  Create Alerts and Reports from the Automation Execution](#5️⃣--create-alerts-and-reports-from-the-automation-execution)
-  - [6️⃣  Create Google Data Studio Dashboards](#6️⃣--create-google-data-studio-dashboards)
-  - [7️⃣  Create your Community Account](#7️⃣--create-your-community-account)
+  - [6️⃣  Create your Community Account](#6️⃣--create-your-community-account)
 - [🤝 Contributing to BotCity Framework](#-contributing-to-botcity-framework)
 - [⛑ Support](#-support)
   - [🐛 Bug reports and 💎 Feature requests](#-bug-reports-and--feature-requests)
@@ -46,7 +45,7 @@ Use our Development Tool alongside your favorite IDE to select UI components and
 
 [![BotCity Studio](https://botcity.dev/github/readme/studio/studio.gif)](https://documentation.botcity.dev/studio/)
 
-[SIGN UP](https://botcity.dev/app/signup) and download our tools.
+[SIGN UP](https://developers.botcity.dev/signup) and download our tools.
 
 
 ## 🚀 Getting Started
@@ -77,7 +76,7 @@ Documentation is available at https://documentation.botcity.dev/frameworks/web/.
 
 ## 💻 Developers Portal
 
-[![Developers Portal](https://botcity.dev/github/readme/portal.png)](https://documentation.botcity.dev)
+[![Developers Portal](https://botcity.dev/github/readme/portal.png?)](https://documentation.botcity.dev)
 
 ## 💬 Forum
 
@@ -89,7 +88,7 @@ BotCity is a platform to develop, deploy, manage and maintain automations. Autom
 ### 1️⃣  All in One Platform
 Develop, deploy, manage and scale your Automation Ops using All in One platform that provides task queue, runtime environment management, reports, alerts, logs and much more.
 
-[![BotCity Maestro](https://botcity.dev/github/readme/maestro/maestro.png)](https://documentation.botcity.dev/maestro/)
+[![BotCity Maestro](https://botcity.dev/github/readme/maestro/maestro.png?)](https://documentation.botcity.dev/maestro/)
 
 ### 2️⃣  Deploy with a Single Line
 
@@ -99,25 +98,25 @@ Use BotCity command-line interface (CLI) to deploy your bot into a runtime envir
 
 ### 3️⃣  Manage your Task Queue
 
-[![BotCity Maestro Task Queue](https://botcity.dev/github/readme/maestro/tasks.png)](https://documentation.botcity.dev/maestro/features/task-queue/)
+[![BotCity Maestro Task Queue](https://botcity.dev/github/readme/maestro/tasks.png?)](https://documentation.botcity.dev/maestro/features/task-queue/)
 
 ### 4️⃣  Manage your Runtime Environments
 
-[![BotCity Maestro Runners](https://botcity.dev/github/readme/maestro/machines.png)](https://documentation.botcity.dev/maestro/features/runners/)
+[![BotCity Maestro Runners](https://botcity.dev/github/readme/maestro/machines.png?)](https://documentation.botcity.dev/maestro/features/runners/)
 
 ### 5️⃣  Create Alerts and Reports from the Automation Execution
 
-[![BotCity Maestro Alerts](https://botcity.dev/github/readme/maestro/alerts.png)](https://documentation.botcity.dev/maestro/features/alerts/)
+#### Alerts
+[![BotCity Maestro Alerts](https://botcity.dev/github/readme/maestro/alerts.png?)](https://documentation.botcity.dev/maestro/features/alerts/)
 
-### 6️⃣  Create Google Data Studio Dashboards
+#### Execution Logs
+[![BotCity Maestro Alerts](https://botcity.dev/github/readme/maestro/logs.png?)](https://documentation.botcity.dev/maestro/features/logs/)
 
-[![BotCity Maestro Dashboards](https://botcity.dev/github/readme/maestro/dashboard.png)](https://documentation.botcity.dev/maestro/features/dashboards/)
-
-### 7️⃣  Create your Community Account
+### 6️⃣  Create your Community Account
 
 We have a community account for hobbyists and students. Just signup and start automating.
 
-[![Sign Up](https://botcity.dev/github/readme/signup.png)](https://botcity.dev/app/signup)
+[![Sign Up](https://botcity.dev/github/readme/signup.png?)](https://developers.botcity.dev/signup)
 
 
 ## 🤝 Contributing to BotCity Framework

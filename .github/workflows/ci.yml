@@ -4,8 +4,12 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - "main"
+      - main
+    paths:
+      - 'botcity/**'
   pull_request:
+      paths:
+      - 'botcity/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

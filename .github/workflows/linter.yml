@@ -2,7 +2,13 @@ name: Linter
 
 on:
   push:
+    branches:
+      - main
+    paths:
+      - 'botcity/**'
   pull_request:
+      paths:
+      - 'botcity/**'
 
 jobs:
   build:

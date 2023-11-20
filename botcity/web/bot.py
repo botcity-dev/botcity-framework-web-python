@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import atexit
 import base64
 import functools
 import glob
@@ -27,6 +30,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait, TimeoutException, NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.print_page_options import PrintOptions
+from weakref import ReferenceType, ref
 
 from . import config, cv2find, compat
 from .browsers import BROWSER_CONFIGS, Browser, PageLoadStrategy
@@ -39,6 +43,14 @@ except ImportError:
 
 
 logger = logging.getLogger(__name__)
+
+
+def _cleanup(bot: ReferenceType[WebBot]):
+    if bot() is not None:
+        try:
+            bot().stop_browser()
+        except:
+            pass
 
 
 class WebBot(BaseBot):
@@ -79,6 +91,8 @@ class WebBot(BaseBot):
         self._shift_hold = False
 
         self._download_folder_path = os.getcwd()
+
+        atexit.register(_cleanup, ref(self))
 
     def __enter__(self):
         pass

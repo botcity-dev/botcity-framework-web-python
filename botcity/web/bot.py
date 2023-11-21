@@ -49,7 +49,7 @@ def _cleanup(bot: ReferenceType[WebBot]):
     if bot() is not None:
         try:
             bot().stop_browser()
-        except:
+        except Exception:
             pass
 
 

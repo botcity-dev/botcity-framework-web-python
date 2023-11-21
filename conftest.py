@@ -7,6 +7,7 @@ import pytest
 import typing
 import platform
 
+from webdriver_manager.core.driver_cache import DriverCacheManager
 from botcity.web import WebBot, Browser, By, browsers
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
@@ -97,7 +98,8 @@ def download_driver(request):
     folder_driver = tempfile.mkdtemp()
     browser = request.config.getoption("--browser") or Browser.CHROME
     manager = factory_driver_manager(browser=browser)
-    installed_driver = manager(path=folder_driver).install()
+    cache_manager = DriverCacheManager(root_dir=folder_driver)
+    installed_driver = manager(cache_manager=cache_manager).install()
     yield installed_driver
     shutil.rmtree(folder_driver)
 

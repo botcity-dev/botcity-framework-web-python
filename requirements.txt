@@ -1,6 +1,6 @@
 botcity-framework-base>=0.2.2
 beautifulsoup4
-numpy
+numpy<2
 opencv-python
 pillow
 selenium>=4.10,<5

@@ -399,8 +399,10 @@ class WebBot(BaseBot):
         if not self._driver:
             return self.DEFAULT_DIMENSIONS
 
-        width = self.execute_javascript("return window.innerWidth")
-        height = self.execute_javascript("return window.innerHeight")
+        scale_factor = self.execute_javascript("return window.devicePixelRatio")
+        width = int(self.execute_javascript("return window.innerWidth") * scale_factor)
+        height = int(self.execute_javascript("return window.innerHeight") * scale_factor)
+
         return width, height
 
     def add_image(self, label, path):
@@ -1399,6 +1401,11 @@ class WebBot(BaseBot):
         my = y - self._y
         self._x = x
         self._y = y
+
+        scale_factor = self.execute_javascript("return window.devicePixelRatio")
+        mx = mx/scale_factor
+        my = my/scale_factor
+
         ActionChains(self._driver).move_by_offset(mx, my).perform()
 
     def click_at(self, x, y, *, clicks=1, interval_between_clicks=0, button='left'):

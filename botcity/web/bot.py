@@ -1215,7 +1215,7 @@ class WebBot(BaseBot):
         Args:
             timeout (int, optional): Timeout in millis. Defaults to 120000.
         """
-        if self.browser in [Browser.CHROME, Browser.UNDETECTED_CHROME, Browser.EDGE] and self.headless:
+        if self.browser in [Browser.CHROME, Browser.EDGE]:
             start_time = time.time()
             while True:
                 elapsed_time = (time.time() - start_time) * 1000

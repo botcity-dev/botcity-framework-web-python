@@ -1,4 +1,3 @@
-import atexit
 import json
 import os
 import platform
@@ -8,7 +7,6 @@ from typing import Dict
 from undetected_chromedriver import Chrome  # noqa: F401, F403
 from undetected_chromedriver.options import ChromeOptions
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from ..util import cleanup_temp_dir
 
 try:
     from undetected_chromedriver import Service as ChromeService  # noqa: F401, F403
@@ -74,10 +72,11 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     except AttributeError:
         pass
 
+    chrome_options._botcity_temp_dir = None
     if not user_data_dir:
         temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")
         user_data_dir = temp_dir.name
-        atexit.register(cleanup_temp_dir, temp_dir)
+        chrome_options._botcity_temp_dir = user_data_dir
 
     chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
 

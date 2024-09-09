@@ -1,4 +1,3 @@
-import atexit
 import os
 import tempfile
 from typing import Dict
@@ -8,7 +7,6 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.firefox.service import Service as FirefoxService  # noqa: F401, F403
 
-from ..util import cleanup_temp_dir
 
 FIREFOX_MIMETYPES_TO_DOWNLOAD = ['application/vnd.hzn-3d-crossword', 'video/3gpp', 'video/3gpp2',
                                  'application/vnd.mseq', 'application/vnd.3m.post-it-notes',
@@ -359,10 +357,11 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     firefox_options.page_load_strategy = page_load_strategy
     if headless:
         firefox_options.add_argument('-headless')
+    firefox_options._botcity_temp_dir = None
     if not user_data_dir:
         temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")
         user_data_dir = temp_dir.name
-        atexit.register(cleanup_temp_dir, temp_dir)
+        firefox_options._botcity_temp_dir = user_data_dir
     if binary_path:
         firefox_options.binary_location = str(binary_path)
     firefox_options.set_preference("profile", user_data_dir)

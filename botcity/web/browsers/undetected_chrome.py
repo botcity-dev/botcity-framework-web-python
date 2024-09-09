@@ -1,4 +1,3 @@
-import atexit
 import json
 import os
 import platform
@@ -73,10 +72,11 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     except AttributeError:
         pass
 
+    chrome_options._botcity_temp_dir = None
     if not user_data_dir:
         temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")
         user_data_dir = temp_dir.name
-    chrome_options._botcity_temp_dir = user_data_dir
+        chrome_options._botcity_temp_dir = user_data_dir
 
     chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
 

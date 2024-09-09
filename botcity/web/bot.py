@@ -44,14 +44,12 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-
 def _cleanup(bot: ReferenceType[WebBot]):
 
     if bot() is not None:
         try:
-            options = bot().options
             bot().stop_browser()
-            temp_dir = options._botcity_temp_dir
+            temp_dir = bot()._botcity_temp_dir
             if not temp_dir: return None
             shutil.rmtree(temp_dir, ignore_errors=True)
         except Exception:
@@ -96,6 +94,7 @@ class WebBot(BaseBot):
         self._shift_hold = False
 
         self._download_folder_path = os.getcwd()
+        self._botcity_temp_dir = None
 
         atexit.register(_cleanup, ref(self))
 
@@ -372,6 +371,11 @@ class WebBot(BaseBot):
             self.activate_tab(self.get_tabs()[-1])
         self._driver.close()
         self._driver.quit()
+        if self.options is not None:
+            try:
+                self._botcity_temp_dir = self.options._botcity_temp_dir
+            except Exception:
+                self._botcity_temp_dir = None
         self.options = None
         self.capabilities = None
         self._driver = None

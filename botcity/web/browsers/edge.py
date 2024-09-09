@@ -1,4 +1,3 @@
-import atexit
 import json
 import os
 import tempfile
@@ -7,8 +6,6 @@ from typing import Dict
 
 from msedge.selenium_tools import Edge, EdgeOptions  # noqa: F401, F403
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
-from ..util import cleanup_temp_dir
 
 
 def default_options(headless=False, download_folder_path=None, user_data_dir=None,
@@ -66,10 +63,11 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     except AttributeError:
         pass
 
+    edge_options._botcity_temp_dir = None
     if not user_data_dir:
         temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")
         user_data_dir = temp_dir.name
-        atexit.register(cleanup_temp_dir, temp_dir)
+        edge_options._botcity_temp_dir = user_data_dir
 
     edge_options.add_argument(f"--user-data-dir={user_data_dir}")
 

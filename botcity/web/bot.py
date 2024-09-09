@@ -44,13 +44,14 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-def _cleanup(bot: ReferenceType[WebBot]):
 
+def _cleanup(bot: ReferenceType[WebBot]):
     if bot() is not None:
         try:
             bot().stop_browser()
             temp_dir = bot()._botcity_temp_dir
-            if not temp_dir: return None
+            if not temp_dir:
+                return None
             shutil.rmtree(temp_dir, ignore_errors=True)
         except Exception:
             pass

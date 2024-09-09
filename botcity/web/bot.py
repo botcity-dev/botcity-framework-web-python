@@ -49,26 +49,18 @@ def _cleanup(bot: ReferenceType[WebBot]):
 
     def get_botcity_temp_dir(opt, browser_name):
         browsers = {
-            Browser.CHROME: ("--botcity-temp-dir=", opt.arguments if opt else []),
-            Browser.EDGE: ("--botcity-temp-dir=", opt.arguments if opt else []),
-            Browser.UNDETECTED_CHROME: ("--botcity-temp-dir=", opt.arguments if opt else []),
+            Browser.CHROME: opt._botcity_temp_dir if opt else None,
+            Browser.EDGE: opt._botcity_temp_dir if opt else None,
+            Browser.UNDETECTED_CHROME: opt._botcity_temp_dir if opt else None,
             Browser.FIREFOX: None,
             Browser.IE: None
         }
-        items = browsers.get(browser_name, None)
-        if not items:
+        response = browsers.get(browser_name, None)
+
+        if not response:
             return None
 
-        result = next(filter(lambda x: x.startswith(items[0]), items[1]), None)
-        if not result:
-            return None
-
-        match_result = re.search(rf'{items[0]}([^ ]+)', result)
-
-        if not match_result:
-            return None
-
-        return match_result.group(1)
+        return response
 
     if bot() is not None:
         try:

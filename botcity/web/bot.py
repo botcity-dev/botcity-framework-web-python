@@ -55,12 +55,7 @@ def _cleanup(bot: ReferenceType[WebBot]):
             Browser.FIREFOX: None,
             Browser.IE: None
         }
-        response = browsers.get(browser_name, None)
-
-        if not response:
-            return None
-
-        return response
+        return browsers.get(browser_name, None)
 
     if bot() is not None:
         try:

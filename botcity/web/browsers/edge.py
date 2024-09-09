@@ -8,7 +8,6 @@ from typing import Dict
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver import Edge, EdgeOptions  # noqa: F401, F403
 from selenium.webdriver.edge.service import Service as EdgeService  # noqa: F401, F403
-from ..util import cleanup_temp_dir
 
 
 def default_options(headless=False, download_folder_path=None, user_data_dir=None,
@@ -73,7 +72,6 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     if not user_data_dir:
         temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")
         user_data_dir = temp_dir.name
-        atexit.register(cleanup_temp_dir, temp_dir)
 
     edge_options.add_argument(f"--user-data-dir={user_data_dir}")
 

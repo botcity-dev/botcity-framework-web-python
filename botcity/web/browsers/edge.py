@@ -71,6 +71,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     if not user_data_dir:
         temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")
         user_data_dir = temp_dir.name
+        edge_options.add_argument(f"--botcity-temp-dir={user_data_dir}")
 
     edge_options.add_argument(f"--user-data-dir={user_data_dir}")
 

@@ -1,4 +1,3 @@
-import atexit
 import os
 import tempfile
 from typing import Dict
@@ -8,7 +7,6 @@ from selenium.webdriver import Firefox  # noqa: F401, F403
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
-from ..util import cleanup_temp_dir
 
 FIREFOX_MIMETYPES_TO_DOWNLOAD = ['application/vnd.hzn-3d-crossword', 'video/3gpp', 'video/3gpp2',
                                  'application/vnd.mseq', 'application/vnd.3m.post-it-notes',

@@ -8,7 +8,6 @@ from msedge.selenium_tools import Edge, EdgeOptions  # noqa: F401, F403
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
-
 def default_options(headless=False, download_folder_path=None, user_data_dir=None,
                     page_load_strategy="normal") -> EdgeOptions:
     """Retrieve the default options for this browser curated by BotCity.

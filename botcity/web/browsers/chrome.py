@@ -8,7 +8,6 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
-
 def default_options(headless=False, download_folder_path=None, user_data_dir=None,
                     page_load_strategy="normal") -> ChromeOptions:
     """Retrieve the default options for this browser curated by BotCity.

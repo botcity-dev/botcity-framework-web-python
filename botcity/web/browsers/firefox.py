@@ -358,10 +358,11 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
         page_load_strategy = page_load_strategy
     firefox_options.page_load_strategy = page_load_strategy
     firefox_options.headless = headless
+    firefox_options._botcity_temp_dir = None
     if not user_data_dir:
         temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")
         user_data_dir = temp_dir.name
-        atexit.register(cleanup_temp_dir, temp_dir)
+        firefox_options._botcity_temp_dir = user_data_dir
     firefox_profile = webdriver.FirefoxProfile(user_data_dir)
     firefox_profile.set_preference("security.default_personal_cert", "Select Automatically")
     firefox_profile.set_preference('browser.download.folderList', 2)

@@ -52,6 +52,7 @@ def _cleanup(bot: ReferenceType[WebBot]):
             options = bot().options
             bot().stop_browser()
             temp_dir = options._botcity_temp_dir
+            if not temp_dir: return None
             shutil.rmtree(temp_dir, ignore_errors=True)
         except Exception:
             pass

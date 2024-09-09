@@ -47,26 +47,11 @@ logger = logging.getLogger(__name__)
 
 def _cleanup(bot: ReferenceType[WebBot]):
 
-    def get_botcity_temp_dir(opt, browser_name):
-        browsers = {
-            Browser.CHROME: opt._botcity_temp_dir if opt else None,
-            Browser.EDGE: opt._botcity_temp_dir if opt else None,
-            Browser.UNDETECTED_CHROME: opt._botcity_temp_dir if opt else None,
-            Browser.FIREFOX: None,
-            Browser.IE: None
-        }
-        return browsers.get(browser_name, None)
-
     if bot() is not None:
         try:
             options = bot().options
-            name = bot().browser
             bot().stop_browser()
-            if not bot():
-                return None
-            temp_dir = get_botcity_temp_dir(options, name)
-            if not temp_dir:
-                return None
+            temp_dir = options._botcity_temp_dir
             shutil.rmtree(temp_dir, ignore_errors=True)
         except Exception:
             pass

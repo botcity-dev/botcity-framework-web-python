@@ -67,7 +67,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
             edge_options.add_argument("--no-sandbox")
     except AttributeError:
         pass
-    edge_options._botcity_temp_dir = None
+
     if not user_data_dir:
         temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")
         user_data_dir = temp_dir.name

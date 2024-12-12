@@ -4,7 +4,7 @@ import platform
 import pytest
 import conftest
 
-from PIL import Image
+from PIL import Image, ImageFile
 from botcity.web import WebBot, By, Browser
 
 
@@ -92,7 +92,7 @@ def test_get_image_from_map(web: WebBot):
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
     img = web.get_image_from_map('mouse')
 
-    assert Image.isImageType(img)
+    assert isinstance(img, ImageFile.ImageFile)
 
 
 def test_get_js_dialog(web: WebBot):
@@ -119,7 +119,7 @@ def test_get_screen_image(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     img = web.get_screen_image(region=(0, 0, 400, 200))
 
-    assert Image.isImageType(img)
+    assert isinstance(img, Image.Image)
 
 
 def test_get_screenshot(web: WebBot):
@@ -127,7 +127,7 @@ def test_get_screenshot(web: WebBot):
     fp = os.path.join(conftest.PROJECT_DIR, 'resources', 'screenshot_test.png')
     img = web.get_screenshot(fp)
 
-    assert Image.isImageType(img) and os.path.isfile(fp)
+    assert isinstance(img, Image.Image) and os.path.isfile(fp)
     os.remove(fp)
 
 
@@ -137,7 +137,7 @@ def test_screen_cut(web: WebBot):
     img = web.screen_cut(0, 0, 100, 200)
     img.save(fp)
 
-    assert Image.isImageType(img) and os.path.isfile(fp)
+    assert isinstance(img, Image.Image) and os.path.isfile(fp)
     os.remove(fp)
 
 

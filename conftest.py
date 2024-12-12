@@ -116,6 +116,7 @@ def web(request, tmp_folder: str, download_driver: str):
 
 
 def get_event_result(id_event: str, web: WebBot) -> typing.Dict:
+    web.wait(1000)
     event_result = web.find_element(id_event, By.ID)
     return json.loads(event_result.text)
 

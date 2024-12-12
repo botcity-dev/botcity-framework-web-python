@@ -28,7 +28,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait, TimeoutException, NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
-from weakref import ReferenceType, ref
+from weakref import ref
 
 from . import config, cv2find
 from .browsers import BROWSER_CONFIGS, Browser, PageLoadStrategy

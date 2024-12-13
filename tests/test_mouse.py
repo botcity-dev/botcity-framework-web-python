@@ -50,7 +50,8 @@ def test_triple_click_relative(web: WebBot):
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
-    web.triple_click_relative(16, 140, wait_after=1000)
+    web.wait(1000)
+    web.triple_click_relative(16, 140)
 
     result = conftest.get_event_result('element-result', web)
     assert result['data'] == ['Left2', 'Left2', 'Left2']
@@ -88,7 +89,8 @@ def test_left_click_relative(web: WebBot):
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
-    web.click_relative(16, 140, wait_after=1000)
+    web.wait(1000)
+    web.click_relative(16, 140)
 
     result = conftest.get_event_result('element-result', web)
     assert result['data'] == ['Left2']
@@ -103,7 +105,8 @@ def test_left_double_click_relative(web: WebBot):
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
-    web.double_click_relative(16, 140, wait_after=1000)
+    web.wait(1000)
+    web.double_click_relative(16, 140)
 
     result = conftest.get_event_result('element-result', web)
     assert result['data'] == ['Left2', 'Left2']
@@ -117,7 +120,8 @@ def test_right_click_relative(web: WebBot):
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
-    web.right_click_relative(16, 140, wait_after=1000)
+    web.wait(1000)
+    web.right_click_relative(16, 140)
 
     result = conftest.get_event_result('element-result', web)
     assert result['data'] == ['Right2']
@@ -169,6 +173,7 @@ def test_move_relative(web: WebBot):
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
     if not web.find("mouse", matching=0.97, waiting_time=10_000):
         raise Exception('Image not found: mouse')
+    web.wait(1000)
     web.move()
     web.move_relative(16, 140)
 

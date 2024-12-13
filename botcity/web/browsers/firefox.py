@@ -357,14 +357,15 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     firefox_options.page_load_strategy = page_load_strategy
     if headless:
         firefox_options.add_argument('-headless')
+
     firefox_options._botcity_temp_dir = None
-    if not user_data_dir:
-        temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")
-        user_data_dir = temp_dir.name
-        firefox_options._botcity_temp_dir = user_data_dir
+    if user_data_dir:
+        firefox_options.add_argument("--profile")
+        firefox_options.add_argument(user_data_dir)
+        firefox_options.set_preference("profile", user_data_dir)
+
     if binary_path:
         firefox_options.binary_location = str(binary_path)
-    firefox_options.set_preference("profile", user_data_dir)
     firefox_options.set_preference("security.default_personal_cert", "Select Automatically")
     firefox_options.set_preference('browser.download.folderList', 2)
     firefox_options.set_preference('browser.download.manager.showWhenStarting', False)

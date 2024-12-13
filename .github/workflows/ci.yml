@@ -63,8 +63,10 @@ jobs:
       - uses: browser-actions/setup-firefox@latest
         if: matrix.browser == 'firefox'
 
-      - uses: browser-actions/setup-edge@latest
+      - uses: browser-actions/setup-edge@v1
         if: matrix.browser == 'edge'
+        with:
+          edge-version: stable
 
       - name: Run Tests in ${{ matrix.browser }}
         run: |

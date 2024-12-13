@@ -25,10 +25,7 @@ jobs:
       # Don't abort if a matrix combination fails
       fail-fast: false
       matrix:
-        # macos-latest issue related to ARM architecture in Firefox and edge.
-        # https://github.com/browser-actions/setup-edge/issues/481
-        # https://github.com/browser-actions/setup-firefox/issues/545
-        os: [ubuntu-latest, windows-latest, macos-12]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.10"]
         browser: ["firefox", "chrome", "edge", "undetected_chrome"]
         headless: [true]
@@ -39,6 +36,14 @@ jobs:
           #   * https://github.com/abhi1693/setup-browser/issues/8
           - os: windows-latest
             browser: "firefox"
+          # For now, the edge setup on linux amd64 is not working (07/2024)
+          # See the issues below
+          #   * https://github.com/browser-actions/setup-edge/issues/386
+          #   * https://github.com/browser-actions/setup-edge/issues/516
+          - os: ubuntu-latest
+            browser: "edge"
+          - os: macos-latest
+            browser: "edge"
 
     steps:
       - uses: actions/checkout@v2

@@ -1,5 +1,4 @@
 import os
-import tempfile
 from typing import Dict
 
 from selenium.webdriver import Firefox  # noqa: F401, F403

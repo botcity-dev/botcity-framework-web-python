@@ -27,12 +27,14 @@ jobs:
         browser: ["firefox", "chrome", "edge"]
         headless: [true]
         exclude:
-          # Can't install firefox using setup-firefox on Windows
+          # For now, the edge setup on linux amd64 is not working (07/2024)
           # See the issues below
-          #   * https://github.com/browser-actions/setup-firefox/issues/252
-          #   * https://github.com/abhi1693/setup-browser/issues/8
-          - os: windows-latest
-            browser: "firefox"
+          #   * https://github.com/browser-actions/setup-edge/issues/386
+          #   * https://github.com/browser-actions/setup-edge/issues/516
+          - os: ubuntu-latest
+            browser: "edge"
+          - os: macos-latest
+            browser: "edge"
     steps:
       - uses: actions/checkout@v4
       - name: Install libgl1
@@ -67,5 +69,11 @@ jobs:
         if: matrix.browser == 'edge'
 
       - name: Run Tests in ${{ matrix.browser }}
+        if: matrix.browser == 'chrome' || matrix.browser == 'firefox'
         run: |
           pytest -n 2 -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}
+
+      - name: Run Tests in ${{ matrix.browser }}
+        if: matrix.browser == 'edge'
+        run: |
+          pytest -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}

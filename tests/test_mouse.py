@@ -48,7 +48,7 @@ def test_triple_click_relative(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
-    if not web.find("mouse", matching=0.97, waiting_time=10_000):
+    if not web.find("mouse", matching=0.97, waiting_time=10_000, x=20, y=30, width=310, height=170):
         raise Exception('Image not found: mouse')
     web.triple_click_relative(16, 140)
 
@@ -86,7 +86,7 @@ def test_left_click_relative(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
-    if not web.find("mouse", matching=0.97, waiting_time=10_000):
+    if not web.find("mouse", matching=0.97, waiting_time=10_000, x=20, y=30, width=310, height=170):
         raise Exception('Image not found: mouse')
     web.click_relative(16, 140)
 
@@ -101,7 +101,7 @@ def test_left_double_click_relative(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
-    if not web.find("mouse", matching=0.97, waiting_time=10_000):
+    if not web.find("mouse", matching=0.97, waiting_time=10_000, x=20, y=30, width=310, height=170):
         raise Exception('Image not found: mouse')
     web.double_click_relative(16, 140)
 
@@ -115,7 +115,7 @@ def test_right_click_relative(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
-    if not web.find("mouse", matching=0.97, waiting_time=10_000):
+    if not web.find("mouse", matching=0.97, waiting_time=10_000, x=20, y=30, width=310, height=170):
         raise Exception('Image not found: mouse')
     web.right_click_relative(16, 140)
 
@@ -167,7 +167,7 @@ def test_move_relative(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
 
     web.add_image('mouse', os.path.join(conftest.PROJECT_DIR, 'resources', 'mouse.png'))
-    if not web.find("mouse", matching=0.97, waiting_time=10_000):
+    if not web.find("mouse", matching=0.97, waiting_time=10_000, x=20, y=30, width=310, height=170):
         raise Exception('Image not found: mouse')
     web.move()
     web.move_relative(16, 140)

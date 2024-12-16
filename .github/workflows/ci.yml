@@ -27,12 +27,8 @@ jobs:
         browser: ["firefox", "chrome", "edge"]
         headless: [true]
         exclude:
-          # Can't install firefox using setup-firefox on Windows
-          # See the issues below
-          #   * https://github.com/browser-actions/setup-firefox/issues/252
-          #   * https://github.com/abhi1693/setup-browser/issues/8
           - os: windows-latest
-            browser: "firefox"
+            browser: "edge"
           # For now, the edge setup on linux amd64 is not working (07/2024)
           # See the issues below
           #   * https://github.com/browser-actions/setup-edge/issues/386

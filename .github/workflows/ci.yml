@@ -27,8 +27,6 @@ jobs:
         browser: ["firefox", "chrome", "edge"]
         headless: [true]
         exclude:
-          - os: windows-latest
-            browser: "edge"
           # For now, the edge setup on linux amd64 is not working (07/2024)
           # See the issues below
           #   * https://github.com/browser-actions/setup-edge/issues/386
@@ -71,5 +69,11 @@ jobs:
         if: matrix.browser == 'edge'
 
       - name: Run Tests in ${{ matrix.browser }}
+        if: matrix.browser == 'chrome' || matrix.browser == 'firefox'
         run: |
           pytest -n 2 -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}
+
+      - name: Run Tests in ${{ matrix.browser }}
+        if: matrix.browser == 'edge'
+        run: |
+          pytest -v -vrxs --headless=${{ matrix.headless }} --browser=${{ matrix.browser }}

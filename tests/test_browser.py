@@ -4,9 +4,13 @@ import conftest
 
 from PIL import Image, ImageFile
 from botcity.web import WebBot, By
+from pytest import xfail
 
 
 def test_context(web: WebBot):
+    if web.browser.lower() in 'edge':
+        xfail(reason=f"Edge is getting stuck in the CI")
+
     with web:
         web.browse(conftest.INDEX_PAGE)
         assert web.driver

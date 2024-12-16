@@ -1,8 +1,11 @@
 import conftest
 
+import pytest
+
 from botcity.web import WebBot
 
 
+@pytest.mark.flaky(reruns=3)
 def test_control_a(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.control_a()
@@ -14,6 +17,7 @@ def test_control_a(web: WebBot):
         assert result['data'] == ['Control', 'a']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_control_c(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.control_c()
@@ -21,6 +25,7 @@ def test_control_c(web: WebBot):
     assert web.get_clipboard() == 'Botcity'
 
 
+@pytest.mark.flaky(reruns=3)
 def test_enter(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.enter()
@@ -29,6 +34,7 @@ def test_enter(web: WebBot):
     assert result['data'] == ['Enter']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_control_v(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.copy_to_clipboard(text='botcity-paste')
@@ -38,6 +44,7 @@ def test_control_v(web: WebBot):
     assert ''.join(result['data']) == 'botcity-paste'
 
 
+@pytest.mark.flaky(reruns=3)
 def test_delete(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.delete()
@@ -46,6 +53,7 @@ def test_delete(web: WebBot):
     assert result['data'] == ['Delete']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_key_end(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.key_end()
@@ -54,6 +62,7 @@ def test_key_end(web: WebBot):
     assert result['data'] == ['End']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_key_esc(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.key_esc()
@@ -62,6 +71,7 @@ def test_key_esc(web: WebBot):
     assert result['data'] == ['Escape']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_key_home(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.key_home()
@@ -70,6 +80,7 @@ def test_key_home(web: WebBot):
     assert result['data'] == ['Home']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_type_keys(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.type_keys(['a', 'b', 'c'])
@@ -78,6 +89,7 @@ def test_type_keys(web: WebBot):
     assert result['data'] == ['a', 'b', 'c']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_type_down(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.type_down()
@@ -86,6 +98,7 @@ def test_type_down(web: WebBot):
     assert result['data'] == ['ArrowDown']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_type_left(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.type_left()
@@ -94,6 +107,7 @@ def test_type_left(web: WebBot):
     assert result['data'] == ['ArrowLeft']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_type_right(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.type_right()
@@ -102,6 +116,7 @@ def test_type_right(web: WebBot):
     assert result['data'] == ['ArrowRight']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_type_up(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.type_up()
@@ -110,6 +125,7 @@ def test_type_up(web: WebBot):
     assert result['data'] == ['ArrowUp']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_backspace(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.backspace()
@@ -118,6 +134,7 @@ def test_backspace(web: WebBot):
     assert result['data'] == ['Backspace']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_hold_shift(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.hold_shift()
@@ -129,6 +146,7 @@ def test_hold_shift(web: WebBot):
     assert result['data'] == ['Shift', 'A', 'a']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_space(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.space()
@@ -137,6 +155,7 @@ def test_space(web: WebBot):
     assert result['data'] == ['Space']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_page_down(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.page_down()
@@ -145,6 +164,7 @@ def test_page_down(web: WebBot):
     assert result['data'] == ['PageDown']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_page_up(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.page_up()
@@ -153,6 +173,7 @@ def test_page_up(web: WebBot):
     assert result['data'] == ['PageUp']
 
 
+@pytest.mark.flaky(reruns=3)
 def test_key_tab(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.tab()

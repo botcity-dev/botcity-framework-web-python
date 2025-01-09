@@ -41,12 +41,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Install libgl1
-        if: runner.os == 'Linux'
-        run: |
-          sudo dpkg --add-architecture i386
-          sudo apt update
-          sudo apt install libgl1-mesa-dev libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libnss3-dev libxss-dev libasound2 -y
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5

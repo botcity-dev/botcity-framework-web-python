@@ -133,7 +133,7 @@ def wait_for_downloads(driver):
     if not driver.current_url.startswith("chrome://downloads"):
         driver.get("chrome://downloads/")
     # Chrome changed the `e.state` from a ENUM Str to numbers. Here 2 means COMPLETE.
-    # Reference: https://github.com/chromium/chromium/blob/b34b8f13054dca8440d2dac0b1b5bae1dc5685d4/chrome/browser/ui/webui/downloads/downloads.mojom#L60
+    # Reference: https://shorturl.at/G4EES
     return driver.execute_script("""
         var items = document.querySelector('downloads-manager')
             .shadowRoot.getElementById('downloadsList').items;

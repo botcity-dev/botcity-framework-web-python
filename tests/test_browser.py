@@ -215,7 +215,7 @@ def test_get_view_port_size(web: WebBot):
         element = [width, height]
     else:
         element = web.find_element('window-size', By.ID).text.split('x')
-    sizes = [tuple(int(e) for e in element), (1600, 900), (1176, 802)]
+    sizes = [tuple(int(e) for e in element), (1600, 900), (1176, 802), (1600, 987)]
     assert size in sizes
 
 

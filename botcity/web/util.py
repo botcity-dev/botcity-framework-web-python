@@ -1,3 +1,4 @@
+import os
 import shutil
 import tempfile
 
@@ -17,6 +18,22 @@ def cleanup_temp_dir(temp_dir: tempfile.TemporaryDirectory) -> None:
             temp_dir.cleanup()
         except OSError:
             shutil.rmtree(temp_dir.name, ignore_errors=True)
+
+
+def is_admin():
+    if os.name == "nt":
+        # Only applies to Windows
+        import ctypes
+        try:
+            return ctypes.windll.shell32.IsUserAnAdmin() != 0
+        except Exception:
+            return False
+    else:
+        # Unix/Linux check
+        try:
+            return os.geteuid() == 0
+        except Exception:
+            return False
 
 
 def element_as_select(element: WebElement) -> Select:

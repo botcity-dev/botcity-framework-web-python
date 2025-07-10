@@ -8,6 +8,8 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.service import Service as ChromeService  # noqa: F401, F403
 
+from ..util import is_admin
+
 
 def default_options(headless=False, download_folder_path=None, user_data_dir=None,
                     page_load_strategy="normal", binary_path: str = None) -> ChromeOptions:
@@ -52,9 +54,16 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
 
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
-    # Disable banner for Browser being remote-controlled
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     chrome_options.add_experimental_option('useAutomationExtension', False)
+
+    # Check if user is root
+    if is_admin():
+        if os.name == "posix":
+            chrome_options.add_argument("--no-sandbox")
+    else:
+        # Disable banner for Browser being remote-controlled
+        chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+
     if headless:
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--headless=new")
@@ -63,13 +72,6 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
         chrome_options.add_argument("--hide-scrollbars")
         chrome_options.add_argument("--mute-audio")
 
-    # Check if user is root
-    try:
-        # This is only valid with Unix
-        if os.geteuid() == 0:
-            chrome_options.add_argument("--no-sandbox")
-    except AttributeError:
-        pass
     chrome_options._botcity_temp_dir = None
     if not user_data_dir:
         temp_dir = tempfile.TemporaryDirectory(prefix="botcity_")

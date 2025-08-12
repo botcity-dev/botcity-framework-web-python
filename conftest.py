@@ -120,7 +120,21 @@ def download_driver(request):
     manager = factory_driver_manager(browser=browser)
 
     cache_manager = DriverCacheManager(root_dir=folder_driver)
-    installed_driver = manager(cache_manager=cache_manager).install()
+
+    if browser == Browser.EDGE:
+        # The Edge webdriver download link has changed.
+        # Since the webdriver-manager is using the outdated link, it is necessary to pass it manually.
+        # References:
+        # - https://github.com/SeleniumHQ/selenium/issues/16073
+        # - https://github.com/SeleniumHQ/selenium/pull/16056
+        edge_driver_url = "https://msedgedriver.microsoft.com"
+        installed_driver = manager(
+            url=edge_driver_url,
+            latest_release_url=f"{edge_driver_url}/LATEST_RELEASE",
+            cache_manager=cache_manager
+        ).install()
+    else:
+        installed_driver = manager(cache_manager=cache_manager).install()
 
     yield installed_driver
     # Issue: https://github.com/ultrafunkamsterdam/undetected-chromedriver/issues/551

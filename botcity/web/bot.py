@@ -356,6 +356,12 @@ class WebBot(BaseBot):
             https://github.com/ultrafunkamsterdam/undetected-chromedriver/issues/260#issuecomment-901276808.
             It will be a temporary solution.
             """
+            if self.browser == Browser.UNDETECTED_CHROME:
+                try:
+                    self.driver.get("about:blank")
+                except Exception:
+                    pass
+
             params = {
                 "behavior": "allow",
                 "downloadPath": self.download_folder_path

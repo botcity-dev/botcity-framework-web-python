@@ -43,6 +43,7 @@ def test_create_window(web: WebBot):
 def test_display_size(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.set_screen_resolution(1280, 720)
+    web.wait(3000)
     (w, h) = web.display_size()
 
     assert w in [1280, 1233, 1223, 1028, 1264, 1176, 1256]
@@ -242,6 +243,7 @@ def test_scroll_up(web: WebBot):
 def test_set_screen_resolution(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.set_screen_resolution(500, 500)
+    web.wait(3000)
 
     page_size = web.find_element('page-size', By.ID).text
     width = page_size.split('x')[0]

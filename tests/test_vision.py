@@ -48,6 +48,7 @@ def test_get_last_element(web: WebBot):
 def test_find_text(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.set_screen_resolution(3000, 2000)
+    web.wait(3000)
 
     web.add_image('hello_world', os.path.join(conftest.PROJECT_DIR, 'resources', 'hello_world.png'))
     ele = web.find("hello_world", matching=0.97, waiting_time=20000)

@@ -45,8 +45,13 @@ def setup_undetected_chrome(headless: bool, tmp_folder: str, download_driver: st
     web = WebBot(headless)
     web.browser = Browser.UNDETECTED_CHROME
 
+    opt = browsers.undetected_chrome.default_options(headless=headless, download_folder_path=tmp_folder)
+    opt.add_argument("--disable-dev-shm-usage")
+    opt.add_argument("--disable-extensions")
+
     web.driver_path = download_driver
     web.download_folder_path = tmp_folder
+    web.options = opt
     return web
 
 

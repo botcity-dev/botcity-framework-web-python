@@ -34,6 +34,7 @@ def test_close_page(web: WebBot):
 def test_create_window(web: WebBot):
     web.browse(conftest.INDEX_PAGE)
     web.create_window(url=conftest.TEST_PAGE)
+    web.wait(3000)
 
     title = web.page_title()
     assert title == 'Page test'

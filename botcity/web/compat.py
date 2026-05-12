@@ -3,11 +3,12 @@ import warnings
 
 def patch_selenium():
     if version_selenium_is_larger_than_four():
-        from selenium import webdriver
+        from selenium.webdriver.remote.webelement import WebElement
+        from selenium.webdriver.remote.webdriver import WebDriver
 
-        web_element = webdriver.remote.webelement.WebElement
+        web_element = WebElement
 
-        remote_driver = webdriver.remote.webdriver.WebDriver
+        remote_driver = WebDriver
 
         bys = ['id', 'class name', 'xpath', 'link text', 'partial link text', 'name', 'css selector', 'tag name']
         for by in bys:

@@ -17,6 +17,7 @@ def default_options(headless=False, download_folder_path=None, user_data_dir=Non
     ie_options.add_argument("-embedding")
     ie_options.add_argument("-extoff")
     ie_options.add_argument("-k")
+    ie_options._botcity_temp_dir = None
     return ie_options
 
 

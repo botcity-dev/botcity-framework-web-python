@@ -4,5 +4,6 @@ numpy
 opencv-python
 pillow
 selenium>=4.38,<5
+setuptools
 undetected-chromedriver
 packaging
